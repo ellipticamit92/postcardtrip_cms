@@ -71,6 +71,8 @@ model Destination {
   imageUrl    String?
   packages    Package[]
   cities      City[]
+  updatedAt       DateTime      @updatedAt
+  createdAt       DateTime      @default(now())
 }
 
 model City {

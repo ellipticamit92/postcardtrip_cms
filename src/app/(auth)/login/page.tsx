@@ -1,7 +1,8 @@
 "use client";
 import { signIn } from "next-auth/react";
 import { useState } from "react";
-import Image from "next/image";
+import { AuthLayout } from "@/components/templates/AuthLayout";
+import { LoginForm } from "@/components/organisms/LoginForm";
 
 export default function LoginPage() {
   const [email, setEmail] = useState("");
@@ -19,6 +20,10 @@ export default function LoginPage() {
   };
 
   return (
+    <AuthLayout>
+      <LoginForm />
+    </AuthLayout>
+    /*
 
       <div className="bg-white rounded-lg shadow-lg w-full max-w-4xl">
         <div className="flex flex-col md:flex-row">
@@ -68,6 +73,6 @@ export default function LoginPage() {
           </div>
         </div>
       </div>
-
+*/
   );
 }
