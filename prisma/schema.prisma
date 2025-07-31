@@ -1,0 +1,179 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id              Int         @id @default(autoincrement())
+  name            String?
+  username        String?     @unique
+  email           String?     @unique
+  emailVerified   DateTime?
+  image           String?
+  password        String?
+  role            String?
+  accounts        Account[]
+  sessions        Session[]
+  updatedAt       DateTime      @updatedAt
+  createdAt       DateTime      @default(now())
+}
+
+model Account {
+  id                 Int         @id @default(autoincrement())
+  userId             Int
+  type               String
+  provider           String
+  providerAccountId  String
+  refresh_token      String?
+  access_token       String?
+  expires_at         Int?
+  token_type         String?
+  scope              String?
+  id_token           String?
+  session_state      String?
+  user               User    @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([provider, providerAccountId])
+}
+
+model Session {
+  id                 Int         @id @default(autoincrement())
+  sessionToken String   @unique
+  userId       Int
+  expires      DateTime
+  user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+model VerificationToken {
+  identifier String
+  token      String   @unique
+  expires    DateTime
+
+  @@unique([identifier, token])
+}
+
+model Destination {
+  id          String   @id @default(cuid())
+  name        String
+  country     String
+  description String
+  overview    String
+  imageUrl    String?
+  packages    Package[]
+  cities      City[]
+}
+
+model City {
+  id            String      @id @default(cuid())
+  name          String
+  description   String
+  destination   Destination @relation(fields: [destinationId], references: [id])
+  destinationId String
+  packages      Package[]
+  hotels        Hotel[]
+}
+
+model Hotel {
+  id         String              @id @default(cuid())
+  name       String
+  description String
+  starRating Int
+  city       City                @relation(fields: [cityId], references: [id])
+  cityId     String
+  prices     PackageHotelPrice[] // reverse relation
+  images      HotelImage[] 
+}
+
+model Package {
+  id            String               @id @default(cuid())
+  name          String
+  basePrice     Float                // Base price before hotel variation
+  durationDays  Int
+  description   String
+  destination   Destination          @relation(fields: [destinationId], references: [id])
+  destinationId String
+  city          City                 @relation(fields: [cityId], references: [id])
+  cityId        String
+  itineraries   Itinerary[]
+  hotelPrices   PackageHotelPrice[] // NEW: Hotel-specific pricing
+}
+
+model PackageHotelPrice {
+  id        String   @id @default(cuid())
+  price     Float    // Specific price for the hotel
+  hotel     Hotel    @relation(fields: [hotelId], references: [id])
+  hotelId   String
+  package   Package  @relation(fields: [packageId], references: [id])
+  packageId String
+
+  @@unique([packageId, hotelId]) // Prevent duplicate pricing per hotel-package
+}
+
+model Itinerary {
+  id          String      @id @default(cuid())
+  day         Int
+  title       String
+  details     String
+  package     Package     @relation(fields: [packageId], references: [id])
+  packageId   String
+  highlights  Highlight[]
+  inclusions  Inclusion[]
+  exclusions  Exclusion[]
+  places      ItineraryPlace[]  // 👈 New: day-wise places with image
+}
+
+model ItineraryPlace {
+  id           String             @id @default(cuid())
+  name         String
+  description  String
+  itinerary    Itinerary          @relation(fields: [itineraryId], references: [id])
+  itineraryId  String
+  images       ItineraryPlaceImage[]  // 👈 optional multiple images
+}
+
+model ItineraryPlaceImage {
+  id       String          @id @default(cuid())
+  url      String
+  caption  String?
+  place    ItineraryPlace  @relation(fields: [placeId], references: [id])
+  placeId  String
+}
+
+model Highlight {
+  id          String     @id @default(cuid())
+  text        String
+  itinerary   Itinerary  @relation(fields: [itineraryId], references: [id])
+  itineraryId String
+}
+
+model Inclusion {
+  id          String     @id @default(cuid())
+  text        String
+  itinerary   Itinerary  @relation(fields: [itineraryId], references: [id])
+  itineraryId String
+}
+
+model Exclusion {
+  id          String     @id @default(cuid())
+  text        String
+  itinerary   Itinerary  @relation(fields: [itineraryId], references: [id])
+  itineraryId String
+}
+
+model HotelImage {
+  id       String  @id @default(cuid())
+  url      String
+  caption  String?
+  hotel    Hotel   @relation(fields: [hotelId], references: [id])
+  hotelId  String
+}

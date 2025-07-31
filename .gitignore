@@ -1,0 +1,46 @@
+# Node modules
+node_modules/
+
+# Build output
+.next/
+out/
+dist/
+
+# Logs
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Env files
+.env
+.env.*
+
+# VSCode
+.vscode/
+
+# Prisma
+prisma/dev.db
+prisma/dev.db-journal
+
+# Misc
+*.local
+
+# Coverage
+coverage/
+
+# Others
+*.log
+
+# Ignore lock files if not using them
+# package-lock.json
+yarn.lock
+pnpm-lock.yaml
+
+# Ignore public runtime files
+public/*.log
+/src/generated
