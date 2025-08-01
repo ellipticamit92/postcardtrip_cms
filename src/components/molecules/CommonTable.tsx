@@ -2,9 +2,9 @@ import { flexRender } from "@tanstack/react-table";
 import { CommonTableSearch } from "./CommonTableSerach";
 import { Table, TableBody, TableCell, TableRow } from "../ui/table";
 import { CommonTableHeader } from "./CommonTableHeader";
+import { CommonTableFooter } from "./CommontTableFooter";
 
 interface CommonTableProps {
-  data: any;
   columns: any;
   columnName: string;
   placeholder: string;
@@ -57,6 +57,7 @@ const CommonTable = ({
           </TableBody>
         </Table>
       </div>
+      <CommonTableFooter table={table} />
     </div>
   );
 };

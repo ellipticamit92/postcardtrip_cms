@@ -45,9 +45,9 @@ export interface Destination {
   id: string;
   name: string;
   country: string;
-  description?: string;
-  overview?: string;
-  imageUrl?: string;
+  description: string | null;
+  overview: string | null;
+  imageUrl: string | null;
   createdAt: Date;
   updatedAt: Date;
   packages?: Package[];
@@ -143,3 +143,10 @@ export interface ItineraryPlaceImage {
   caption?: string;
   placeId: string;
 }
+
+export type DestinationResponse = {
+  destinations: Destination[];
+  totalPages: number;
+  totalCount: number;
+  currentPage: number;
+};

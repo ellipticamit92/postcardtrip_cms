@@ -1,10 +1,10 @@
 "use client";
 
+import { format } from "date-fns";
 import { Destination } from "@/types/type";
 import {
   ColumnDef,
   ColumnFiltersState,
-  flexRender,
   getCoreRowModel,
   getFilteredRowModel,
   getPaginationRowModel,
@@ -24,11 +24,7 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "../ui/dropdown-menu";
-import { useState } from "react";
-import { CommonTableHeader } from "../molecules/CommonTableHeader";
-import { CommonTableSearch } from "../molecules/CommonTableSerach";
-import { Table, TableBody, TableCell, TableRow } from "../ui/table";
-import { CommonTableFooter } from "../molecules/CommontTableFooter";
+import { FC, useState } from "react";
 import CommonTable from "../molecules/CommonTable";
 
 export const columns: ColumnDef<Destination>[] = [
@@ -87,7 +83,7 @@ export const columns: ColumnDef<Destination>[] = [
     header: "Created",
     cell: ({ row }) => {
       const value = row.getValue("createdAt");
-      return value ? new Date(value as any).toLocaleDateString() : null;
+      return value ? format(new Date(value as any), "dd/MM/yyyy") : null;
     },
   },
   {
@@ -121,30 +117,19 @@ export const columns: ColumnDef<Destination>[] = [
   },
 ];
 
-const data: Destination[] = [
-  {
-    id: "dest_1",
-    name: "Kashmir",
-    country: "India",
-    description: "Paradise on Earth",
-    overview: "Explore the Himalayas",
-    imageUrl: "https://example.com/kashmir.jpg",
-    createdAt: new Date(),
-    updatedAt: new Date(),
-  },
-  {
-    id: "dest_2",
-    name: "Kerala",
-    country: "India",
-    description: "God's Own Country",
-    overview: "Backwaters, Beaches, Ayurveda",
-    imageUrl: "https://example.com/kerala.jpg",
-    createdAt: new Date(),
-    updatedAt: new Date(),
-  },
-];
+interface DestinationTableProps {
+  data: Destination[];
+  totalCount: number;
+  totalPages: number;
+  currentPage: number;
+}
 
-const DestinationTable = () => {
+const DestinationTable: FC<DestinationTableProps> = ({
+  data,
+  currentPage,
+  totalCount,
+  totalPages,
+}) => {
   const [sorting, setSorting] = useState<SortingState>([]);
   const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
   const [columnVisibility, setColumnVisibility] = useState<VisibilityState>({});
@@ -175,7 +160,6 @@ const DestinationTable = () => {
         table={table}
         placeholder="Filter by Destination Name"
         columnName="name"
-        data={undefined}
         columns={columns}
       />
     </div>
