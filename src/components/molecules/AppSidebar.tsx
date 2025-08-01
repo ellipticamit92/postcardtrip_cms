@@ -23,107 +23,7 @@ import {
   DropdownMenuTrigger,
 } from "../ui/dropdown-menu";
 import { signOut } from "next-auth/react";
-
-// This is sample data.
-const data = {
-  navMain: [
-    {
-      title: "Destinations",
-      url: "/destination",
-      items: [
-        {
-          title: "View Destination",
-          url: "/destination",
-          icon: Home,
-        },
-        {
-          title: "Add Destination",
-          url: "/destination",
-          icon: Home,
-        },
-      ],
-    },
-    {
-      title: "Packages",
-      url: "#",
-      items: [
-        {
-          title: "View Packages",
-          url: "#",
-          icon: Home,
-        },
-        {
-          title: "Add Packages",
-          url: "#",
-          icon: Home,
-        },
-        {
-          title: "Deploying",
-          url: "#",
-          icon: Home,
-        },
-        {
-          title: "Upgrading",
-          url: "#",
-          icon: Home,
-        },
-        {
-          title: "Examples",
-          url: "#",
-          icon: Home,
-        },
-      ],
-    },
-    {
-      title: "API Reference",
-      url: "#",
-      items: [
-        {
-          title: "Components",
-          url: "#",
-          icon: Home,
-        },
-        {
-          title: "File Conventions",
-          url: "#",
-          icon: Home,
-        },
-      ],
-    },
-    {
-      title: "Architecture",
-      url: "#",
-      items: [
-        {
-          title: "Accessibility",
-          url: "#",
-          icon: Home,
-        },
-        {
-          title: "Fast Refresh",
-          url: "#",
-          icon: Home,
-        },
-        {
-          title: "Next.js Compiler",
-          url: "#",
-          icon: Home,
-        },
-      ],
-    },
-    {
-      title: "Community",
-      url: "#",
-      items: [
-        {
-          title: "Contribution Guide",
-          url: "#",
-          icon: Home,
-        },
-      ],
-    },
-  ],
-};
+import { SIDEBAR_URL } from "@/consttants/constant";
 
 export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
   const handleLogout = () => {
@@ -151,7 +51,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
       <SidebarContent>
         <SidebarGroup>
           <SidebarMenu>
-            {data.navMain.map((item) => (
+            {SIDEBAR_URL.navMain.map((item) => (
               <SidebarMenuItem key={item.title}>
                 <SidebarMenuButton asChild>
                   <a href={item.url} className="font-medium">

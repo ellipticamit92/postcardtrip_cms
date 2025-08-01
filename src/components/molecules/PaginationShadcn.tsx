@@ -11,82 +11,77 @@ import {
 } from "@/components/ui/pagination";
 
 interface PaginationShadcnProps {
-  page: number;
+  currentPage: number;
   totalPages: number;
   onPageChange: (page: number) => void;
 }
 
 export function PaginationShadcn({
-  page,
+  currentPage,
   totalPages,
   onPageChange,
 }: PaginationShadcnProps) {
-  const getPages = () => {
-    const pages = [];
-
-    if (totalPages <= 5) {
-      for (let i = 1; i <= totalPages; i++) {
-        pages.push(i);
-      }
-    } else {
-      pages.push(1);
-      if (page > 3) pages.push(-1); // -1 will be used for Ellipsis
-
-      const start = Math.max(2, page - 1);
-      const end = Math.min(totalPages - 1, page + 1);
-
-      for (let i = start; i <= end; i++) {
-        pages.push(i);
-      }
-
-      if (page < totalPages - 2) pages.push(-2); // another ellipsis
-      pages.push(totalPages);
-    }
-
-    return pages;
-  };
+  const maxVisiblePages = 6;
+  const startPage = Math.max(
+    1,
+    Math.min(
+      currentPage - Math.floor(maxVisiblePages / 2),
+      totalPages - maxVisiblePages + 1
+    )
+  );
+  const endPage = Math.min(totalPages, startPage + maxVisiblePages - 1);
 
   return (
-    <Pagination>
+    <Pagination className="mx-0 justify-end">
       <PaginationContent>
         <PaginationItem>
           <PaginationPrevious
             href="#"
             onClick={(e) => {
               e.preventDefault();
-              if (page > 1) onPageChange(page - 1);
+              if (currentPage > 1) onPageChange(currentPage - 1);
             }}
+            className={`${
+              currentPage <= 1 && "opacity-50 !cursor-none !cursor-not-allowed"
+            }`}
           />
         </PaginationItem>
 
-        {getPages().map((pg, idx) =>
-          pg === -1 || pg === -2 ? (
-            <PaginationItem key={`ellipsis-${idx}`}>
+        {Array.from({ length: endPage - startPage + 1 }, (_, i) => {
+          const page = startPage + i;
+          const isActive = page === currentPage;
+          console.log("DEBUG page  = ", page);
+          return page === -1 || page === -2 ? (
+            <PaginationItem key={`ellipsis-${i}`}>
               <PaginationEllipsis />
             </PaginationItem>
           ) : (
-            <PaginationItem key={pg}>
+            <PaginationItem key={page}>
               <PaginationLink
                 href="#"
-                isActive={pg === page}
+                isActive={isActive}
                 onClick={(e) => {
                   e.preventDefault();
-                  onPageChange(pg);
+                  onPageChange(page);
                 }}
               >
-                {pg}
+                {page}
               </PaginationLink>
             </PaginationItem>
-          )
-        )}
+          );
+        })}
 
         <PaginationItem>
           <PaginationNext
             href="#"
             onClick={(e) => {
               e.preventDefault();
-              if (page < totalPages) onPageChange(page + 1);
+              if (currentPage < totalPages) onPageChange(currentPage + 1);
             }}
+            className={`${
+              currentPage >= totalPages &&
+              "opacity-50 !cursor-none !cursor-not-allowed"
+            }`}
           />
         </PaginationItem>
       </PaginationContent>

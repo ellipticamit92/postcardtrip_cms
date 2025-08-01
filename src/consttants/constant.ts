@@ -1,144 +1,60 @@
-import { Home, Inbox, Calendar, Search, Settings } from "lucide-react";
+import {
+  Home,
+  EyeOff,
+  View,
+  Eye,
+  Plus,
+  Diff,
+  SquareDivide,
+} from "lucide-react";
 
-export const SIDEBAR_URL = [
-  {
-    title: "Home",
-    url: "#",
-    icon: Home,
-  },
-  {
-    title: "Destination",
-    url: "/destination",
-    icon: Inbox,
-    child: [
-      {
-        title: "View Destination",
-        icon: Home,
-        url: "#",
-      },
-
-      {
-        title: "Add Destination",
-        icon: Home,
-        url: "#",
-      },
-    ],
-  },
-  {
-    title: "Calendar",
-    url: "#",
-    icon: Calendar,
-  },
-  {
-    title: "Search",
-    url: "#",
-    icon: Search,
-  },
-  {
-    title: "Settings",
-    url: "#",
-    icon: Settings,
-  },
-];
-
-export const data = {
+export const SIDEBAR_URL = {
   navMain: [
     {
-      title: "Getting Started",
-      url: "#",
+      title: "Destinations",
+      url: "/destination",
       items: [
         {
-          title: "Installation",
-          url: "#",
+          title: "View Destination",
+          url: "/destination",
+          icon: Plus,
         },
         {
-          title: "Project Structure",
-          url: "#",
+          title: "Add Destination",
+          url: "/destination/add",
+          icon: Eye,
         },
       ],
     },
     {
-      title: "Building Your Application",
+      title: "Packages",
       url: "#",
       items: [
         {
-          title: "Routing",
+          title: "View Packages",
           url: "#",
+          icon: EyeOff,
         },
         {
-          title: "Data Fetching",
+          title: "Add Packages",
           url: "#",
-          isActive: true,
-        },
-        {
-          title: "Rendering",
-          url: "#",
-        },
-        {
-          title: "Caching",
-          url: "#",
-        },
-        {
-          title: "Styling",
-          url: "#",
-        },
-        {
-          title: "Optimizing",
-          url: "#",
-        },
-        {
-          title: "Configuring",
-          url: "#",
-        },
-        {
-          title: "Testing",
-          url: "#",
-        },
-        {
-          title: "Authentication",
-          url: "#",
-        },
-        {
-          title: "Deploying",
-          url: "#",
-        },
-        {
-          title: "Upgrading",
-          url: "#",
-        },
-        {
-          title: "Examples",
-          url: "#",
+          icon: Diff,
         },
       ],
     },
     {
-      title: "API Reference",
+      title: "Hotels",
       url: "#",
       items: [
         {
-          title: "Components",
+          title: "View Hotels",
           url: "#",
+          icon: View,
         },
         {
-          title: "File Conventions",
+          title: "Add Hotels",
           url: "#",
-        },
-        {
-          title: "Functions",
-          url: "#",
-        },
-        {
-          title: "next.config.js Options",
-          url: "#",
-        },
-        {
-          title: "CLI",
-          url: "#",
-        },
-        {
-          title: "Edge Runtime",
-          url: "#",
+          icon: SquareDivide,
         },
       ],
     },
@@ -149,22 +65,7 @@ export const data = {
         {
           title: "Accessibility",
           url: "#",
-        },
-        {
-          title: "Fast Refresh",
-          url: "#",
-        },
-        {
-          title: "Next.js Compiler",
-          url: "#",
-        },
-        {
-          title: "Supported Browsers",
-          url: "#",
-        },
-        {
-          title: "Turbopack",
-          url: "#",
+          icon: Home,
         },
       ],
     },
@@ -175,8 +76,28 @@ export const data = {
         {
           title: "Contribution Guide",
           url: "#",
+          icon: Home,
         },
       ],
     },
   ],
 };
+
+export const PAGE_LIMIT = [
+  { label: 5, value: 5 },
+  { label: 2, value: 2 },
+  { label: 3, value: 3 },
+  { label: 10, value: 10 },
+  { label: 25, value: 25 },
+  { label: 50, value: 50 },
+  { label: 100, value: 100 },
+];
+
+export const COUNTRIES = [
+  { label: "United States", value: "US" },
+  { label: "India", value: "IN" },
+  { label: "Germany", value: "DE" },
+  { label: "United Arab Emirates", value: "AE" },
+  { label: "Dubai", value: "dubai" },
+  { label: "Indonesia", value: "indonesia" },
+];

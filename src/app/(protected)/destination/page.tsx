@@ -1,18 +1,14 @@
-import { DestinationForm } from "@/components/organisms/DestinationForm";
-import { DestinationTable } from "@/components/organisms/DestinationTable";
+import { MyTable } from "@/components/molecules/MyTable";
+import DestinationTable from "@/components/organisms/DeatinationTable";
 import { getAllDestinations } from "@/services/destination.svc";
 
 export default async function DestinationPage() {
-  const destinations = await getAllDestinations();
-
-  console.log("Destination = ", destinations);
+  const destinations = await getAllDestinations(1);
 
   return (
-    <div className="py-10 space-y-6">
-      <h1 className="text-2xl font-bold">Create Destination</h1>
-      <DestinationForm />
-      <h2 className="text-xl font-semibold">All Destinations</h2>
-      <DestinationTable tableData={destinations} />
-    </div>
+    <>
+      <h2 className="text-xl font-semibold mt-10">All Destinations</h2>
+      <DestinationTable />
+    </>
   );
 }

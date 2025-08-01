@@ -66,13 +66,13 @@ model Destination {
   id          String   @id @default(cuid())
   name        String
   country     String
-  description String
-  overview    String
+  description String?
+  overview    String?
   imageUrl    String?
   packages    Package[]
   cities      City[]
-  updatedAt       DateTime      @updatedAt
-  createdAt       DateTime      @default(now())
+  updatedAt   DateTime      @updatedAt
+  createdAt   DateTime      @default(now())
 }
 
 model City {

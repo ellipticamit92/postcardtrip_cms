@@ -1,121 +1,145 @@
-export type User = {
+export interface User {
   id: number;
-  name?: string | null;
-  username?: string | null;
-  email?: string | null;
-  emailVerified?: Date | null;
-  image?: string | null;
-  password?: string | null;
-  role?: string | null;
-  updatedAt: Date;
+  name?: string;
+  username?: string;
+  email?: string;
+  emailVerified?: Date;
+  image?: string;
+  password?: string;
+  role?: string;
   createdAt: Date;
-};
+  updatedAt: Date;
+  accounts: Account[];
+  sessions: Session[];
+}
 
-export type Account = {
+export interface Account {
   id: number;
   userId: number;
   type: string;
   provider: string;
   providerAccountId: string;
-  refresh_token?: string | null;
-  access_token?: string | null;
-  expires_at?: number | null;
-  token_type?: string | null;
-  scope?: string | null;
-  id_token?: string | null;
-  session_state?: string | null;
-};
+  refresh_token?: string;
+  access_token?: string;
+  expires_at?: number;
+  token_type?: string;
+  scope?: string;
+  id_token?: string;
+  session_state?: string;
+}
 
-export type Session = {
+export interface Session {
   id: number;
   sessionToken: string;
   userId: number;
   expires: Date;
-};
+}
 
-export type VerificationToken = {
+export interface VerificationToken {
   identifier: string;
   token: string;
   expires: Date;
-};
+}
 
-export type Queries = {
-  qid: number;
-  leadId: string;
-  platform: string;
-  clientDescription: string;
-  company?: string | null;
-  destination?: string | null;
-  title?: string | null;
+export interface Destination {
+  id: string;
+  name: string;
+  country: string;
+  description?: string;
+  overview?: string;
+  imageUrl?: string;
+  createdAt: Date;
+  updatedAt: Date;
+  packages?: Package[];
+  cities?: City[];
+}
+
+export interface City {
+  id: string;
+  name: string;
   description: string;
-  email: string;
-  fullName: string;
-  phoneNumber: string;
-  flightRequired: string;
-  children?: number | null;
-  adult?: number | null;
-  infant?: number | null;
-  isOrganic?: string | null;
-  travelStartDate: Date;
-  travelEndDate: Date;
-  travelMonth?: string | null;
-  leadCreatedTime: string;
-  formName: string;
-  campaignName: string;
-  adsetName: string;
-  adName: string;
-  leadStatus: string;
-  assignedToId?: number | null;
-  addedById?: number | null;
-  assignedToName?: string | null;
-  updatedAt: Date;
-  createdAt: Date;
-};
+  destinationId: string;
+  hotels: Hotel[];
+  packages: Package[];
+}
 
-export type QueryTask = {
-  qtid: number;
-  queryId: number;
-  assignToId?: number | null;
-  addedById: number;
+export interface Hotel {
+  id: string;
+  name: string;
+  description: string;
+  starRating: number;
+  cityId: string;
+  prices: PackageHotelPrice[];
+  images: HotelImage[];
+}
+
+export interface HotelImage {
+  id: string;
+  url: string;
+  caption?: string;
+  hotelId: string;
+}
+
+export interface Package {
+  id: string;
+  name: string;
+  basePrice: number;
+  durationDays: number;
+  description: string;
+  destinationId: string;
+  cityId: string;
+  itineraries: Itinerary[];
+  hotelPrices: PackageHotelPrice[];
+}
+
+export interface PackageHotelPrice {
+  id: string;
+  price: number;
+  hotelId: string;
+  packageId: string;
+}
+
+export interface Itinerary {
+  id: string;
+  day: number;
+  title: string;
   details: string;
-  status?: number | null;
-  reminderDate?: Date | null;
-  confirmDate?: Date | null;
-  taskType: string;
-  updatedAt: Date;
-  createdAt: Date;
-  time: string;
-  addedBy: User;
-};
+  packageId: string;
+  highlights: Highlight[];
+  inclusions: Inclusion[];
+  exclusions: Exclusion[];
+  places: ItineraryPlace[];
+}
 
-export type QueryNotes = {
-  qnId: number;
-  queryId: number;
-  details: string;
-  addedById: number;
-  createdAt: Date;
-  addedBy: User;
-};
+export interface Highlight {
+  id: string;
+  text: string;
+  itineraryId: string;
+}
 
-export type QueryData = {
-  queries: Queries[];
-  totalPages: number;
-  totalCount: number;
-  currentPage: number;
-};
+export interface Inclusion {
+  id: string;
+  text: string;
+  itineraryId: string;
+}
 
-export type Team = {
-  tid: number;
-  firstname: string;
-  lastname: string;
-  role: string;
-  email: string;
-  username?: string | null;
-  updatedAt: Date;
-  createdAt: Date;
-};
+export interface Exclusion {
+  id: string;
+  text: string;
+  itineraryId: string;
+}
 
-export type QueryNotesResponse = QueryNotes[];
-export type QueryTaskResponse = QueryTask[];
-export type QueriesResponse = Queries[];
-export type UsersResponse = User[];
+export interface ItineraryPlace {
+  id: string;
+  name: string;
+  description: string;
+  itineraryId: string;
+  images: ItineraryPlaceImage[];
+}
+
+export interface ItineraryPlaceImage {
+  id: string;
+  url: string;
+  caption?: string;
+  placeId: string;
+}

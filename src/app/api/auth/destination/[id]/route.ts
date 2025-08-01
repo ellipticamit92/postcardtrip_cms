@@ -1,27 +1,65 @@
 import { prisma } from "@/lib/prisma";
 import { NextResponse } from "next/server";
 
-// GET /api/destination/:id
-export async function GET(_: Request, { params }: { params: { id: string } }) {
+export async function GET(req: Request) {
+  const { searchParams } = new URL(req.url);
+
+  const page = parseInt(searchParams.get("page") || "1");
+  const limit = parseInt(searchParams.get("limit") || "10");
+  const query = searchParams.get("query")?.trim().toLowerCase() || "";
+
+  const skip = (page - 1) * limit;
+
   try {
-    const destination = await prisma.destination.findUnique({
-      where: { id: params.id },
-      include: { packages: true, cities: true },
+    const [destinations, total] = await Promise.all([
+      prisma.destination.findMany({
+        where: {
+          OR: [
+            {
+              name: {
+                contains: query || "",
+              },
+            },
+            {
+              country: {
+                contains: query,
+              },
+            },
+          ],
+        },
+        skip,
+        take: limit,
+        orderBy: {
+          name: "asc",
+        },
+      }),
+      prisma.destination.count({
+        where: {
+          OR: [
+            {
+              name: {
+                contains: query,
+              },
+            },
+            {
+              country: {
+                contains: query,
+              },
+            },
+          ],
+        },
+      }),
+    ]);
+
+    return NextResponse.json({
+      data: destinations,
+      total,
+      currentPage: page,
+      totalPages: Math.ceil(total / limit),
     });
-
-    if (!destination) {
-      return NextResponse.json(
-        { error: "Destination not found" },
-        { status: 404 }
-      );
-    }
-
-    return NextResponse.json(destination);
   } catch (error) {
-    return NextResponse.json(
-      { error: "Failed to fetch destination" },
-      { status: 500 }
-    );
+    console.error("[DESTINATION_GET]", error);
+    return new NextResponse("Internal Server Error", { status: 500 });
   }
 }
 

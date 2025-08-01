@@ -15,7 +15,6 @@ export default function ProtectedLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  const [notificationOpen, setNotificationOpen] = useState(false);
   return (
     <div className="flex min-h-screen bg-slate-100">
       <SessionProvider>
@@ -23,11 +22,9 @@ export default function ProtectedLayout({
           <AppSidebar />
           <SidebarInset>
             <Header />
-            <div className="flex flex-1 flex-col">
+            <div className="px-10">
               <div className="@container/main flex flex-1 flex-col gap-2">
-                <div className="flex flex-col gap-4 py-4 md:gap-6 md:py-6">
-                  {children}
-                </div>
+                <div className="flex flex-col gap-4">{children}</div>
               </div>
             </div>
           </SidebarInset>
