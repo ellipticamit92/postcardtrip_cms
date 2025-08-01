@@ -63,7 +63,7 @@ model VerificationToken {
 }
 
 model Destination {
-  id          String   @id @default(cuid())
+  did         Int       @id @default(autoincrement())
   name        String
   country     String
   description String?
@@ -71,111 +71,111 @@ model Destination {
   imageUrl    String?
   packages    Package[]
   cities      City[]
-  updatedAt   DateTime      @updatedAt
-  createdAt   DateTime      @default(now())
+  updatedAt   DateTime  @updatedAt
+  createdAt   DateTime  @default(now())
 }
 
 model City {
-  id            String      @id @default(cuid())
+  cid           Int          @id @default(autoincrement())
   name          String
   description   String
-  destination   Destination @relation(fields: [destinationId], references: [id])
-  destinationId String
+  destination   Destination  @relation(fields: [destinationId], references: [did])
+  destinationId Int
   packages      Package[]
   hotels        Hotel[]
 }
 
 model Hotel {
-  id         String              @id @default(cuid())
-  name       String
+  hid         Int           @id @default(autoincrement())
+  name        String
   description String
-  starRating Int
-  city       City                @relation(fields: [cityId], references: [id])
-  cityId     String
-  prices     PackageHotelPrice[] // reverse relation
-  images      HotelImage[] 
+  starRating  Int
+  city        City          @relation(fields: [cityId], references: [cid])
+  cityId      Int
+  prices      PackageHotelPrice[]
+  images      HotelImage[]
 }
 
 model Package {
-  id            String               @id @default(cuid())
+  pid           Int                  @id @default(autoincrement())
   name          String
-  basePrice     Float                // Base price before hotel variation
+  basePrice     Float
   durationDays  Int
   description   String
-  destination   Destination          @relation(fields: [destinationId], references: [id])
-  destinationId String
-  city          City                 @relation(fields: [cityId], references: [id])
-  cityId        String
+  destination   Destination          @relation(fields: [destinationId], references: [did])
+  destinationId Int
+  city          City                 @relation(fields: [cityId], references: [cid])
+  cityId        Int
   itineraries   Itinerary[]
-  hotelPrices   PackageHotelPrice[] // NEW: Hotel-specific pricing
+  hotelPrices   PackageHotelPrice[]
 }
 
 model PackageHotelPrice {
-  id        String   @id @default(cuid())
-  price     Float    // Specific price for the hotel
-  hotel     Hotel    @relation(fields: [hotelId], references: [id])
-  hotelId   String
-  package   Package  @relation(fields: [packageId], references: [id])
-  packageId String
+  phid       Int     @id @default(autoincrement())
+  price      Float
+  hotel      Hotel   @relation(fields: [hotelId], references: [hid])
+  hotelId    Int
+  package    Package @relation(fields: [packageId], references: [pid])
+  packageId  Int
 
-  @@unique([packageId, hotelId]) // Prevent duplicate pricing per hotel-package
+  @@unique([packageId, hotelId])
 }
 
 model Itinerary {
-  id          String      @id @default(cuid())
+  itid        Int             @id @default(autoincrement())
   day         Int
   title       String
   details     String
-  package     Package     @relation(fields: [packageId], references: [id])
-  packageId   String
+  package     Package         @relation(fields: [packageId], references: [pid])
+  packageId   Int
   highlights  Highlight[]
   inclusions  Inclusion[]
   exclusions  Exclusion[]
-  places      ItineraryPlace[]  // 👈 New: day-wise places with image
+  places      ItineraryPlace[]
 }
 
 model ItineraryPlace {
-  id           String             @id @default(cuid())
-  name         String
-  description  String
-  itinerary    Itinerary          @relation(fields: [itineraryId], references: [id])
-  itineraryId  String
-  images       ItineraryPlaceImage[]  // 👈 optional multiple images
+  itpid       Int                  @id @default(autoincrement())
+  name        String
+  description String
+  itinerary   Itinerary            @relation(fields: [itineraryId], references: [itid])
+  itineraryId Int
+  images      ItineraryPlaceImage[]
 }
 
 model ItineraryPlaceImage {
-  id       String          @id @default(cuid())
+  ipiid    Int              @id @default(autoincrement())
   url      String
   caption  String?
-  place    ItineraryPlace  @relation(fields: [placeId], references: [id])
-  placeId  String
+  place    ItineraryPlace   @relation(fields: [placeId], references: [itpid])
+  placeId  Int
 }
 
 model Highlight {
-  id          String     @id @default(cuid())
+  hlid        Int       @id @default(autoincrement())
   text        String
-  itinerary   Itinerary  @relation(fields: [itineraryId], references: [id])
-  itineraryId String
+  itinerary   Itinerary @relation(fields: [itineraryId], references: [itid])
+  itineraryId Int
 }
 
 model Inclusion {
-  id          String     @id @default(cuid())
+  lid         Int       @id @default(autoincrement())
   text        String
-  itinerary   Itinerary  @relation(fields: [itineraryId], references: [id])
-  itineraryId String
+  itinerary   Itinerary @relation(fields: [itineraryId], references: [itid])
+  itineraryId Int
 }
 
 model Exclusion {
-  id          String     @id @default(cuid())
+  eid         Int       @id @default(autoincrement())
   text        String
-  itinerary   Itinerary  @relation(fields: [itineraryId], references: [id])
-  itineraryId String
+  itinerary   Itinerary @relation(fields: [itineraryId], references: [itid])
+  itineraryId Int
 }
 
 model HotelImage {
-  id       String  @id @default(cuid())
+  hiid     Int     @id @default(autoincrement())
   url      String
   caption  String?
-  hotel    Hotel   @relation(fields: [hotelId], references: [id])
-  hotelId  String
+  hotel    Hotel   @relation(fields: [hotelId], references: [hid])
+  hotelId  Int
 }

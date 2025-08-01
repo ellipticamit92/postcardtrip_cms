@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
+import { createDestination } from "@/services/destination.svc";
 
 export async function GET(req: NextRequest) {
   const { searchParams } = new URL(req.url);
@@ -33,14 +34,33 @@ export async function GET(req: NextRequest) {
 }
 
 // POST a new destination
-export async function POST(req: NextRequest) {
+export async function POST(req: Request) {
   try {
     const body = await req.json();
-    const destination = await prisma.destination.create({ data: body });
-    return NextResponse.json(destination, { status: 201 });
+
+    const { name, country, description, overview, imageUrl } = body;
+
+    // Basic validation
+    if (!name || !country) {
+      return new Response(
+        JSON.stringify({ error: "Name and country are required" }),
+        { status: 400 }
+      );
+    }
+
+    const newDestination = await createDestination({
+      name,
+      country,
+      description,
+      overview,
+      imageUrl,
+    });
+
+    return new Response(JSON.stringify(newDestination), { status: 201 });
   } catch (error) {
-    return NextResponse.json(
-      { error: "Failed to create destination" },
+    console.error("Error in POST /api/destinations:", error);
+    return new Response(
+      JSON.stringify({ error: "Failed to create destination" }),
       { status: 500 }
     );
   }
