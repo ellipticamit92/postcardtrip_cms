@@ -1,12 +1,8 @@
 "use client";
 
-import React, { useState } from "react";
+import React from "react";
 import { SessionProvider } from "next-auth/react";
-import {
-  SidebarInset,
-  SidebarProvider,
-  SidebarTrigger,
-} from "@/components/ui/sidebar";
+import { SidebarInset, SidebarProvider } from "@/components/ui/sidebar";
 import { AppSidebar } from "@/components/molecules/AppSidebar";
 import { Header } from "@/components/molecules/Header";
 

@@ -1,82 +1,113 @@
 import {
-  Home,
-  EyeOff,
-  View,
   Eye,
   Plus,
-  Diff,
-  SquareDivide,
+  MapPinHouse,
+  Blocks,
+  Hotel,
+  AudioWaveform,
+  BookOpen,
+  Command,
+  GalleryVerticalEnd,
+  Settings2,
 } from "lucide-react";
 
-export const SIDEBAR_URL = {
+export const SIDEBAR_URLS = {
+  user: {
+    name: "Postcardtrip Admin",
+    email: "abc@a.com",
+    avatar: "/avatars/shadcn.jpg",
+  },
+  teams: [
+    {
+      name: "Postcardtrip CMS",
+      logo: GalleryVerticalEnd,
+      plan: "Enterprise",
+    },
+    {
+      name: "Admin ",
+      logo: AudioWaveform,
+      plan: "Startup",
+    },
+    {
+      name: "Users",
+      logo: Command,
+      plan: "Free",
+    },
+  ],
   navMain: [
     {
-      title: "Destinations",
+      title: "Destination",
       url: "/destination",
+      icon: MapPinHouse,
+      isActive: true,
       items: [
         {
           title: "View Destination",
           url: "/destination",
-          icon: Plus,
+          icon: Eye,
         },
         {
           title: "Add Destination",
           url: "/destination/add",
-          icon: Eye,
+          icon: Plus,
         },
       ],
     },
     {
       title: "Packages",
       url: "#",
+      icon: Blocks,
       items: [
         {
           title: "View Packages",
-          url: "#",
-          icon: EyeOff,
+          url: "/package",
+          icon: Eye,
         },
         {
-          title: "Add Packages",
-          url: "#",
-          icon: Diff,
+          title: "Add Package",
+          url: "/package/add",
+          icon: Plus,
         },
       ],
     },
     {
       title: "Hotels",
       url: "#",
+      icon: Hotel,
       items: [
         {
           title: "View Hotels",
-          url: "#",
-          icon: View,
+          url: "/package",
+          icon: Eye,
         },
         {
-          title: "Add Hotels",
-          url: "#",
-          icon: SquareDivide,
-        },
-      ],
-    },
-    {
-      title: "Architecture",
-      url: "#",
-      items: [
-        {
-          title: "Accessibility",
-          url: "#",
-          icon: Home,
+          title: "Add Hotel",
+          url: "/package/add",
+          icon: Plus,
         },
       ],
     },
     {
-      title: "Community",
+      title: "Documentation",
       url: "#",
+      icon: BookOpen,
       items: [
         {
-          title: "Contribution Guide",
+          title: "Introduction",
           url: "#",
-          icon: Home,
+          icon: Eye,
+        },
+      ],
+    },
+    {
+      title: "Settings",
+      url: "#",
+      icon: Settings2,
+      items: [
+        {
+          title: "General",
+          url: "#",
+          icon: Eye,
         },
       ],
     },

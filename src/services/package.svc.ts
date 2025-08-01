@@ -1,20 +1,20 @@
 import { prisma } from "@/lib/prisma";
 
-export const getAllDestinations = async (page: number = 1) => {
+export const getAllPackages = async (page: number = 1) => {
   const pageSize = 10;
   const skip = (page - 1) * pageSize;
 
-  const [destinations, total] = await Promise.all([
-    prisma.destination.findMany({
+  const [packages, total] = await Promise.all([
+    prisma.package.findMany({
       skip,
       take: pageSize,
-      orderBy: { createdAt: "desc" },
+      orderBy: { name: "desc" },
     }),
-    prisma.destination.count(),
+    prisma.package.count(),
   ]);
 
   return {
-    destinations,
+    packages,
     totalPages: Math.ceil(total / pageSize),
     totalCount: total,
     currentPage: page,
