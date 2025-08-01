@@ -1,3 +1,4 @@
+import { Heading } from "@/components/atoms/Heading";
 import DestinationTable from "@/components/organisms/DeatinationTable";
 import { getAllDestinations } from "@/services/destination.svc";
 
@@ -8,7 +9,7 @@ export default async function DestinationPage() {
 
   return (
     <>
-      <h2 className="text-xl font-semibold mt-5">All Destinations</h2>
+      <Heading text="All Destinations" />
       <DestinationTable
         data={destinations ?? []}
         totalCount={totalCount}

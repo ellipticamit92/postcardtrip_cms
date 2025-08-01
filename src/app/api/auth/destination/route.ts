@@ -1,35 +1,26 @@
-import { NextResponse } from "next/server";
+import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
 
-// GET all destinations
-export async function GET(req: Request) {
+export async function GET(req: NextRequest) {
   const { searchParams } = new URL(req.url);
   const page = parseInt(searchParams.get("page") || "1");
   const limit = parseInt(searchParams.get("limit") || "10");
-
   const skip = (page - 1) * limit;
 
-  console.log("DEBUG page number = ", page);
-  console.log("DEBUG limit number = ", limit);
-  console.log("DEBUG skip = ", skip);
-
   try {
-    // Fetch paginated destinations
-    const destinations = await prisma.destination.findMany({
-      skip,
-      take: limit,
-      orderBy: { name: "asc" },
-      include: { packages: true, cities: true },
-    });
-
-    // Fetch total count of destinations
-    const totalCount = await prisma.destination.count();
+    const [destinations, totalCount] = await Promise.all([
+      prisma.destination.findMany({
+        skip,
+        take: limit,
+        orderBy: { createdAt: "desc" },
+      }),
+      prisma.destination.count(),
+    ]);
 
     return NextResponse.json({
       data: destinations,
       totalCount,
       page,
-      limit,
       totalPages: Math.ceil(totalCount / limit),
     });
   } catch (error) {
@@ -42,15 +33,10 @@ export async function GET(req: Request) {
 }
 
 // POST a new destination
-export async function POST(req: Request) {
+export async function POST(req: NextRequest) {
   try {
     const body = await req.json();
-    const { name, country, overview, imageUrl } = body;
-
-    const destination = await prisma.destination.create({
-      data: { name, country, overview, imageUrl },
-    });
-
+    const destination = await prisma.destination.create({ data: body });
     return NextResponse.json(destination, { status: 201 });
   } catch (error) {
     return NextResponse.json(
