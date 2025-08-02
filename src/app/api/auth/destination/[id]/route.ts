@@ -1,86 +1,47 @@
-import { prisma } from "@/lib/prisma";
+import {
+  deleteDestination,
+  updateDestination,
+} from "@/services/destination.svc";
 import { NextResponse } from "next/server";
 
-export async function GET(req: Request) {
-  const { searchParams } = new URL(req.url);
-
-  const page = parseInt(searchParams.get("page") || "1");
-  const limit = parseInt(searchParams.get("limit") || "10");
-  const query = searchParams.get("query")?.trim().toLowerCase() || "";
-
-  const skip = (page - 1) * limit;
-
-  try {
-    const [destinations, total] = await Promise.all([
-      prisma.destination.findMany({
-        where: {
-          OR: [
-            {
-              name: {
-                contains: query || "",
-              },
-            },
-            {
-              country: {
-                contains: query,
-              },
-            },
-          ],
-        },
-        skip,
-        take: limit,
-        orderBy: {
-          name: "asc",
-        },
-      }),
-      prisma.destination.count({
-        where: {
-          OR: [
-            {
-              name: {
-                contains: query,
-              },
-            },
-            {
-              country: {
-                contains: query,
-              },
-            },
-          ],
-        },
-      }),
-    ]);
-
-    return NextResponse.json({
-      data: destinations,
-      total,
-      currentPage: page,
-      totalPages: Math.ceil(total / limit),
-    });
-  } catch (error) {
-    console.error("[DESTINATION_GET]", error);
-    return new NextResponse("Internal Server Error", { status: 500 });
-  }
-}
-
-// PUT /api/destination/:id
+// PUT /api/destination/[id]
 export async function PUT(
   req: Request,
   { params }: { params: { id: string } }
 ) {
   try {
+    const id = params.id;
     const body = await req.json();
-    const { name, country, description, overview, imageUrl } = body;
-
-    const updated = await prisma.destination.update({
-      where: { id: params.id },
-      data: { name, country, description, overview, imageUrl },
+    const result = await updateDestination(parseInt(id), {
+      name: body.name,
+      country: body.country,
+      description: body.description,
+      overview: body.overview,
+      imageUrl: body.imageUrl,
     });
 
-    return NextResponse.json(updated);
+    if (!result.success) {
+      return NextResponse.json(
+        { message: result.message, success: result.success },
+        { status: 409 } // Conflict
+      );
+    }
+
+    return NextResponse.json(
+      {
+        message: result.message,
+        data: result.destination,
+        success: result.success,
+      },
+      { status: 200 }
+    );
   } catch (error) {
     return NextResponse.json(
-      { error: "Failed to update destination" },
+      {
+        message: "Failed to update destination",
+        error: (error as Error).message,
+        success: false,
+      },
       { status: 500 }
     );
   }
@@ -88,18 +49,17 @@ export async function PUT(
 
 // DELETE /api/destination/:id
 export async function DELETE(
-  _: Request,
+  req: Request,
   { params }: { params: { id: string } }
 ) {
   try {
-    await prisma.destination.delete({
-      where: { id: params.id },
-    });
-
-    return NextResponse.json({ message: "Destination deleted" });
-  } catch (error) {
+    const id = params.id;
+    const deleted = await deleteDestination(Number(id));
+    return NextResponse.json({ success: true, data: deleted });
+  } catch (error: any) {
+    console.error("API DELETE error:", error);
     return NextResponse.json(
-      { error: "Failed to delete destination" },
+      { error: error.message || "Delete failed" },
       { status: 500 }
     );
   }

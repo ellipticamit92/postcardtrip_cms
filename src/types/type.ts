@@ -42,111 +42,128 @@ export interface VerificationToken {
 }
 
 export interface Destination {
-  id: string;
+  did: number;
   name: string;
   country: string;
-  description: string | null;
-  overview: string | null;
-  imageUrl: string | null;
-  createdAt: Date;
+  overview?: string | null;
+  imageUrl?: string | null;
   updatedAt: Date;
+  createdAt: Date;
+  // Optional relations
   packages?: Package[];
   cities?: City[];
 }
 
 export interface City {
-  id: string;
+  cid: number;
   name: string;
-  description: string;
-  destinationId: string;
-  hotels: Hotel[];
-  packages: Package[];
+  description: string; // Rich text HTML content
+  destinationId: number;
+  // Optional relations
+  destination?: Destination;
+  packages?: Package[];
+  hotels?: Hotel[];
 }
 
 export interface Hotel {
-  id: string;
+  hid: number;
   name: string;
   description: string;
   starRating: number;
-  cityId: string;
-  prices: PackageHotelPrice[];
-  images: HotelImage[];
-}
-
-export interface HotelImage {
-  id: string;
-  url: string;
-  caption?: string;
-  hotelId: string;
+  cityId: number;
+  // Optional relations
+  city?: City;
+  prices?: PackageHotelPrice[];
+  images?: HotelImage[];
 }
 
 export interface Package {
-  id: string;
+  pid: number;
   name: string;
   basePrice: number;
   durationDays: number;
   description: string;
-  destinationId: string;
-  cityId: string;
-  itineraries: Itinerary[];
-  hotelPrices: PackageHotelPrice[];
+  destinationId: number;
+  cityId: number;
+  // Optional relations
+  destination?: Destination;
+  city?: City;
+  itineraries?: Itinerary[];
+  hotelPrices?: PackageHotelPrice[];
 }
 
 export interface PackageHotelPrice {
-  id: string;
+  phid: number;
   price: number;
-  hotelId: string;
-  packageId: string;
+  hotelId: number;
+  packageId: number;
+  // Optional relations
+  hotel?: Hotel;
+  package?: Package;
 }
 
 export interface Itinerary {
-  id: string;
+  itid: number;
   day: number;
   title: string;
-  details: string;
-  packageId: string;
-  highlights: Highlight[];
-  inclusions: Inclusion[];
-  exclusions: Exclusion[];
-  places: ItineraryPlace[];
-}
-
-export interface Highlight {
-  id: string;
-  text: string;
-  itineraryId: string;
-}
-
-export interface Inclusion {
-  id: string;
-  text: string;
-  itineraryId: string;
-}
-
-export interface Exclusion {
-  id: string;
-  text: string;
-  itineraryId: string;
+  details: string; // Rich text HTML content
+  packageId: number;
+  // Optional relations
+  package?: Package;
+  highlights?: Highlight[];
+  inclusions?: Inclusion[];
+  exclusions?: Exclusion[];
+  places?: ItineraryPlace[];
 }
 
 export interface ItineraryPlace {
-  id: string;
+  itpid: number;
   name: string;
-  description: string;
-  itineraryId: string;
-  images: ItineraryPlaceImage[];
+  description: string; // Rich text HTML content
+  itineraryId: number;
+  // Optional relations
+  itinerary?: Itinerary;
+  images?: ItineraryPlaceImage[];
 }
 
 export interface ItineraryPlaceImage {
-  id: string;
+  ipiid: number;
   url: string;
-  caption?: string;
-  placeId: string;
+  caption?: string | null;
+  placeId: number;
+  // Optional relations
+  place?: ItineraryPlace;
 }
 
-export type DestinationResponse = {
-  destinations: Destination[];
-  totalPages: number;
-  totalCount: number;
-  currentPage: number;
-};
+export interface Highlight {
+  hlid: number;
+  text: string;
+  itineraryId: number;
+  // Optional relations
+  itinerary?: Itinerary;
+}
+
+export interface Inclusion {
+  lid: number;
+  text: string;
+  itineraryId: number;
+  // Optional relations
+  itinerary?: Itinerary;
+}
+
+export interface Exclusion {
+  eid: number;
+  text: string;
+  itineraryId: number;
+  // Optional relations
+  itinerary?: Itinerary;
+}
+
+export interface HotelImage {
+  hiid: number;
+  url: string;
+  caption?: string | null;
+  hotelId: number;
+  // Optional relations
+  hotel?: Hotel;
+}

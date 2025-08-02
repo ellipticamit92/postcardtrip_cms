@@ -64,10 +64,9 @@ model VerificationToken {
 
 model Destination {
   did         Int       @id @default(autoincrement())
-  name        String
+  name        String    @unique
   country     String
-  description String?
-  overview    String?
+  overview    String?   @db.Text
   imageUrl    String?
   packages    Package[]
   cities      City[]
@@ -77,34 +76,36 @@ model Destination {
 
 model City {
   cid           Int          @id @default(autoincrement())
-  name          String
-  description   String
+  name          String       @unique
+  description   String       @db.Text
   destination   Destination  @relation(fields: [destinationId], references: [did])
   destinationId Int
   packages      Package[]
   hotels        Hotel[]
+  createdAt   DateTime  @default(now())
 }
 
 model Hotel {
   hid         Int           @id @default(autoincrement())
-  name        String
+  name        String        @unique
   description String
   starRating  Int
   city        City          @relation(fields: [cityId], references: [cid])
   cityId      Int
   prices      PackageHotelPrice[]
   images      HotelImage[]
+  createdAt   DateTime  @default(now())
 }
 
 model Package {
-  pid           Int                  @id @default(autoincrement())
-  name          String
+  pid           Int          @id @default(autoincrement())
+  name          String       @unique
   basePrice     Float
   durationDays  Int
   description   String
-  destination   Destination          @relation(fields: [destinationId], references: [did])
+  destination   Destination  @relation(fields: [destinationId], references: [did])
   destinationId Int
-  city          City                 @relation(fields: [cityId], references: [cid])
+  city          City         @relation(fields: [cityId], references: [cid])
   cityId        Int
   itineraries   Itinerary[]
   hotelPrices   PackageHotelPrice[]
@@ -122,11 +123,11 @@ model PackageHotelPrice {
 }
 
 model Itinerary {
-  itid        Int             @id @default(autoincrement())
+  itid        Int       @id @default(autoincrement())
   day         Int
   title       String
-  details     String
-  package     Package         @relation(fields: [packageId], references: [pid])
+  details     String     @db.Text
+  package     Package    @relation(fields: [packageId], references: [pid])
   packageId   Int
   highlights  Highlight[]
   inclusions  Inclusion[]
@@ -137,7 +138,7 @@ model Itinerary {
 model ItineraryPlace {
   itpid       Int                  @id @default(autoincrement())
   name        String
-  description String
+  description String               @db.Text
   itinerary   Itinerary            @relation(fields: [itineraryId], references: [itid])
   itineraryId Int
   images      ItineraryPlaceImage[]
@@ -153,14 +154,14 @@ model ItineraryPlaceImage {
 
 model Highlight {
   hlid        Int       @id @default(autoincrement())
-  text        String
+  text        String    @unique
   itinerary   Itinerary @relation(fields: [itineraryId], references: [itid])
   itineraryId Int
 }
 
 model Inclusion {
   lid         Int       @id @default(autoincrement())
-  text        String
+  text        String    @unique
   itinerary   Itinerary @relation(fields: [itineraryId], references: [itid])
   itineraryId Int
 }

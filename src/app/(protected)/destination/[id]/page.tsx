@@ -1,23 +1,31 @@
+import { Heading } from "@/components/atoms/Heading";
+import { getDestinationById } from "@/services/destination.svc";
 import { DestinationForm } from "@/components/organisms/DestinationForm";
-
-async function getDestination(id: string) {
-  const res = await fetch(
-    `${process.env.NEXT_PUBLIC_BASE_URL}/api/destination/${id}`
-  );
-  return res.json();
-}
 
 export default async function EditDestinationPage({
   params,
 }: {
-  params: { id: string };
+  params: Promise<{ id: string }>; // Note: params is now a Promise
 }) {
-  const destination = await getDestination(params.id);
+  const { id: idString } = await params;
+  const id = Number(idString);
+  const destination = await getDestinationById(id);
+  const name = destination?.name ?? "";
+  const country = destination?.country ?? "";
+  const overview = destination?.overview ?? "";
+  const imageUrl = destination?.imageUrl ?? "";
+
+  const updatedDestination = {
+    name,
+    country,
+    overview,
+    imageUrl,
+  };
 
   return (
-    <div className="max-w-2xl mx-auto py-10">
-      <h1 className="text-2xl font-bold mb-4">Edit Destination</h1>
-      <DestinationForm initialData={destination} />
-    </div>
+    <>
+      <Heading text="Edit Destination" subText={name} />
+      <DestinationForm initialData={updatedDestination} id={id} />
+    </>
   );
 }

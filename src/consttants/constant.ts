@@ -9,6 +9,7 @@ import {
   Command,
   GalleryVerticalEnd,
   Settings2,
+  Building,
 } from "lucide-react";
 
 export const SIDEBAR_URLS = {
@@ -88,6 +89,23 @@ export const SIDEBAR_URLS = {
       ],
     },
     {
+      title: "Cities",
+      url: "#",
+      icon: Building,
+      items: [
+        {
+          title: "View Cities",
+          url: "/city",
+          icon: Eye,
+        },
+        {
+          title: "Add City",
+          url: "/city/add",
+          icon: Plus,
+        },
+      ],
+    },
+    {
       title: "Documentation",
       url: "#",
       icon: BookOpen,
@@ -125,10 +143,9 @@ export const PAGE_LIMIT = [
 ];
 
 export const COUNTRIES = [
-  { label: "United States", value: "US" },
-  { label: "India", value: "IN" },
-  { label: "Germany", value: "DE" },
-  { label: "United Arab Emirates", value: "AE" },
-  { label: "Dubai", value: "dubai" },
+  { label: "United States", value: "United States (US)" },
+  { label: "India", value: "India (IN)" },
+  { label: "Germany", value: "Germany (Gre)" },
+  { label: "United Arab Emirates", value: "United Arab Emirates (UAE)" },
   { label: "Indonesia", value: "indonesia" },
 ];

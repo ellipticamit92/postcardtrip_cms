@@ -53,7 +53,7 @@ export const deletePackage = async (id: string) => {
 export const getPackageById = async (id: string) => {
   try {
     return await prisma.package.findUnique({
-      where: { id },
+      where: { pid },
       include: {
         destination: true,
         city: true,

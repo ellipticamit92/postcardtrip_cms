@@ -1,7 +1,7 @@
 "use client";
 
 import { format } from "date-fns";
-import { Destination } from "@/types/type";
+import { City } from "@/types/type";
 import {
   ColumnDef,
   ColumnFiltersState,
@@ -36,7 +36,7 @@ import {
   DialogTrigger,
 } from "../ui/dialog";
 
-export const columns: ColumnDef<Destination>[] = [
+export const columns: ColumnDef<City>[] = [
   {
     id: "select",
     header: ({ table }) => (
@@ -67,20 +67,15 @@ export const columns: ColumnDef<Destination>[] = [
         className="!p-0"
         onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
       >
-        Destination Name <ArrowUpDown className="ml-2 h-4 w-4" />
+        City Name <ArrowUpDown className="ml-2 h-4 w-4" />
       </Button>
     ),
   },
   {
-    accessorKey: "country",
-    header: "Country",
-    cell: ({ row }) => <div>{row.getValue("country")}</div>,
-  },
-  {
-    accessorKey: "overview",
-    header: "Overview",
+    accessorKey: "description",
+    header: "City Description",
     cell: ({ row }) => {
-      const overview = row.getValue("overview") as string;
+      const overview = row.getValue("description") as string;
       const name = row.getValue("name") as string;
 
       // Preview (first 100 chars without HTML)
@@ -110,19 +105,19 @@ export const columns: ColumnDef<Destination>[] = [
     },
   },
   {
-    accessorKey: "createdAt",
-    header: "Created",
+    accessorKey: "destination",
+    header: "Destination Name",
     cell: ({ row }) => {
-      const value = row.getValue("createdAt");
-      return value ? format(new Date(value as any), "dd/MM/yyyy") : null;
+      const city = row.original;
+      return <span>{city?.destination?.name}</span>;
     },
   },
   {
     id: "actions",
     enableHiding: false,
     cell: ({ row }) => {
-      const destination = row.original;
-      const did = String(destination.did);
+      const city = row.original;
+      const cid = String(city.cid);
       return (
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
@@ -134,7 +129,7 @@ export const columns: ColumnDef<Destination>[] = [
           <DropdownMenuContent align="end">
             <DropdownMenuLabel>Actions</DropdownMenuLabel>
             <DropdownMenuItem
-              onClick={() => navigator.clipboard.writeText(did)}
+              onClick={() => navigator.clipboard.writeText(cid)}
             >
               Copy ID
             </DropdownMenuItem>
@@ -142,13 +137,13 @@ export const columns: ColumnDef<Destination>[] = [
             <DropdownMenuItem>
               <Link
                 className="hover:text-blue-400 font-semibold"
-                href={`/destination/${did}`}
+                href={`/City/${cid}`}
               >
                 Edit
               </Link>
             </DropdownMenuItem>
             <DropdownMenuItem>
-              <DeleteData id={did} model="destination" />
+              <DeleteData id={cid} model="city" />
             </DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>
@@ -157,19 +152,14 @@ export const columns: ColumnDef<Destination>[] = [
   },
 ];
 
-interface DestinationTableProps {
-  data: Destination[];
-  totalCount: number;
-  totalPages: number;
-  currentPage: number;
+interface CityTableProps {
+  data: City[];
+  totalCount?: number;
+  totalPages?: number;
+  currentPage?: number;
 }
 
-const DestinationTable: FC<DestinationTableProps> = ({
-  data,
-  currentPage,
-  totalCount,
-  totalPages,
-}) => {
+const CityTable: FC<CityTableProps> = ({ data }) => {
   const [sorting, setSorting] = useState<SortingState>([]);
   const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
   const [columnVisibility, setColumnVisibility] = useState<VisibilityState>({});
@@ -198,7 +188,7 @@ const DestinationTable: FC<DestinationTableProps> = ({
     <div className="w-full">
       <CommonTable
         table={table}
-        placeholder="Filter by Destination Name"
+        placeholder="Filter by City Name"
         columnName="name"
         columns={columns}
       />
@@ -206,4 +196,4 @@ const DestinationTable: FC<DestinationTableProps> = ({
   );
 };
 
-export default DestinationTable;
+export default CityTable;

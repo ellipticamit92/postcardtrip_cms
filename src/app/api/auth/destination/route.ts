@@ -1,29 +1,23 @@
 import { NextRequest, NextResponse } from "next/server";
-import { prisma } from "@/lib/prisma";
-import { createDestination } from "@/services/destination.svc";
+import {
+  createDestination,
+  getPaginationDestinations,
+} from "@/services/destination.svc";
 
 export async function GET(req: NextRequest) {
-  const { searchParams } = new URL(req.url);
-  const page = parseInt(searchParams.get("page") || "1");
-  const limit = parseInt(searchParams.get("limit") || "10");
-  const skip = (page - 1) * limit;
-
   try {
-    const [destinations, totalCount] = await Promise.all([
-      prisma.destination.findMany({
-        skip,
-        take: limit,
-        orderBy: { createdAt: "desc" },
-      }),
-      prisma.destination.count(),
-    ]);
+    const { searchParams } = new URL(req.url);
+    const page = parseInt(searchParams.get("page") || "1");
+    const limit = parseInt(searchParams.get("limit") || "10");
+    const query = searchParams.get("query") || "";
 
-    return NextResponse.json({
-      data: destinations,
-      totalCount,
+    const paginationData = await getPaginationDestinations({
       page,
-      totalPages: Math.ceil(totalCount / limit),
+      limit,
+      query,
     });
+
+    return NextResponse.json(paginationData);
   } catch (error) {
     console.error("Failed to fetch destinations:", error);
     return NextResponse.json(
