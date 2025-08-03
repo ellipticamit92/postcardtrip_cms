@@ -12,6 +12,7 @@ import { toast } from "sonner";
 import { Loader2 } from "lucide-react";
 import { COUNTRIES } from "@/consttants/constant";
 import { FormRichText } from "../atoms/FormRichText";
+import { useDestinations } from "@/hooks/use-destinations";
 
 const schema = z.object({
   name: z.string().min(1),
@@ -24,12 +25,21 @@ export type DestinationFormData = z.infer<typeof schema>;
 
 export function DestinationForm({
   initialData,
-  id,
+  destinationId,
 }: {
   initialData?: DestinationFormData;
-  id?: number;
+  destinationId?: number;
 }) {
-  const [loading, setLoading] = useState(false);
+  const {
+    createDestination,
+    updateDestination,
+    getDestination,
+    loading,
+    error,
+    clearError,
+  } = useDestinations({
+    autoFetch: false,
+  });
 
   const form = useForm<DestinationFormData>({
     resolver: zodResolver(schema),
@@ -44,10 +54,31 @@ export function DestinationForm({
   const { control, reset, setValue } = form;
 
   const onSubmit = async (data: DestinationFormData) => {
-    setLoading(true);
     try {
-      const isEditMode = Boolean(id);
+      const isEditMode = Boolean(destinationId);
 
+      const submitData = {
+        name: data.name.trim(),
+        country: data.country.trim(),
+        overview: data.overview?.trim() || undefined,
+        imageUrl: data.imageUrl?.trim() || undefined,
+      };
+
+      let result;
+      if (isEditMode && destinationId) {
+        result = await updateDestination(destinationId, submitData);
+      } else {
+        result = await createDestination(submitData);
+      }
+
+      if (!result.success) {
+      }
+
+      console.log("DEBUG submit result  = ", result);
+      if (!isEditMode) {
+        //reset();
+      }
+      /*
       const res = await fetch(
         isEditMode
           ? `/api/auth/destination/${id}` // PUT endpoint
@@ -80,11 +111,11 @@ export function DestinationForm({
       if (!isEditMode) {
         reset(); // clears form for new entries
       }
+      */
     } catch (err: any) {
       console.error("Error submitting destination", err);
-      toast.error(err.message || "Error submitting destination");
+      //toast.error(err.message || "Error submitting destination");
     } finally {
-      setLoading(false);
     }
   };
 

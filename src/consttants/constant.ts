@@ -16,7 +16,7 @@ export const SIDEBAR_URLS = {
   user: {
     name: "Postcardtrip Admin",
     email: "abc@a.com",
-    avatar: "/avatars/shadcn.jpg",
+    avatar: "",
   },
   teams: [
     {
@@ -84,6 +84,23 @@ export const SIDEBAR_URLS = {
         {
           title: "Add Hotel",
           url: "/package/add",
+          icon: Plus,
+        },
+      ],
+    },
+    {
+      title: "Hotel Image",
+      url: "#",
+      icon: Hotel,
+      items: [
+        {
+          title: "View Hotel Images",
+          url: "/hotel-image",
+          icon: Eye,
+        },
+        {
+          title: "Add Hotel Image",
+          url: "/hotel-image/add",
           icon: Plus,
         },
       ],
