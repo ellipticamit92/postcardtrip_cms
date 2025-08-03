@@ -31,7 +31,7 @@ export default async function RootLayout({
       >
         {children}
         <Toaster
-          position="top-right"
+          position="top-center"
           richColors
           expand={true}
           duration={3000}

@@ -7,12 +7,11 @@ import { Form } from "@/components/ui/form";
 import { FormInput } from "@/components/atoms/FormInput";
 import { Button } from "@/components/ui/button";
 import { FormSelect } from "../atoms/FormSelect";
-import { useState } from "react";
-import { toast } from "sonner";
 import { Loader2 } from "lucide-react";
 import { COUNTRIES } from "@/consttants/constant";
 import { FormRichText } from "../atoms/FormRichText";
 import { useDestinations } from "@/hooks/use-destinations";
+import { toast } from "sonner";
 
 const schema = z.object({
   name: z.string().min(1),
@@ -30,14 +29,7 @@ export function DestinationForm({
   initialData?: DestinationFormData;
   destinationId?: number;
 }) {
-  const {
-    createDestination,
-    updateDestination,
-    getDestination,
-    loading,
-    error,
-    clearError,
-  } = useDestinations({
+  const { createDestination, updateDestination, loading } = useDestinations({
     autoFetch: false,
   });
 
@@ -71,50 +63,21 @@ export function DestinationForm({
         result = await createDestination(submitData);
       }
 
-      if (!result.success) {
-      }
-
-      console.log("DEBUG submit result  = ", result);
-      if (!isEditMode) {
-        //reset();
-      }
       /*
-      const res = await fetch(
-        isEditMode
-          ? `/api/auth/destination/${id}` // PUT endpoint
-          : `/api/auth/destination`, // POST endpoint
-        {
-          method: isEditMode ? "PUT" : "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify(data),
-        }
-      );
-
-      const resData = await res.json();
-
-      console.log("DEBUG fornt resData  = ", resData);
-
-      if (!res.ok || !resData.success) {
-        throw new Error(resData.message || "Failed to save destination");
-      }
-
       if (isEditMode) {
         setValue("name", resData?.data?.name ?? "");
         setValue("overview", resData?.data?.overview ?? "");
         setValue("country", resData?.data?.country ?? "");
         setValue("imageUrl", resData?.data?.imageUrl ?? "");
       }
-
-      toast.success(resData.message);
-      if (!isEditMode) {
-        reset(); // clears form for new entries
-      }
       */
+
+      if (!isEditMode) {
+        reset();
+      }
     } catch (err: any) {
       console.error("Error submitting destination", err);
-      //toast.error(err.message || "Error submitting destination");
+      toast.error(err.message || "Error submitting destination");
     } finally {
     }
   };

@@ -103,36 +103,33 @@ export const useDestinations = (options: UseDestinationsOptions = {}) => {
     setError(null);
 
     const loadingToast = showToast.createLoading("destination");
-    console.log("DEBUG  loadingToast = ", loadingToast);
 
     try {
-      const checkName = await destinationsApi.getByName(data.name);
-
-      console.log("DEBUG check name = ", checkName);
+      const nameResult = await destinationsApi.getByName(data.name);
+      if (nameResult.success) {
+        const errorMsg = "Destination name already exist";
+        toast.dismiss(loadingToast);
+        showToast.error(errorMsg);
+        return { success: false, error: errorMsg };
+      }
 
       const result = await destinationsApi.create(data);
 
-      console.log("DEBUG 115 result= ", result);
-
       if (result.success) {
-        console.log("DEBUG 119= ", result);
-
         // Refresh the list if we're showing destinations
         if (destinations.length > 0 || autoFetch) {
           await fetchDestinations({ page: currentPage });
         }
         toast.dismiss(loadingToast);
-        showToast.createSuccess("hotel");
+        showToast.createSuccess("Destinations");
         return { success: true, data: result.data };
       } else {
-        setError(result.error || "Failed to create destination");
-        console.log("DEBUG line 127= ", result);
-
+        toast.dismiss(loadingToast);
+        showToast.createError("Destinations");
         return { success: false, error: result.error };
       }
     } catch (err) {
       const errorMsg = err instanceof Error ? err.message : "An error occurred";
-      console.log("error message  134  = ", errorMsg);
       toast.dismiss(loadingToast);
       showToast.createError("destination", errorMsg);
       setError(errorMsg);
