@@ -11,51 +11,54 @@ import { Form } from "../ui/form";
 import { Loader2 } from "lucide-react";
 import { FormRichText } from "../atoms/FormRichText";
 import { useCities } from "@/hooks/use-cities";
+import { useHotels } from "@/hooks/use-hotels";
 
-const citySchema = z.object({
-  name: z.string().min(2, "City name is required"),
-  description: z.string().min(5, "Description is too short"),
-  destinationId: z.string().min(1, "Please atleast one number"),
+const hotelSchema = z.object({
+  name: z.string().min(2, "Hotel name is required"),
+  description: z.string().min(5, "Hotel is too short"),
+  starRating: z.string().min(1, "Hotel rating is required"),
+  cityId: z.string().min(1, "Please atleast one number"),
 });
 
-type CityFormValues = z.infer<typeof citySchema>;
+type HotelFormValues = z.infer<typeof hotelSchema>;
 
-interface CityFormProps {
-  destinations: { label: string; value: string }[];
-  initialData?: CityFormValues;
-  cityId?: number;
+interface HotelFormProps {
+  cities: { label: string; value: string }[];
+  initialData?: HotelFormValues;
+  hotelId?: number;
 }
 
-export function CityForm({ destinations, initialData, cityId }: CityFormProps) {
-  const { loading, createCity, updateCity } = useCities({
+export function HotelForm({ cities, initialData, hotelId }: HotelFormProps) {
+  const { loading, createHotel, updateHotel } = useHotels({
     autoFetch: false,
   });
-  const form = useForm<CityFormValues>({
-    resolver: zodResolver(citySchema),
+  const form = useForm<HotelFormValues>({
+    resolver: zodResolver(hotelSchema),
     defaultValues: initialData || {
       name: "",
       description: "",
-      destinationId: destinations?.[0]?.value || "0",
+      cityId: cities?.[0]?.value || "0",
     },
   });
 
   const { control, handleSubmit, reset } = form;
 
-  const onSubmit = async (data: CityFormValues) => {
+  const onSubmit = async (data: HotelFormValues) => {
     try {
-      const isEditMode = Boolean(cityId);
+      const isEditMode = Boolean(hotelId);
 
       const submitData = {
         name: data.name.trim(),
         description: data.description.trim(),
-        destinationId: parseInt(data.destinationId),
+        cityId: parseInt(data.cityId),
+        starRating: parseInt(data.starRating),
       };
 
       let result;
-      if (isEditMode && cityId) {
-        result = await updateCity(cityId, submitData);
+      if (isEditMode && hotelId) {
+        result = await updateHotel(hotelId, submitData);
       } else {
-        result = await createCity(submitData);
+        result = await createHotel(submitData);
       }
 
       if (!isEditMode) {
@@ -67,6 +70,34 @@ export function CityForm({ destinations, initialData, cityId }: CityFormProps) {
     }
   };
 
+  // async function onSubmit(data: CityFormValues) {
+  //   setLoading(true);
+  //   try {
+  //     const res = await fetch(
+  //       cityId ? `/api/auth/city/${cityId}` : `/api/auth/city`,
+  //       {
+  //         method: cityId ? "PUT" : "POST",
+  //         headers: { "Content-Type": "application/json" },
+  //         body: JSON.stringify(data),
+  //       }
+  //     );
+
+  //     const result = await res.json();
+
+  //     if (!res.ok) throw new Error(result.message || "Something went wrong");
+
+  //     toast.success(result.message);
+  //     router.refresh();
+  //     if (!cityId) {
+  //       reset(); // clears form for new entries
+  //     }
+  //   } catch (err: any) {
+  //     toast.error(err.message);
+  //   } finally {
+  //     setLoading(false);
+  //   }
+  // }
+
   return (
     <Form {...form}>
       <form onSubmit={handleSubmit(onSubmit)} className="space-y-4 mt-4">
@@ -77,13 +108,13 @@ export function CityForm({ destinations, initialData, cityId }: CityFormProps) {
             placeholder="Enter city name"
             control={control}
           />
-          <FormSelect
+          {/* <FormSelect
             label="Destination"
             name="destinationId"
             control={control}
             options={destinations}
             placeholder="Select destination"
-          />
+          /> */}
         </div>
 
         <FormRichText

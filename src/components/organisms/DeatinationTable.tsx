@@ -1,7 +1,7 @@
 "use client";
 
 import { format } from "date-fns";
-import { Destination } from "@/types/type";
+import { Destination, PaginationProps } from "@/types/type";
 import {
   ColumnDef,
   ColumnFiltersState,
@@ -159,17 +159,10 @@ export const columns: ColumnDef<Destination>[] = [
 
 interface DestinationTableProps {
   data: Destination[];
-  totalCount: number;
-  totalPages: number;
-  currentPage: number;
+  pagination: PaginationProps;
 }
 
-const DestinationTable: FC<DestinationTableProps> = ({
-  data,
-  currentPage,
-  totalCount,
-  totalPages,
-}) => {
+const DestinationTable: FC<DestinationTableProps> = ({ data, pagination }) => {
   const [sorting, setSorting] = useState<SortingState>([]);
   const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
   const [columnVisibility, setColumnVisibility] = useState<VisibilityState>({});
@@ -201,6 +194,7 @@ const DestinationTable: FC<DestinationTableProps> = ({
         placeholder="Filter by Destination Name"
         columnName="name"
         columns={columns}
+        pagination={pagination}
       />
     </div>
   );

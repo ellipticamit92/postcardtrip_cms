@@ -1,16 +1,13 @@
 import { Heading } from "@/components/atoms/Heading";
 import { CityForm } from "@/components/organisms/CityForm";
-import { getDestinationDropdown } from "@/lib/helper";
-import { getPaginationDestinations } from "@/services/destination.svc";
+import DestinationService from "@/services/destination.service";
 
 export default async function AddCityPage() {
-  const destinationsData = await getPaginationDestinations({});
-  const { destinations } = destinationsData;
-
+  const destinationsData = await DestinationService.getNameId();
   return (
     <>
-      <Heading text="Create City" />
-      <CityForm destinations={getDestinationDropdown(destinations)} />
+      <Heading text="Add New City" />
+      <CityForm destinations={destinationsData?.data} />
     </>
   );
 }

@@ -43,7 +43,7 @@ export function DestinationForm({
     },
   });
 
-  const { control, reset, setValue } = form;
+  const { control, reset } = form;
 
   const onSubmit = async (data: DestinationFormData) => {
     try {
@@ -78,7 +78,6 @@ export function DestinationForm({
     } catch (err: any) {
       console.error("Error submitting destination", err);
       toast.error(err.message || "Error submitting destination");
-    } finally {
     }
   };
 

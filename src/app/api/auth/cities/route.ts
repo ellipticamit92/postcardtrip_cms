@@ -1,4 +1,3 @@
-// app/api/cities/route.ts
 import { NextRequest, NextResponse } from "next/server";
 import { CityService } from "@/services/city.service";
 

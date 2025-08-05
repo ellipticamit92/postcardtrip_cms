@@ -3,12 +3,14 @@ import { CommonTableSearch } from "./CommonTableSerach";
 import { Table, TableBody, TableCell, TableRow } from "../ui/table";
 import { CommonTableHeader } from "./CommonTableHeader";
 import { CommonTableFooter } from "./CommontTableFooter";
+import { PaginationProps } from "@/types/type";
 
 interface CommonTableProps {
   columns: any;
   columnName: string;
   placeholder: string;
   table: any;
+  pagination?: PaginationProps;
 }
 
 const CommonTable = ({
@@ -16,6 +18,7 @@ const CommonTable = ({
   columnName,
   placeholder,
   table,
+  pagination,
 }: CommonTableProps) => {
   return (
     <div className="w-full">
@@ -57,7 +60,15 @@ const CommonTable = ({
           </TableBody>
         </Table>
       </div>
-      <CommonTableFooter table={table} />
+      <CommonTableFooter
+        table={table}
+        page={pagination?.page}
+        limit={pagination?.limit}
+        total={pagination?.total}
+        totalPages={pagination?.totalPages}
+        hasNext={pagination?.hasNext}
+        hasPrev={pagination?.hasPrev}
+      />
     </div>
   );
 };

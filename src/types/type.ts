@@ -5,16 +5,18 @@ export interface PaginationOptions {
   sortOrder?: "asc" | "desc";
 }
 
+export interface PaginationProps {
+  page: number;
+  limit: number;
+  total: number;
+  totalPages: number;
+  hasNext: boolean;
+  hasPrev: boolean;
+}
+
 export interface PaginatedResponse<T> {
   data: T[];
-  pagination: {
-    page: number;
-    limit: number;
-    total: number;
-    totalPages: number;
-    hasNext: boolean;
-    hasPrev: boolean;
-  };
+  pagination: PaginationProps;
 }
 
 export interface User {

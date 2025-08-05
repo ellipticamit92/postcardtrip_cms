@@ -1,3 +1,4 @@
+import { getDestinationDropdown } from "@/lib/helper";
 import { prisma } from "@/lib/prisma";
 
 export class DestinationService {
@@ -17,6 +18,18 @@ export class DestinationService {
       });
     } catch (error) {
       throw new Error(`Failed to create destination: ${error}`);
+    }
+  }
+
+  static async getNameId() {
+    try {
+      const destinations = await prisma.destination.findMany();
+      const destinationsData = getDestinationDropdown(destinations);
+      return {
+        data: destinationsData,
+      };
+    } catch (error) {
+      throw new Error(`Failed to fetch destinations name and id: ${error}`);
     }
   }
 

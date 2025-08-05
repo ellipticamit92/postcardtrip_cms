@@ -1,4 +1,3 @@
-// src/lib/api/cities.ts
 export interface CityPayload {
   name: string;
   description: string;
@@ -20,7 +19,7 @@ export interface ApiResponse<T = unknown> {
   error?: string;
 }
 
-const BASE = "/api/cities";
+const BASE = "/api/auth/cities";
 
 export const citiesApi = {
   /* List with pagination & filters */
