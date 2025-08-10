@@ -1,6 +1,6 @@
 "use client";
 
-import { useForm } from "react-hook-form";
+import { Controller, useForm } from "react-hook-form";
 import z from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Form } from "@/components/ui/form";
@@ -12,6 +12,7 @@ import { COUNTRIES } from "@/consttants/constant";
 import { FormRichText } from "../atoms/FormRichText";
 import { useDestinations } from "@/hooks/use-destinations";
 import { toast } from "sonner";
+import ImageUploader from "../atoms/ImageUploader";
 
 const schema = z.object({
   name: z.string().min(1),
@@ -83,7 +84,18 @@ export function DestinationForm({
 
   return (
     <Form {...form}>
-      <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
+      <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4 mb-10">
+        <Controller
+          control={control}
+          name="imageUrl"
+          render={({ field }) => (
+            <ImageUploader
+              value={field.value}
+              onChange={field.onChange}
+              label="Upload Destination Image"
+            />
+          )}
+        />
         <div className="grid grid-cols-3 gap-4">
           <FormInput name="name" control={control} label="Destination Name" />
           <FormSelect
@@ -93,7 +105,12 @@ export function DestinationForm({
             placeholder="Choose your country"
             options={COUNTRIES}
           />
-          <FormInput name="imageUrl" control={control} label="Image URL" />
+          <FormInput
+            disabled
+            name="imageUrl"
+            control={control}
+            label="Image URL"
+          />
           <div className="col-span-3">
             <FormRichText label="Overview" name="overview" control={control} />
           </div>

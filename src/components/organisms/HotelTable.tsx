@@ -1,6 +1,6 @@
 "use client";
 
-import { City } from "@/types/type";
+import { Hotel } from "@/types/type";
 import { ColumnDef } from "@tanstack/react-table";
 import { Checkbox } from "../ui/checkbox";
 import { ArrowUpDown, MoreHorizontal } from "lucide-react";
@@ -13,7 +13,7 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "../ui/dropdown-menu";
-import { FC, useState } from "react";
+import { FC } from "react";
 import CommonTable from "../molecules/CommonTable";
 import Link from "next/link";
 import DeleteData from "./DeleteData";
@@ -25,7 +25,7 @@ import {
   DialogTrigger,
 } from "../ui/dialog";
 
-export const columns: ColumnDef<City>[] = [
+export const columns: ColumnDef<Hotel>[] = [
   {
     id: "select",
     header: ({ table }) => (
@@ -56,13 +56,22 @@ export const columns: ColumnDef<City>[] = [
         className="!p-0"
         onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
       >
-        City Name <ArrowUpDown className="ml-2 h-4 w-4" />
+        Hotel Name <ArrowUpDown className="ml-2 h-4 w-4" />
       </Button>
     ),
   },
   {
+    accessorKey: "city",
+    header: "City Name",
+    cell: ({ row }) => {
+      const hotel = row.original;
+      return <span>{hotel?.city?.name}</span>;
+    },
+  },
+
+  {
     accessorKey: "description",
-    header: "City Description",
+    header: "Hotel Description",
     cell: ({ row }) => {
       const overview = row.getValue("description") as string;
       const name = row.getValue("name") as string;
@@ -93,20 +102,13 @@ export const columns: ColumnDef<City>[] = [
       );
     },
   },
-  {
-    accessorKey: "destination",
-    header: "Destination Name",
-    cell: ({ row }) => {
-      const city = row.original;
-      return <span>{city?.destination?.name}</span>;
-    },
-  },
+
   {
     id: "actions",
     enableHiding: false,
     cell: ({ row }) => {
-      const city = row.original;
-      const cid = String(city.cid);
+      const hotel = row.original;
+      const hid = String(hotel.hid);
       return (
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
@@ -118,7 +120,7 @@ export const columns: ColumnDef<City>[] = [
           <DropdownMenuContent align="end">
             <DropdownMenuLabel>Actions</DropdownMenuLabel>
             <DropdownMenuItem
-              onClick={() => navigator.clipboard.writeText(cid)}
+              onClick={() => navigator.clipboard.writeText(hid)}
             >
               Copy ID
             </DropdownMenuItem>
@@ -126,13 +128,13 @@ export const columns: ColumnDef<City>[] = [
             <DropdownMenuItem>
               <Link
                 className="hover:text-blue-400 font-semibold"
-                href={`/City/${cid}`}
+                href={`/hotel/${hid}`}
               >
                 Edit
               </Link>
             </DropdownMenuItem>
             <DropdownMenuItem>
-              <DeleteData id={cid} model="city" />
+              <DeleteData id={hid} model="Hotel" />
             </DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>
@@ -141,14 +143,14 @@ export const columns: ColumnDef<City>[] = [
   },
 ];
 
-interface CityTableProps {
-  data: City[];
+interface HotelTableProps {
+  data: Hotel[];
   totalCount?: number;
   totalPages?: number;
   currentPage?: number;
 }
 
-const CityTable: FC<CityTableProps> = ({ data }) => {
+const HotelTable: FC<HotelTableProps> = ({ data }) => {
   return (
     <div className="w-full">
       <CommonTable
@@ -161,4 +163,4 @@ const CityTable: FC<CityTableProps> = ({ data }) => {
   );
 };
 
-export default CityTable;
+export default HotelTable;

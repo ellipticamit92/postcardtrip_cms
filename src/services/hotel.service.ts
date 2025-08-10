@@ -1,3 +1,4 @@
+import { getFieldOptions } from "@/lib/helper";
 import { prisma } from "@/lib/prisma";
 
 export class HotelService {
@@ -27,6 +28,18 @@ export class HotelService {
       });
     } catch (error) {
       throw new Error(`Failed to create hotel: ${error}`);
+    }
+  }
+
+  static async getNameId() {
+    try {
+      const hotels = await prisma.hotel.findMany();
+      const destinationsData = getFieldOptions(hotels, "hid");
+      return {
+        data: destinationsData,
+      };
+    } catch (error) {
+      throw new Error(`Failed to fetch destinations name and id: ${error}`);
     }
   }
 

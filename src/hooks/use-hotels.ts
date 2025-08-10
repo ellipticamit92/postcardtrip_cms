@@ -1,6 +1,8 @@
 // hooks/use-hotels.ts
 import { useState, useEffect } from "react";
 import { hotelsApi } from "@/lib/api/hotels";
+import { showToast } from "@/lib/toast";
+import { toast } from "sonner";
 
 interface Hotel {
   hid: number;
@@ -51,7 +53,7 @@ interface PaginationInfo {
 }
 
 export const useHotels = (options: UseHotelsOptions = {}) => {
-  const { autoFetch = true, initialPage = 1, initialLimit = 10 } = options;
+  const { autoFetch = false, initialPage = 1, initialLimit = 10 } = options;
 
   const [hotels, setHotels] = useState<Hotel[]>([]);
   const [loading, setLoading] = useState(false);
@@ -125,6 +127,7 @@ export const useHotels = (options: UseHotelsOptions = {}) => {
   }): Promise<{ success: boolean; data?: Hotel; error?: string }> => {
     setLoading(true);
     setError(null);
+    const loadingToast = showToast.createLoading("hotel");
 
     try {
       const result = await hotelsApi.create(data);
@@ -134,14 +137,20 @@ export const useHotels = (options: UseHotelsOptions = {}) => {
         if (hotels.length > 0 || autoFetch) {
           await fetchHotels({ page: currentPage });
         }
+        toast.dismiss(loadingToast);
+        showToast.createSuccess("Hotel");
         return { success: true, data: result.data };
       } else {
+        toast.dismiss(loadingToast);
+        showToast.createError("Hotel");
         setError(result.error || "Failed to create hotel");
         return { success: false, error: result.error };
       }
     } catch (err) {
       const errorMsg = err instanceof Error ? err.message : "An error occurred";
       setError(errorMsg);
+      toast.dismiss(loadingToast);
+      showToast.createError("hotel", errorMsg);
       return { success: false, error: errorMsg };
     } finally {
       setLoading(false);
@@ -160,6 +169,8 @@ export const useHotels = (options: UseHotelsOptions = {}) => {
     setLoading(true);
     setError(null);
 
+    const loadingToast = showToast.updateLoading("hotel");
+
     try {
       const result = await hotelsApi.update(id, data);
 
@@ -170,14 +181,20 @@ export const useHotels = (options: UseHotelsOptions = {}) => {
             hotel.hid === id ? { ...hotel, ...result.data } : hotel
           )
         );
+        toast.dismiss(loadingToast);
+        showToast.updateSuccess("hotel");
         return { success: true, data: result.data };
       } else {
         setError(result.error || "Failed to update hotel");
+        toast.dismiss(loadingToast);
+        showToast.updateError("Destination", "Failed to update destination");
         return { success: false, error: result.error };
       }
     } catch (err) {
       const errorMsg = err instanceof Error ? err.message : "An error occurred";
       setError(errorMsg);
+      toast.dismiss(loadingToast);
+      showToast.updateError("Destination", errorMsg);
       return { success: false, error: errorMsg };
     } finally {
       setLoading(false);

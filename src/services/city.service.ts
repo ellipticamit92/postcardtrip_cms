@@ -1,3 +1,4 @@
+import { getFieldOptions } from "@/lib/helper";
 import { prisma } from "@/lib/prisma";
 
 export class CityService {
@@ -17,6 +18,18 @@ export class CityService {
       });
     } catch (error) {
       throw new Error(`Failed to create city: ${error}`);
+    }
+  }
+
+  static async getNameId() {
+    try {
+      const cities = await prisma.city.findMany();
+      const cityData = getFieldOptions(cities, "cid");
+      return {
+        data: cityData,
+      };
+    } catch (error) {
+      throw new Error(`Failed to fetch destinations name and id: ${error}`);
     }
   }
 

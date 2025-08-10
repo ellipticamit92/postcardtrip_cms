@@ -22,7 +22,7 @@ export interface ApiResponse<T = unknown> {
   error?: string;
 }
 
-const BASE = "/api/hotels";
+const BASE = "/api/auth/hotels";
 
 export const hotelsApi = {
   /* List with pagination & filters */

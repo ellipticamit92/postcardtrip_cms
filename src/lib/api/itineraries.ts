@@ -29,7 +29,7 @@ export interface ApiResponse<T = unknown> {
   error?: string;
 }
 
-const BASE = "/api/itineraries";
+const BASE = "/api/auth/itineraries";
 
 export const itinerariesApi = {
   /* List with pagination & filters */

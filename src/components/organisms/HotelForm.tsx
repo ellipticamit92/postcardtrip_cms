@@ -1,22 +1,22 @@
 "use client";
 
 import { z } from "zod";
-import { useForm } from "react-hook-form";
+import { Controller, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Button } from "@/components/ui/button";
 import { toast } from "sonner";
 import { FormInput } from "../atoms/FormInput";
 import { FormSelect } from "../atoms/FormSelect";
 import { Form } from "../ui/form";
-import { Loader2 } from "lucide-react";
+import { Loader2, Star } from "lucide-react";
 import { FormRichText } from "../atoms/FormRichText";
-import { useCities } from "@/hooks/use-cities";
 import { useHotels } from "@/hooks/use-hotels";
+import { StarRating } from "../atoms/StarRating";
 
 const hotelSchema = z.object({
   name: z.string().min(2, "Hotel name is required"),
   description: z.string().min(5, "Hotel is too short"),
-  starRating: z.string().min(1, "Hotel rating is required"),
+  starRating: z.number().min(1, "Hotel rating is required"),
   cityId: z.string().min(1, "Please atleast one number"),
 });
 
@@ -38,6 +38,7 @@ export function HotelForm({ cities, initialData, hotelId }: HotelFormProps) {
       name: "",
       description: "",
       cityId: cities?.[0]?.value || "0",
+      starRating: 0,
     },
   });
 
@@ -51,8 +52,10 @@ export function HotelForm({ cities, initialData, hotelId }: HotelFormProps) {
         name: data.name.trim(),
         description: data.description.trim(),
         cityId: parseInt(data.cityId),
-        starRating: parseInt(data.starRating),
+        starRating: data.starRating,
       };
+
+      console.log("DEBUG data - ", submitData);
 
       let result;
       if (isEditMode && hotelId) {
@@ -62,7 +65,7 @@ export function HotelForm({ cities, initialData, hotelId }: HotelFormProps) {
       }
 
       if (!isEditMode) {
-        //reset();
+        reset();
       }
     } catch (err: any) {
       console.error("Error submitting destination", err);
@@ -70,63 +73,46 @@ export function HotelForm({ cities, initialData, hotelId }: HotelFormProps) {
     }
   };
 
-  // async function onSubmit(data: CityFormValues) {
-  //   setLoading(true);
-  //   try {
-  //     const res = await fetch(
-  //       cityId ? `/api/auth/city/${cityId}` : `/api/auth/city`,
-  //       {
-  //         method: cityId ? "PUT" : "POST",
-  //         headers: { "Content-Type": "application/json" },
-  //         body: JSON.stringify(data),
-  //       }
-  //     );
-
-  //     const result = await res.json();
-
-  //     if (!res.ok) throw new Error(result.message || "Something went wrong");
-
-  //     toast.success(result.message);
-  //     router.refresh();
-  //     if (!cityId) {
-  //       reset(); // clears form for new entries
-  //     }
-  //   } catch (err: any) {
-  //     toast.error(err.message);
-  //   } finally {
-  //     setLoading(false);
-  //   }
-  // }
-
   return (
     <Form {...form}>
       <form onSubmit={handleSubmit(onSubmit)} className="space-y-4 mt-4">
-        <div className="grid grid-cols-2 gap-4 mb-6">
+        <div className="grid grid-cols-3 gap-4 mb-6">
           <FormInput
-            label="City Name"
+            label="Hotel Name"
             name="name"
-            placeholder="Enter city name"
+            placeholder="Enter hotel name"
             control={control}
           />
-          {/* <FormSelect
-            label="Destination"
-            name="destinationId"
+          <FormSelect
+            label="City"
+            name="cityId"
             control={control}
-            options={destinations}
-            placeholder="Select destination"
-          /> */}
+            options={cities}
+            placeholder="Select City"
+          />
+          <Controller
+            name="starRating"
+            control={control}
+            render={({ field }) => (
+              <StarRating
+                value={field.value}
+                onChange={(val) => field.onChange(val)}
+                label="Hotel Star Rating"
+              />
+            )}
+          />
         </div>
 
         <FormRichText
-          label="City Description"
+          label="Hotel Description"
           name="description"
-          placeholder="Describe the city"
+          placeholder="Describe hotel details"
           control={control}
         />
 
         <Button type="submit" disabled={loading}>
           {loading && <Loader2 className="animate-spin mr-2" />}
-          {initialData ? "Update" : "Add"} City
+          {initialData ? "Update" : "Add"} Hotel
         </Button>
       </form>
     </Form>

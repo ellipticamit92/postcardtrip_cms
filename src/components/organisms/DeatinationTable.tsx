@@ -2,17 +2,7 @@
 
 import { format } from "date-fns";
 import { Destination, PaginationProps } from "@/types/type";
-import {
-  ColumnDef,
-  ColumnFiltersState,
-  getCoreRowModel,
-  getFilteredRowModel,
-  getPaginationRowModel,
-  getSortedRowModel,
-  SortingState,
-  useReactTable,
-  VisibilityState,
-} from "@tanstack/react-table";
+import { ColumnDef } from "@tanstack/react-table";
 import { Checkbox } from "../ui/checkbox";
 import { ArrowUpDown, MoreHorizontal } from "lucide-react";
 import { Button } from "../ui/button";
@@ -35,6 +25,7 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "../ui/dialog";
+import { getFIleName } from "@/lib/utils";
 
 export const columns: ColumnDef<Destination>[] = [
   {
@@ -75,6 +66,21 @@ export const columns: ColumnDef<Destination>[] = [
     accessorKey: "country",
     header: "Country",
     cell: ({ row }) => <div>{row.getValue("country")}</div>,
+  },
+  {
+    accessorKey: "imageUrl",
+    header: "imageUrl",
+    cell: ({ row }) => (
+      <div>
+        <a
+          className="text-blue-700 hover:underline"
+          href={row.getValue("imageUrl")}
+          target="_blank"
+        >
+          {getFIleName(row.getValue("imageUrl"))}
+        </a>
+      </div>
+    ),
   },
   {
     accessorKey: "overview",
@@ -163,34 +169,10 @@ interface DestinationTableProps {
 }
 
 const DestinationTable: FC<DestinationTableProps> = ({ data, pagination }) => {
-  const [sorting, setSorting] = useState<SortingState>([]);
-  const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
-  const [columnVisibility, setColumnVisibility] = useState<VisibilityState>({});
-  const [rowSelection, setRowSelection] = useState({});
-
-  const table = useReactTable({
-    data,
-    columns,
-    onSortingChange: setSorting,
-    onColumnFiltersChange: setColumnFilters,
-    getCoreRowModel: getCoreRowModel(),
-    getPaginationRowModel: getPaginationRowModel(),
-    getSortedRowModel: getSortedRowModel(),
-    getFilteredRowModel: getFilteredRowModel(),
-    onColumnVisibilityChange: setColumnVisibility,
-    onRowSelectionChange: setRowSelection,
-    state: {
-      sorting,
-      columnFilters,
-      columnVisibility,
-      rowSelection,
-    },
-  });
-
   return (
     <div className="w-full">
       <CommonTable
-        table={table}
+        data={data}
         placeholder="Filter by Destination Name"
         columnName="name"
         columns={columns}

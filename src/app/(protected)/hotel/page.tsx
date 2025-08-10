@@ -1,14 +1,14 @@
 import { Heading } from "@/components/atoms/Heading";
-import CityTable from "@/components/organisms/CityTable";
-import cityService from "@/services/city.service";
+import HotelTable from "@/components/organisms/HotelTable";
+import HotelService from "@/services/hotel.service";
 
 export default async function HotelPage() {
-  const cityData = await cityService.getAll();
+  const hotelsData = await HotelService.getAll();
 
   return (
     <>
       <Heading text="All Cities" />
-      <CityTable data={cityData?.data ?? []} />
+      {/* <HotelTable data={hotelsData?.data ?? []} /> */}
     </>
   );
 }

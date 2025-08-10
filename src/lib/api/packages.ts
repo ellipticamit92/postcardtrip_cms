@@ -24,7 +24,7 @@ export interface ApiResponse<T = unknown> {
   error?: string;
 }
 
-const BASE = "/api/packages";
+const BASE = "/api/auth/packages";
 
 export const packagesApi = {
   /* List with pagination & filters */

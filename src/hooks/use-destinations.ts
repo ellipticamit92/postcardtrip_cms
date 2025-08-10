@@ -31,7 +31,7 @@ interface PaginationInfo {
 }
 
 export const useDestinations = (options: UseDestinationsOptions = {}) => {
-  const { autoFetch = true, initialPage = 1, initialLimit = 10 } = options;
+  const { autoFetch = false, initialPage = 1, initialLimit = 10 } = options;
 
   const [destinations, setDestinations] = useState<Destination[]>([]);
   const [loading, setLoading] = useState(false);
@@ -152,6 +152,8 @@ export const useDestinations = (options: UseDestinationsOptions = {}) => {
     setLoading(true);
     setError(null);
 
+    const loadingToast = showToast.updateLoading("destination");
+
     try {
       const result = await destinationsApi.update(id, data);
 
@@ -162,14 +164,20 @@ export const useDestinations = (options: UseDestinationsOptions = {}) => {
             dest.did === id ? { ...dest, ...result.data } : dest
           )
         );
+        toast.dismiss(loadingToast);
+        showToast.updateSuccess("Destinations");
         return { success: true, data: result.data };
       } else {
         setError(result.error || "Failed to update destination");
+        toast.dismiss(loadingToast);
+        showToast.updateError("Destination", "Failed to update destination");
         return { success: false, error: result.error };
       }
     } catch (err) {
       const errorMsg = err instanceof Error ? err.message : "An error occurred";
       setError(errorMsg);
+      toast.dismiss(loadingToast);
+      showToast.updateError("Destination", errorMsg);
       return { success: false, error: errorMsg };
     } finally {
       setLoading(false);

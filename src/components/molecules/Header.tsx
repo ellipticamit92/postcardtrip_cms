@@ -20,7 +20,7 @@ export function Header() {
               target="_blank"
               className="dark:text-foreground"
             >
-              End
+              Notification
             </a>
           </Button>
         </div>

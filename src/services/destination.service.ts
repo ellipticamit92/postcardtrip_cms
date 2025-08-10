@@ -1,4 +1,4 @@
-import { getDestinationDropdown } from "@/lib/helper";
+import { getFieldOptions } from "@/lib/helper";
 import { prisma } from "@/lib/prisma";
 
 export class DestinationService {
@@ -24,7 +24,7 @@ export class DestinationService {
   static async getNameId() {
     try {
       const destinations = await prisma.destination.findMany();
-      const destinationsData = getDestinationDropdown(destinations);
+      const destinationsData = getFieldOptions(destinations, "did");
       return {
         data: destinationsData,
       };

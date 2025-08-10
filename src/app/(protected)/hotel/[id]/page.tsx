@@ -2,7 +2,7 @@ import { Heading } from "@/components/atoms/Heading";
 import { DestinationForm } from "@/components/organisms/DestinationForm";
 import DestinationService from "@/services/destination.service";
 
-export default async function EditDestinationPage({
+export default async function EditHotelPage({
   params,
 }: {
   params: Promise<{ id: string }>; // Note: params is now a Promise

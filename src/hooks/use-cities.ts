@@ -44,7 +44,7 @@ interface PaginationInfo {
 }
 
 export const useCities = (options: UseCitiesOptions = {}) => {
-  const { autoFetch = true, initialPage = 1, initialLimit = 10 } = options;
+  const { autoFetch = false, initialPage = 1, initialLimit = 10 } = options;
 
   const [cities, setCities] = useState<City[]>([]);
   const [loading, setLoading] = useState(false);
