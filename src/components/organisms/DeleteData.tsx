@@ -1,32 +1,45 @@
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
 
-const DeleteData = ({ model, id }: { model: string; id: string }) => {
+const DeleteData = ({
+  model,
+  id,
+  ieh,
+}: {
+  model: string;
+  id: string;
+  ieh?: boolean;
+}) => {
   const router = useRouter();
 
   const handleDelete = async () => {
-    const confirmDelete = confirm(
-      "Are you sure you want to delete this destination?"
-    );
+    const confirmDelete = confirm("Are you sure you want to delete this");
     if (!confirmDelete) return;
 
     try {
-      const res = await fetch(`/api/auth/${model}/${id}`, {
-        method: "DELETE",
-      });
+      let res;
+      if (ieh) {
+        res = await fetch(`/api/auth/ieh/${id}`, {
+          method: "DELETE",
+        });
+      } else {
+        res = await fetch(`/api/auth/${model}/${id}`, {
+          method: "DELETE",
+        });
+      }
 
       const resData = await res.json();
 
       if (!res.ok || !resData.success) {
-        throw new Error(resData.message || "Failed to delete destination");
+        throw new Error(resData.message || "Failed to delete");
       }
 
-      toast.success("Destination deleted successfully");
+      toast.success("Deleted successfully");
 
       // Refresh or refetch destinations list
       router.refresh(); // or mutate() if you're using SWR/React Query
     } catch (err: any) {
-      toast.error(err.message || "Error deleting destination");
+      toast.error(err.message || "Error deleting");
       console.error("Delete error:", err);
     }
   };

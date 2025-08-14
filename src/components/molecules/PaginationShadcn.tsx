@@ -50,7 +50,7 @@ export function PaginationShadcn({
         {Array.from({ length: endPage - startPage + 1 }, (_, i) => {
           const page = startPage + i;
           const isActive = page === currentPage;
-          console.log("DEBUG page  = ", page);
+
           return page === -1 || page === -2 ? (
             <PaginationItem key={`ellipsis-${i}`}>
               <PaginationEllipsis />

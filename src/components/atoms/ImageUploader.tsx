@@ -24,7 +24,7 @@ interface ImageUploaderProps {
 
 export default function ImageUploader({
   label = "Upload Image",
-  value = "https://res.cloudinary.com/dnkfly4cj/image/upload/v1755088640/cms_uploads/mabbvifnt87yhjtldx0k.jpg",
+  value = "",
   onChange,
 }: ImageUploaderProps) {
   const [dragActive, setDragActive] = useState(false);
@@ -82,7 +82,7 @@ export default function ImageUploader({
       </Label>
 
       <div
-        className={`relative border-2 border-dashed rounded-lg p-1 transition-all duration-300 ${
+        className={`relative border-2 border-dashed rounded-lg p-1 py-3 transition-all duration-300 ${
           dragActive
             ? "border-primary bg-accent/20"
             : "border-border hover:border-primary/50"
@@ -98,7 +98,7 @@ export default function ImageUploader({
           if (files?.[0]) handleFileUpload(files[0]);
         }}
       >
-        {!value ? (
+        {value ? (
           <div className="space-y-4">
             <div className="flex-1 flex flex-col">
               <div className="group  relative">
@@ -169,7 +169,7 @@ export default function ImageUploader({
           </div>
         ) : (
           <div className="text-center">
-            <Upload className="h-12 w-12 text-muted-foreground mx-auto mb-4" />
+            <Upload className="h-24 w-12 text-muted-foreground mx-auto mb-4" />
             <p className="text-lg font-medium mb-2">Drop your image here</p>
             <p className="text-muted-foreground mb-4">
               or click to browse files

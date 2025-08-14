@@ -18,9 +18,7 @@ export default function UploadForm() {
     defaultValues: { images: undefined },
   });
 
-  const onSubmit = (values: any) => {
-    console.log("Form submitted with Cloudinary URLs:", values);
-  };
+  const onSubmit = (values: any) => {};
 
   return (
     <FormProvider {...form}>

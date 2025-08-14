@@ -73,17 +73,6 @@ export function CityForm({ destinations, initialData, cityId }: CityFormProps) {
   return (
     <Form {...form}>
       <form onSubmit={handleSubmit(onSubmit)} className="space-y-4 mt-4">
-        <Controller
-          control={control}
-          name="imageUrl"
-          render={({ field }) => (
-            <ImageUploader
-              value={field.value}
-              onChange={field.onChange}
-              label="Upload Destination Image"
-            />
-          )}
-        />
         <div className="grid grid-cols-3 gap-4 mb-6">
           <FormInput
             label="City Name"
@@ -104,14 +93,27 @@ export function CityForm({ destinations, initialData, cityId }: CityFormProps) {
             control={control}
             label="Image URL"
           />
+          <div className="col-span-2">
+            <FormRichText
+              label="City Description"
+              name="description"
+              placeholder="Describe the city"
+              control={control}
+              height={260}
+            />
+          </div>
+          <Controller
+            control={control}
+            name="imageUrl"
+            render={({ field }) => (
+              <ImageUploader
+                value={field.value}
+                onChange={field.onChange}
+                label="Upload City Image"
+              />
+            )}
+          />
         </div>
-
-        <FormRichText
-          label="City Description"
-          name="description"
-          placeholder="Describe the city"
-          control={control}
-        />
 
         <Button type="submit" disabled={loading}>
           {loading && <Loader2 className="animate-spin mr-2" />}

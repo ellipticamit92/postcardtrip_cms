@@ -14,6 +14,26 @@ export interface PaginationProps {
   hasPrev: boolean;
 }
 
+export interface IEH {
+  updatedAt: Date;
+  createdAt: Date;
+  text: string;
+  id: number | null;
+  type?: string;
+}
+
+export interface Highlight extends IEH {
+  hlid: number;
+}
+
+export interface Inclusion extends IEH {
+  lid: number;
+}
+
+export interface Exclusion extends IEH {
+  eid: number;
+}
+
 export interface PaginatedResponse<T> {
   data: T[];
   pagination: PaginationProps;
@@ -112,7 +132,7 @@ export interface Package {
   city?: City;
   itineraries?: Itinerary[];
   hotelPrices?: PackageHotelPrice[];
-  imageUrl?: string;
+  imageUrl?: string | null;
 }
 
 export interface PackageHotelPrice {
@@ -133,10 +153,6 @@ export interface Itinerary {
   packageId: number;
   // Optional relations
   package?: Package;
-  highlights?: Highlight[];
-  inclusions?: Inclusion[];
-  exclusions?: Exclusion[];
-  places?: ItineraryPlace[];
 }
 
 export interface ItineraryPlace {
@@ -190,3 +206,5 @@ export interface HotelImage {
   // Optional relations
   hotel?: Hotel;
 }
+
+export type IEHType = "inclusion" | "exclusion" | "highlight";

@@ -146,50 +146,29 @@ model Itinerary {
   details     String     @db.Text
   package     Package    @relation(fields: [packageId], references: [pid])
   packageId   Int
-  highlights  Highlight[]
-  inclusions  Inclusion[]
-  exclusions  Exclusion[]
-  places      ItineraryPlace[]
+  highlights  String    @db.Text
+  places      String    @db.Text
   updatedAt   DateTime  @updatedAt
   createdAt   DateTime  @default(now())
-}
-
-model ItineraryPlace {
-  itpid       Int                  @id @default(autoincrement())
-  name        String
-  description String               @db.Text
-  itinerary   Itinerary            @relation(fields: [itineraryId], references: [itid])
-  itineraryId Int
-  images      ItineraryPlaceImage[]
-  updatedAt   DateTime  @updatedAt
-  createdAt   DateTime  @default(now())
-}
-
-model ItineraryPlaceImage {
-  ipiid    Int              @id @default(autoincrement())
-  url      String
-  caption  String?
-  place    ItineraryPlace   @relation(fields: [placeId], references: [itpid])
-  placeId  Int
 }
 
 model Highlight {
   hlid        Int       @id @default(autoincrement())
   text        String    @unique
-  itinerary   Itinerary @relation(fields: [itineraryId], references: [itid])
-  itineraryId Int
+  updatedAt   DateTime  @updatedAt
+  createdAt   DateTime  @default(now())
 }
 
 model Inclusion {
   lid         Int       @id @default(autoincrement())
   text        String    @unique
-  itinerary   Itinerary @relation(fields: [itineraryId], references: [itid])
-  itineraryId Int
+  updatedAt   DateTime  @updatedAt
+  createdAt   DateTime  @default(now())
 }
 
 model Exclusion {
   eid         Int       @id @default(autoincrement())
-  text        String
-  itinerary   Itinerary @relation(fields: [itineraryId], references: [itid])
-  itineraryId Int
+  text        String    @unique
+  updatedAt   DateTime  @updatedAt
+  createdAt   DateTime  @default(now())
 }

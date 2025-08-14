@@ -1,3 +1,4 @@
+import { getFieldOptions } from "@/lib/helper";
 import { prisma } from "@/lib/prisma";
 
 export class PackageService {
@@ -36,6 +37,18 @@ export class PackageService {
       });
     } catch (error) {
       throw new Error(`Failed to create package: ${error}`);
+    }
+  }
+
+  static async getNameId() {
+    try {
+      const packages = await prisma.package.findMany();
+      const pagkagesData = getFieldOptions(packages, "pid");
+      return {
+        data: pagkagesData,
+      };
+    } catch (error) {
+      throw new Error(`Failed to fetch destinations name and id: ${error}`);
     }
   }
 
@@ -107,18 +120,7 @@ export class PackageService {
           include: {
             destination: true,
             city: true,
-            itineraries: {
-              include: {
-                highlights: true,
-                inclusions: true,
-                exclusions: true,
-                places: {
-                  include: {
-                    images: true,
-                  },
-                },
-              },
-            },
+            itineraries: true,
             hotelPrices: {
               include: {
                 hotel: {
@@ -159,21 +161,7 @@ export class PackageService {
         include: {
           destination: true,
           city: true,
-          itineraries: {
-            include: {
-              highlights: true,
-              inclusions: true,
-              exclusions: true,
-              places: {
-                include: {
-                  images: true,
-                },
-              },
-            },
-            orderBy: {
-              day: "asc",
-            },
-          },
+          itineraries: true,
           hotelPrices: {
             include: {
               hotel: {
@@ -202,18 +190,7 @@ export class PackageService {
         where: { destinationId },
         include: {
           city: true,
-          itineraries: {
-            include: {
-              highlights: true,
-              inclusions: true,
-              exclusions: true,
-              places: {
-                include: {
-                  images: true,
-                },
-              },
-            },
-          },
+          itineraries: true,
           hotelPrices: {
             include: {
               hotel: {
@@ -380,9 +357,6 @@ export class PackageService {
             },
             itineraries: {
               take: 1,
-              include: {
-                highlights: true,
-              },
             },
           },
         }),

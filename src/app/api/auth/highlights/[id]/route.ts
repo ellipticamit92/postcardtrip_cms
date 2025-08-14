@@ -1,31 +1,69 @@
 import { NextRequest, NextResponse } from "next/server";
-import { ItineraryService } from "@/services/itinerary.service";
+import HighlightService from "@/services/highlight.service";
 
-interface RouteParams {
-  params: Promise<{ id: string }>;
+interface Params {
+  params: Promise<{ hlid: string }>;
 }
 
-// DELETE /api/highlights/:id
-export async function DELETE(_: NextRequest, { params }: RouteParams) {
+export async function GET(_req: NextRequest, { params }: Params) {
   try {
-    const id = Number((await params).id);
-    if (isNaN(id)) {
+    const hlid = Number((await params).hlid);
+    if (isNaN(hlid))
       return NextResponse.json(
         { success: false, error: "Invalid highlight ID" },
         { status: 400 }
       );
-    }
-
-    await ItineraryService.removeHighlight(id);
-    return NextResponse.json({ success: true, message: "Highlight removed" });
-  } catch (err) {
-    console.error("DELETE highlight error:", err);
+    const highlight = await HighlightService.getById(hlid);
+    if (!highlight)
+      return NextResponse.json(
+        { success: false, error: "Highlight not found" },
+        { status: 404 }
+      );
+    return NextResponse.json({ success: true, data: highlight });
+  } catch (error) {
     return NextResponse.json(
-      {
-        success: false,
-        error:
-          err instanceof Error ? err.message : "Failed to remove highlight",
-      },
+      { success: false, error: error instanceof Error ? error.message : "" },
+      { status: 500 }
+    );
+  }
+}
+
+export async function PUT(req: NextRequest, { params }: Params) {
+  try {
+    const hlid = Number((await params).hlid);
+    if (isNaN(hlid))
+      return NextResponse.json(
+        { success: false, error: "Invalid highlight ID" },
+        { status: 400 }
+      );
+    const body = await req.json();
+    const highlight = await HighlightService.update(hlid, { text: body.text });
+    return NextResponse.json({
+      success: true,
+      data: highlight,
+      message: "Highlight updated",
+    });
+  } catch (error) {
+    return NextResponse.json(
+      { success: false, error: error instanceof Error ? error.message : "" },
+      { status: 500 }
+    );
+  }
+}
+
+export async function DELETE(_req: NextRequest, { params }: Params) {
+  try {
+    const hlid = Number((await params).hlid);
+    if (isNaN(hlid))
+      return NextResponse.json(
+        { success: false, error: "Invalid highlight ID" },
+        { status: 400 }
+      );
+    await HighlightService.delete(hlid);
+    return NextResponse.json({ success: true, message: "Highlight deleted" });
+  } catch (error) {
+    return NextResponse.json(
+      { success: false, error: error instanceof Error ? error.message : "" },
       { status: 500 }
     );
   }

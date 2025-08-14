@@ -10,6 +10,10 @@ import {
   GalleryVerticalEnd,
   Settings2,
   Building,
+  SquaresIntersect,
+  TriangleAlert,
+  Siren,
+  ScanEye,
 } from "lucide-react";
 
 export const SIDEBAR_URLS = {
@@ -69,6 +73,16 @@ export const SIDEBAR_URLS = {
           url: "/package/add",
           icon: Plus,
         },
+        {
+          title: "View Package Price",
+          url: "/package/hotel-price",
+          icon: Eye,
+        },
+        {
+          title: "Add Package Price",
+          url: "/package/hotel-price/add",
+          icon: Plus,
+        },
       ],
     },
     {
@@ -91,7 +105,7 @@ export const SIDEBAR_URLS = {
     {
       title: "Hotel Image",
       url: "#",
-      icon: Hotel,
+      icon: ScanEye,
       items: [
         {
           title: "View Hotel Images",
@@ -123,14 +137,70 @@ export const SIDEBAR_URLS = {
       ],
     },
     {
-      title: "Documentation",
+      title: "Itineraries",
       url: "#",
       icon: BookOpen,
       items: [
         {
-          title: "Introduction",
-          url: "#",
+          title: "View Itineraries",
+          url: "/itineraries",
           icon: Eye,
+        },
+        {
+          title: "Add Itineraries",
+          url: "/itineraries/add",
+          icon: Plus,
+        },
+      ],
+    },
+    {
+      title: "Inclusion",
+      url: "#",
+      icon: SquaresIntersect,
+      items: [
+        {
+          title: "View Inclusion",
+          url: "/inclusion",
+          icon: Eye,
+        },
+        {
+          title: "Add Inclusion",
+          url: "/inclusion/add",
+          icon: Plus,
+        },
+      ],
+    },
+    {
+      title: "Exclusion",
+      url: "#",
+      icon: TriangleAlert,
+      items: [
+        {
+          title: "View Exclusion",
+          url: "/exclusion",
+          icon: Eye,
+        },
+        {
+          title: "Add Exclusion",
+          url: "/exclusion/add",
+          icon: Plus,
+        },
+      ],
+    },
+    {
+      title: "Highlights",
+      url: "#",
+      icon: Siren,
+      items: [
+        {
+          title: "View Highlights",
+          url: "/highlight",
+          icon: Eye,
+        },
+        {
+          title: "Add Highlights",
+          url: "/highlight/add",
+          icon: Plus,
         },
       ],
     },

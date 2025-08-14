@@ -117,7 +117,7 @@ export const useCities = (options: UseCitiesOptions = {}) => {
 
     try {
       const nameResult = await citiesApi.getByName(data.name);
-      console.log("DEBUG nameResult = ", nameResult);
+
       if (nameResult.success) {
         const errorMsg = "Destination name already exist";
         toast.dismiss(loadingToast);

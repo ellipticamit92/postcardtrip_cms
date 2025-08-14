@@ -85,17 +85,6 @@ export function DestinationForm({
   return (
     <Form {...form}>
       <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4 mb-10">
-        <Controller
-          control={control}
-          name="imageUrl"
-          render={({ field }) => (
-            <ImageUploader
-              value={field.value}
-              onChange={field.onChange}
-              label="Upload Destination Image"
-            />
-          )}
-        />
         <div className="grid grid-cols-3 gap-4">
           <FormInput name="name" control={control} label="Destination Name" />
           <FormSelect
@@ -111,9 +100,27 @@ export function DestinationForm({
             control={control}
             label="Image URL"
           />
-          <div className="col-span-3">
-            <FormRichText label="Overview" name="overview" control={control} />
+
+          <div className="col-span-2">
+            <FormRichText
+              label="Overview"
+              name="overview"
+              placeholder="Describe the destination"
+              control={control}
+              height={260}
+            />
           </div>
+          <Controller
+            control={control}
+            name="imageUrl"
+            render={({ field }) => (
+              <ImageUploader
+                value={field.value}
+                onChange={field.onChange}
+                label="Upload Destination Image"
+              />
+            )}
+          />
         </div>
 
         <Button type="submit" disabled={loading}>

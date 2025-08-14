@@ -43,8 +43,7 @@ export function PackageForm({
     defaultValues: initialData ?? {
       name: "",
       destinationId: destinations?.[0]?.value || "0",
-      imageUrl:
-        "https://res.cloudinary.com/dnkfly4cj/image/upload/v1755088640/cms_uploads/mabbvifnt87yhjtldx0k.jpg",
+      imageUrl: "",
       description: "",
       day: "",
       night: "",
@@ -129,27 +128,25 @@ export function PackageForm({
             label="Package Base Price"
           />
 
-          <div className="col-span-3">
-            <Controller
-              control={control}
-              name="imageUrl"
-              render={({ field }) => (
-                <ImageUploader
-                  value={field.value}
-                  onChange={field.onChange}
-                  label="Upload Package Image"
-                />
-              )}
-            />
-          </div>
-
-          <div className="col-span-3">
+          <div className="col-span-2">
             <FormRichText
               label="Package Overview"
               name="description"
               control={control}
+              height={260}
             />
           </div>
+          <Controller
+            control={control}
+            name="imageUrl"
+            render={({ field }) => (
+              <ImageUploader
+                value={field.value}
+                onChange={field.onChange}
+                label="Upload Package Image"
+              />
+            )}
+          />
         </div>
 
         <Button type="submit" disabled={loading}>
