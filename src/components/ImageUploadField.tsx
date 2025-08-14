@@ -50,7 +50,6 @@ export function ImageUploadField({ name }: { name: string }) {
         Array.from(files).map((file) => uploadToCloudinary(file))
       );
       setUploadedUrls(urls);
-      console.log("Uploaded URLs:", urls);
     } catch (err) {
       console.error(err);
     } finally {

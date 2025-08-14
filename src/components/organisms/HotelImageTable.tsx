@@ -1,6 +1,6 @@
 "use client";
 
-import { Hotel } from "@/types/type";
+import { HotelImage } from "@/types/type";
 import { ColumnDef } from "@tanstack/react-table";
 import { Checkbox } from "../ui/checkbox";
 import { ArrowUpDown, MoreHorizontal } from "lucide-react";
@@ -17,16 +17,9 @@ import { FC } from "react";
 import CommonTable from "../molecules/CommonTable";
 import Link from "next/link";
 import DeleteData from "./DeleteData";
-import {
-  Dialog,
-  DialogContent,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
-} from "../ui/dialog";
 import { getFIleName } from "@/lib/utils";
 
-export const columns: ColumnDef<Hotel>[] = [
+export const columns: ColumnDef<HotelImage>[] = [
   {
     id: "select",
     header: ({ table }) => (
@@ -50,92 +43,54 @@ export const columns: ColumnDef<Hotel>[] = [
     enableHiding: false,
   },
   {
-    accessorKey: "name",
+    accessorKey: "caption",
     header: ({ column }) => (
       <Button
         variant="ghost"
         className="!p-0"
         onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
       >
-        Hotel Name <ArrowUpDown className="ml-2 h-4 w-4" />
+        Hotel Caption <ArrowUpDown className="ml-2 h-4 w-4" />
       </Button>
     ),
+  },
+  {
+    accessorKey: "hotel",
+    header: "Hotel Name",
+    cell: ({ row }) => {
+      const hotelImage = row.original;
+      return <span>{hotelImage.hotel?.name}</span>;
+    },
   },
   {
     accessorKey: "city",
     header: "City Name",
     cell: ({ row }) => {
-      const hotel = row.original;
-      return <span>{hotel?.city?.name}</span>;
-    },
-  },
-
-  {
-    accessorKey: "description",
-    header: "Hotel Description",
-    cell: ({ row }) => {
-      const overview = row.getValue("description") as string;
-      const name = row.getValue("name") as string;
-
-      // Preview (first 100 chars without HTML)
-      const previewText = overview.replace(/<[^>]*>/g, "").substring(0, 15);
-
-      return (
-        <div className="space-y-2">
-          <p className="text-sm text-gray-600 line-clamp-2">{previewText}...</p>
-          <Dialog>
-            <DialogTrigger asChild>
-              <Button variant="outline" size="sm">
-                View Full Content
-              </Button>
-            </DialogTrigger>
-            <DialogContent className="max-w-4xl max-h-[80vh] overflow-y-auto">
-              <DialogHeader>
-                <DialogTitle>{name} - Overview</DialogTitle>
-              </DialogHeader>
-              <div
-                className="prose prose-sm max-w-none"
-                dangerouslySetInnerHTML={{ __html: overview }}
-              />
-            </DialogContent>
-          </Dialog>
-        </div>
-      );
+      const hotelImage = row.original;
+      return <span>{hotelImage.hotel?.city?.name}</span>;
     },
   },
   {
-    id: "iamges",
-    header: "Hotel Images",
-    cell: ({ row }) => {
-      const hotel = row.original;
-      const data = hotel?.images;
-      return (
-        <div className="flex flex-col">
-          {data?.map((item, index) => {
-            const fileName = getFIleName(item.url);
-            return (
-              <a
-                key={item.hiid}
-                href={item.url}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="text-blue-700 hover:underline"
-              >
-                {fileName}
-                {index < data.length - 1 && ", "}
-              </a>
-            );
-          })}
-        </div>
-      );
-    },
+    accessorKey: "url",
+    header: "Hotel Image",
+    cell: ({ row }) => (
+      <div>
+        <a
+          className="text-blue-700 hover:underline"
+          href={row.getValue("url")}
+          target="_blank"
+        >
+          {getFIleName(row.getValue("url"))}
+        </a>
+      </div>
+    ),
   },
   {
     id: "actions",
     enableHiding: false,
     cell: ({ row }) => {
-      const hotel = row.original;
-      const hid = String(hotel.hid);
+      const hotelImage = row.original;
+      const hiid = String(hotelImage.hiid);
       return (
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
@@ -147,7 +102,7 @@ export const columns: ColumnDef<Hotel>[] = [
           <DropdownMenuContent align="end">
             <DropdownMenuLabel>Actions</DropdownMenuLabel>
             <DropdownMenuItem
-              onClick={() => navigator.clipboard.writeText(hid)}
+              onClick={() => navigator.clipboard.writeText(hiid)}
             >
               Copy ID
             </DropdownMenuItem>
@@ -155,13 +110,13 @@ export const columns: ColumnDef<Hotel>[] = [
             <DropdownMenuItem>
               <Link
                 className="hover:text-blue-400 font-semibold"
-                href={`/hotel/${hid}`}
+                href={`/hotel-images/${hiid}`}
               >
                 Edit
               </Link>
             </DropdownMenuItem>
             <DropdownMenuItem>
-              <DeleteData id={hid} model="Hotel" />
+              <DeleteData id={hiid} model="Hotel" />
             </DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>
@@ -170,24 +125,24 @@ export const columns: ColumnDef<Hotel>[] = [
   },
 ];
 
-interface HotelTableProps {
-  data: Hotel[];
+interface HotelImageTableProps {
+  data: HotelImage[];
   totalCount?: number;
   totalPages?: number;
   currentPage?: number;
 }
 
-const HotelTable: FC<HotelTableProps> = ({ data }) => {
+const HotelImageTable: FC<HotelImageTableProps> = ({ data }) => {
   return (
     <div className="w-full">
       <CommonTable
         data={data}
-        placeholder="Filter by City Name"
-        columnName="name"
+        placeholder="Filter by Hotel Image Caption"
+        columnName="caption"
         columns={columns}
       />
     </div>
   );
 };
 
-export default HotelTable;
+export default HotelImageTable;

@@ -34,9 +34,9 @@ export class HotelService {
   static async getNameId() {
     try {
       const hotels = await prisma.hotel.findMany();
-      const destinationsData = getFieldOptions(hotels, "hid");
+      const hotelData = getFieldOptions(hotels, "hid");
       return {
-        data: destinationsData,
+        data: hotelData,
       };
     } catch (error) {
       throw new Error(`Failed to fetch destinations name and id: ${error}`);
@@ -198,7 +198,7 @@ export class HotelService {
 
   static async getByName(name: string) {
     try {
-      return await prisma.hotel.findUnique({
+      return await prisma.hotel.findMany({
         where: { name },
         include: {
           city: true,

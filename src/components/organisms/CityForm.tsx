@@ -15,7 +15,7 @@ import ImageUploader from "../atoms/ImageUploader";
 
 const citySchema = z.object({
   name: z.string().min(2, "City name is required"),
-  description: z.string().min(5, "Description is too short"),
+  description: z.string().min(5, "City Description is too short"),
   destinationId: z.string().min(1, "Please atleast one number"),
   imageUrl: z.string().optional(),
 });

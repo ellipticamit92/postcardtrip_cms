@@ -26,3 +26,11 @@ export const getCityOptions = (cities: City[]) => {
     };
   });
 };
+
+export function toIndianCurrency(amount: number): string {
+  return amount.toLocaleString("en-IN", {
+    style: "currency",
+    currency: "INR",
+    minimumFractionDigits: 2,
+  });
+}

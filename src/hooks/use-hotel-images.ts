@@ -1,189 +1,212 @@
-// import { useState, useEffect } from "react";
-// import type {
-//   HotelImage,
-//   HotelImagePayload,
-//   ApiResponse,
-// } from "@/lib/api/hotelImages";
-// import { hotelImagesApi } from "@/lib/api/hotelImages";
+import { useState, useEffect } from "react";
+import type {
+  HotelImage,
+  HotelImagePayload,
+  ApiResponse,
+} from "@/lib/api/hotelImages";
+import { hotelImagesApi } from "@/lib/api/hotelImages";
+import { showToast } from "@/lib/toast";
+import { toast } from "sonner";
 
-// // Optional filter interface for listing images
-// interface HotelImageFilters {
-//   hotelId?: number;
-//   caption?: string;
-//   autoFetch?: boolean;
-//   initialPage?: number;
-//   initialLimit?: number;
-// }
+// Optional filter interface for listing images
+interface HotelImageFilters {
+  hotelId?: number;
+  caption?: string;
+  autoFetch?: boolean;
+  initialPage?: number;
+  initialLimit?: number;
+}
 
-// // The hook returns list, single image, loading, error, pagination, CRUD functions
-// export function useHotelImages(initialFilters: HotelImageFilters = {}) {
-//   const { autoFetch = false } = initialFilters;
-//   const [images, setImages] = useState<HotelImage[]>([]);
-//   const [image, setImage] = useState<HotelImage | null>(null);
-//   const [loading, setLoading] = useState<boolean>(true);
-//   const [error, setError] = useState<string | null>(null);
-//   const [pagination, setPagination] = useState<ApiResponse["pagination"]>({
-//     page: 1,
-//     limit: 12,
-//     total: 0,
-//     totalPages: 1,
-//     hasNext: false,
-//     hasPrev: false,
-//   });
-//   const [filters, setFilters] = useState<HotelImageFilters>(initialFilters);
+// The hook returns list, single image, loading, error, pagination, CRUD functions
+export function useHotelImages(initialFilters: HotelImageFilters = {}) {
+  const { autoFetch = false } = initialFilters;
+  const [images, setImages] = useState<HotelImage[]>([]);
+  const [image, setImage] = useState<HotelImage | null>(null);
+  const [loading, setLoading] = useState<boolean>(false);
+  const [error, setError] = useState<string | null>(null);
+  const [pagination, setPagination] = useState<ApiResponse["pagination"]>({
+    page: 1,
+    limit: 12,
+    total: 0,
+    totalPages: 1,
+    hasNext: false,
+    hasPrev: false,
+  });
+  const [filters, setFilters] = useState<HotelImageFilters>(initialFilters);
 
-//   // Fetch list of hotel images
-//   const fetchImages = async (page?: number) => {
-//     setLoading(true);
-//     setError(null);
-//     try {
-//       const res = await hotelImagesApi.getAll({
-//         ...filters,
-//         page: page ?? filters.initialPage ?? 1,
-//         limit: filters.initialLimit ?? 12,
-//       });
-//       if (res.success) {
-//         setImages(res.data || []);
-//         setPagination(res.pagination || pagination);
-//       } else {
-//         setError(res.error || "Failed to load images");
-//       }
-//     } catch (e: any) {
-//       setError(e?.message || "Failed to fetch hotel images");
-//     } finally {
-//       setLoading(false);
-//     }
-//   };
+  // Fetch list of hotel images
+  const fetchImages = async (page?: number) => {
+    setLoading(true);
+    setError(null);
+    try {
+      const res = await hotelImagesApi.getAll({
+        ...filters,
+        page: page ?? filters.initialPage ?? 1,
+        limit: filters.initialLimit ?? 12,
+      });
+      if (res.success) {
+        setImages(res.data || []);
+        setPagination(res.pagination || pagination);
+      } else {
+        setError(res.error || "Failed to load images");
+      }
+    } catch (e: any) {
+      setError(e?.message || "Failed to fetch hotel images");
+    } finally {
+      setLoading(false);
+    }
+  };
 
-//   // Fetch a single image by id
-//   const fetchImage = async (hiid: number) => {
-//     setLoading(true);
-//     setError(null);
-//     try {
-//       const res = await hotelImagesApi.getById(hiid);
-//       if (res.success) {
-//         setImage(res.data || null);
-//       } else {
-//         setError(res.error || "Image not found");
-//       }
-//     } catch (e: any) {
-//       setError(e?.message || "Failed to fetch image");
-//     } finally {
-//       setLoading(false);
-//     }
-//   };
+  // Fetch a single image by id
+  const fetchImage = async (hiid: number) => {
+    setLoading(true);
+    setError(null);
+    try {
+      const res = await hotelImagesApi.getById(hiid);
+      if (res.success) {
+        setImage(res.data || null);
+      } else {
+        setError(res.error || "Image not found");
+      }
+    } catch (e: any) {
+      setError(e?.message || "Failed to fetch image");
+    } finally {
+      setLoading(false);
+    }
+  };
 
-//   // Create a hotel image
-//   const createImage = async (data: HotelImagePayload) => {
-//     setLoading(true);
-//     setError(null);
-//     try {
-//       const res = await hotelImagesApi.create(data);
-//       if (res.success) {
-//         fetchImages(); // refresh list
-//         return res.data;
-//       } else {
-//         setError(res.error || "Failed to create image");
-//         throw new Error(res.error || "Failed to create image");
-//       }
-//     } catch (e: any) {
-//       setError(e?.message || "Failed to create image");
-//       throw e;
-//     } finally {
-//       setLoading(false);
-//     }
-//   };
+  // Create a hotel image
+  const createImage = async (data: HotelImagePayload) => {
+    setLoading(true);
+    setError(null);
+    const loadingToast = showToast.createLoading("Hotel image");
+    try {
+      const result = await hotelImagesApi.create(data);
+      if (result.success) {
+        if (images.length > 0 || autoFetch) {
+          await fetchImages();
+        }
+        toast.dismiss(loadingToast);
+        showToast.createSuccess("Hotel image");
+        return { success: true, data: result.data };
+      } else {
+        setError(result.error || "Failed to create image");
+        toast.dismiss(loadingToast);
+        showToast.createError("Hotel Images");
+        return { success: false, error: result.error };
+      }
+    } catch (err: any) {
+      const errorMsg = err instanceof Error ? err.message : "An error occurred";
+      toast.dismiss(loadingToast);
+      showToast.createError("hotel images", errorMsg);
+      setError(errorMsg);
+      return { success: false, error: errorMsg };
+    } finally {
+      setLoading(false);
+    }
+  };
 
-//   // Update a hotel image
-//   const updateImage = async (
-//     hiid: number,
-//     data: Partial<Omit<HotelImagePayload, "hotelId">>
-//   ) => {
-//     setLoading(true);
-//     setError(null);
-//     try {
-//       const res = await hotelImagesApi.update(hiid, data);
-//       if (res.success) {
-//         fetchImages();
-//         return res.data;
-//       } else {
-//         setError(res.error || "Failed to update image");
-//         throw new Error(res.error || "Failed to update image");
-//       }
-//     } catch (e: any) {
-//       setError(e?.message || "Failed to update image");
-//       throw e;
-//     } finally {
-//       setLoading(false);
-//     }
-//   };
+  // Update a hotel image
+  const updateImage = async (
+    hiid: number,
+    data: Partial<Omit<HotelImagePayload, "hotelId">>
+  ) => {
+    setLoading(true);
+    setError(null);
+    const loadingToast = showToast.updateLoading("hotel images");
+    try {
+      const result = await hotelImagesApi.update(hiid, data);
+      if (result.success) {
+        if (images.length > 0 || autoFetch) {
+          await fetchImages();
+        }
+        toast.dismiss(loadingToast);
+        showToast.createSuccess("Hotel image");
+        return { success: true, data: result.data };
+      } else {
+        setError(result.error || "Failed to update image");
+        toast.dismiss(loadingToast);
+        showToast.updateError("Destination", "Failed to update images");
+        return { success: false, error: result.error };
+      }
+    } catch (err: any) {
+      const errorMsg =
+        err instanceof Error ? err.message : "Failed to update image";
+      setError(errorMsg);
+      toast.dismiss(loadingToast);
+      showToast.updateError("Destination", errorMsg);
+      return { success: false, error: errorMsg };
+    } finally {
+      setLoading(false);
+    }
+  };
 
-//   // Delete a hotel image
-//   const deleteImage = async (hiid: number) => {
-//     setLoading(true);
-//     setError(null);
-//     try {
-//       const res = await hotelImagesApi.delete(hiid);
-//       if (res.success) {
-//         setImages((prev) => prev.filter((img) => img.hiid !== hiid));
-//         // Optionally fetchImages() for up-to-date pagination
-//       } else {
-//         setError(res.error || "Failed to delete image");
-//         throw new Error(res.error || "Failed to delete image");
-//       }
-//     } catch (e: any) {
-//       setError(e?.message || "Failed to delete image");
-//       throw e;
-//     } finally {
-//       setLoading(false);
-//     }
-//   };
+  // Delete a hotel image
+  const deleteImage = async (hiid: number) => {
+    setLoading(true);
+    setError(null);
+    try {
+      const res = await hotelImagesApi.delete(hiid);
+      if (res.success) {
+        setImages((prev) => prev.filter((img) => img.hiid !== hiid));
+        // Optionally fetchImages() for up-to-date pagination
+      } else {
+        setError(res.error || "Failed to delete image");
+        throw new Error(res.error || "Failed to delete image");
+      }
+    } catch (e: any) {
+      setError(e?.message || "Failed to delete image");
+      throw e;
+    } finally {
+      setLoading(false);
+    }
+  };
 
-//   // Bulk create hotel images (optional)
-//   const bulkCreateImages = async (images: HotelImagePayload[]) => {
-//     setLoading(true);
-//     setError(null);
-//     try {
-//       const res = await hotelImagesApi.bulkCreate(images);
-//       if (res.success) {
-//         fetchImages();
-//         return true;
-//       } else {
-//         setError(res.error || "Failed to create images");
-//         throw new Error(res.error || "Failed to create images");
-//       }
-//     } catch (e: any) {
-//       setError(e?.message || "Failed to create images");
-//       throw e;
-//     } finally {
-//       setLoading(false);
-//     }
-//   };
+  // Bulk create hotel images (optional)
+  const bulkCreateImages = async (images: HotelImagePayload[]) => {
+    setLoading(true);
+    setError(null);
+    try {
+      const res = await hotelImagesApi.bulkCreate(images);
+      if (res.success) {
+        fetchImages();
+        return true;
+      } else {
+        setError(res.error || "Failed to create images");
+        throw new Error(res.error || "Failed to create images");
+      }
+    } catch (e: any) {
+      setError(e?.message || "Failed to create images");
+      throw e;
+    } finally {
+      setLoading(false);
+    }
+  };
 
-//   // Change filters
-//   const updateFilters = (newFilters: HotelImageFilters) => {
-//     setFilters((prev) => ({ ...prev, ...newFilters }));
-//   };
+  // Change filters
+  const updateFilters = (newFilters: HotelImageFilters) => {
+    setFilters((prev) => ({ ...prev, ...newFilters }));
+  };
 
-//   useEffect(() => {
-//     if (autoFetch) {
-//       fetchImages();
-//     }
-//   }, [autoFetch]);
+  useEffect(() => {
+    if (autoFetch) {
+      fetchImages();
+    }
+  }, [autoFetch]);
 
-//   return {
-//     images,
-//     image,
-//     loading,
-//     error,
-//     pagination,
-//     filters,
-//     fetchImages,
-//     fetchImage,
-//     createImage,
-//     updateImage,
-//     deleteImage,
-//     bulkCreateImages,
-//     updateFilters,
-//   };
-// }
+  return {
+    images,
+    image,
+    loading,
+    error,
+    pagination,
+    filters,
+    fetchImages,
+    fetchImage,
+    createImage,
+    updateImage,
+    deleteImage,
+    bulkCreateImages,
+    updateFilters,
+  };
+}

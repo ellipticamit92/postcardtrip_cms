@@ -2,7 +2,8 @@
 export interface PackagePayload {
   name: string;
   basePrice: number;
-  durationDays: number;
+  day: number;
+  night: number;
   description: string;
   destinationId: number;
   cityId: number;
@@ -38,7 +39,7 @@ export const packagesApi = {
     minDuration?: number;
     maxDuration?: number;
     name?: string;
-    sortBy?: "name" | "basePrice" | "durationDays" | "createdAt";
+    sortBy?: "name" | "basePrice" | "day" | "night" | "createdAt";
     sortOrder?: "asc" | "desc";
   }) => {
     const search = new URLSearchParams();

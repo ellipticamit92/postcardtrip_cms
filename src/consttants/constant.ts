@@ -95,12 +95,12 @@ export const SIDEBAR_URLS = {
       items: [
         {
           title: "View Hotel Images",
-          url: "/hotel-image",
+          url: "/hotel-images",
           icon: Eye,
         },
         {
           title: "Add Hotel Image",
-          url: "/hotel-image/add",
+          url: "/hotel-images/add",
           icon: Plus,
         },
       ],

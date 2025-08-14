@@ -1,34 +1,22 @@
-import { useState, useEffect } from "react";
-import { citiesApi } from "@/lib/api/cities";
+import { packagesApi } from "@/lib/api/packages";
 import { showToast } from "@/lib/toast";
+import { useState, useEffect } from "react";
 import { toast } from "sonner";
 
-interface City {
-  cid: number;
+interface Package {
+  pid: number;
   name: string;
-  description: string;
   destinationId: number;
-  destination?: {
-    did: number;
-    name: string;
-    country: string;
-  };
-  hotels: Array<{
-    hid: number;
-    name: string;
-    starRating: number;
-  }>;
-  packages: Array<{
-    pid: number;
-    name: string;
-    basePrice: number;
-    durationDays: number;
-  }>;
+  description?: string;
+  basePrice: number;
+  day: number;
+  night: number;
+  imageUrl?: string;
   createdAt: string;
   updatedAt: string;
 }
 
-interface UseCitiesOptions {
+interface UsePackagesOptions {
   autoFetch?: boolean;
   initialPage?: number;
   initialLimit?: number;
@@ -43,29 +31,29 @@ interface PaginationInfo {
   hasPrev: boolean;
 }
 
-export const useCities = (options: UseCitiesOptions = {}) => {
+export const usePackages = (options: UsePackagesOptions = {}) => {
   const { autoFetch = false, initialPage = 1, initialLimit = 10 } = options;
 
-  const [cities, setCities] = useState<City[]>([]);
+  const [packages, setPackages] = useState<Package[]>([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [pagination, setPagination] = useState<PaginationInfo | null>(null);
   const [currentPage, setCurrentPage] = useState(initialPage);
 
-  // Fetch cities with filters
-  const fetchCities = async (params?: {
+  // Fetch packages with filters
+  const fetchPackages = async (params?: {
     page?: number;
     limit?: number;
-    destinationId?: number;
     name?: string;
-    sortBy?: "name" | "createdAt";
+    destinationId?: number;
+    sortBy?: "name" | "basePrice" | "createdAt";
     sortOrder?: "asc" | "desc";
   }) => {
     setLoading(true);
     setError(null);
 
     try {
-      const result = await citiesApi.getAll({
+      const result = await packagesApi.getAll({
         page: initialPage,
         limit: initialLimit,
         sortBy: "name",
@@ -74,13 +62,13 @@ export const useCities = (options: UseCitiesOptions = {}) => {
       });
 
       if (result.success) {
-        setCities(result.data);
+        setPackages(result.data);
         setPagination(result.pagination);
         if (params?.page) {
           setCurrentPage(params.page);
         }
       } else {
-        setError(result.error || "Failed to fetch cities");
+        setError(result.error || "Failed to fetch packages");
       }
     } catch (err) {
       setError(err instanceof Error ? err.message : "An error occurred");
@@ -89,14 +77,14 @@ export const useCities = (options: UseCitiesOptions = {}) => {
     }
   };
 
-  // Get single city by ID
-  const getCity = async (id: number): Promise<City | null> => {
+  // Get single package by ID
+  const getPackage = async (id: number): Promise<Package | null> => {
     try {
-      const result = await citiesApi.getById(id);
+      const result = await packagesApi.getById(id);
       if (result.success) {
-        return result.data;
+        return result.data as Package | null;
       } else {
-        setError(result.error || "Failed to fetch city");
+        setError(result.error || "Failed to fetch package");
         return null;
       }
     } catch (err) {
@@ -105,46 +93,51 @@ export const useCities = (options: UseCitiesOptions = {}) => {
     }
   };
 
-  // Create new city
-  const createCity = async (data: {
+  // Create new package
+  const createPackage = async (data: {
     name: string;
-    description: string;
     destinationId: number;
-  }): Promise<{ success: boolean; data?: City; error?: string }> => {
+    description: string;
+    basePrice: number;
+    day: number;
+    night: number;
+    cityId: number;
+    imageUrl: string;
+  }): Promise<{ success: boolean; data?: Package; error?: string }> => {
     setLoading(true);
     setError(null);
-    const loadingToast = showToast.createLoading("destination");
+
+    const loadingToast = showToast.createLoading("package");
 
     try {
-      const nameResult = await citiesApi.getByName(data.name);
-      console.log("DEBUG nameResult = ", nameResult);
+      const nameResult = await packagesApi.getByName(data.name);
+
       if (nameResult.success) {
-        const errorMsg = "Destination name already exist";
+        const errorMsg = "Package name already exists";
         toast.dismiss(loadingToast);
         showToast.error(errorMsg);
         return { success: false, error: errorMsg };
       }
 
-      const result = await citiesApi.create(data);
+      const result = await packagesApi.create(data);
 
       if (result.success) {
-        // Refresh the list if we're showing cities
-        if (cities.length > 0 || autoFetch) {
-          await fetchCities({ page: currentPage });
+        // Refresh the list if we're showing packages
+        if (packages.length > 0 || autoFetch) {
+          await fetchPackages({ page: currentPage });
         }
         toast.dismiss(loadingToast);
-        showToast.createSuccess("City");
+        showToast.createSuccess("Packages");
         return { success: true, data: result.data };
       } else {
-        setError(result.error || "Failed to create city");
         toast.dismiss(loadingToast);
-        showToast.createError("city");
+        showToast.createError("Packages");
         return { success: false, error: result.error };
       }
     } catch (err) {
       const errorMsg = err instanceof Error ? err.message : "An error occurred";
       toast.dismiss(loadingToast);
-      showToast.createError("city", errorMsg);
+      showToast.createError("package", errorMsg);
       setError(errorMsg);
       return { success: false, error: errorMsg };
     } finally {
@@ -152,58 +145,67 @@ export const useCities = (options: UseCitiesOptions = {}) => {
     }
   };
 
-  // Update city
-  const updateCity = async (
+  // Update package
+  const updatePackage = async (
     id: number,
     data: {
       name?: string;
+      destinationId?: number;
       description?: string;
+      price?: number;
+      duration?: number;
+      imageUrl?: string;
     }
-  ): Promise<{ success: boolean; data?: City; error?: string }> => {
+  ): Promise<{ success: boolean; data?: Package; error?: string }> => {
     setLoading(true);
     setError(null);
 
+    const loadingToast = showToast.updateLoading("package");
+
     try {
-      const result = await citiesApi.update(id, data);
+      const result = await packagesApi.update(id, data);
 
       if (result.success) {
         // Update the local state
-        setCities((prev) =>
-          prev.map((city) =>
-            city.cid === id ? { ...city, ...result.data } : city
-          )
+        setPackages((prev) =>
+          prev.map((pkg) => (pkg.pid === id ? { ...pkg, ...result.data } : pkg))
         );
-
+        toast.dismiss(loadingToast);
+        showToast.updateSuccess("Packages");
         return { success: true, data: result.data };
       } else {
-        setError(result.error || "Failed to update city");
+        setError(result.error || "Failed to update package");
+        toast.dismiss(loadingToast);
+        showToast.updateError("Package", "Failed to update package");
         return { success: false, error: result.error };
       }
     } catch (err) {
       const errorMsg = err instanceof Error ? err.message : "An error occurred";
       setError(errorMsg);
+      toast.dismiss(loadingToast);
+      showToast.updateError("Package", errorMsg);
       return { success: false, error: errorMsg };
     } finally {
       setLoading(false);
     }
   };
 
-  // Delete city
-  const deleteCity = async (
+  // Delete package
+  const deletePackage = async (
     id: number
   ): Promise<{ success: boolean; error?: string }> => {
     setLoading(true);
     setError(null);
 
     try {
-      const result = await citiesApi.delete(id);
+      const result = await packagesApi.delete(id);
 
       if (result.success) {
         // Remove from local state
-        setCities((prev) => prev.filter((city) => city.cid !== id));
+        setPackages((prev) => prev.filter((pkg) => pkg.pid !== id));
         return { success: true };
       } else {
-        setError(result.error || "Failed to delete city");
+        setError(result.error || "Failed to delete package");
         return { success: false, error: result.error };
       }
     } catch (err) {
@@ -215,77 +217,45 @@ export const useCities = (options: UseCitiesOptions = {}) => {
     }
   };
 
-  // Get cities by destination
-  const getCitiesByDestination = async (destinationId: number) => {
-    setLoading(true);
-    setError(null);
-
-    try {
-      const result = await citiesApi.getByDestination(destinationId);
-      if (result.success) {
-        setCities(result.data);
-      } else {
-        setError(result.error || "Failed to fetch cities");
-      }
-    } catch (err) {
-      setError(err instanceof Error ? err.message : "An error occurred");
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  // Search cities
-  const searchCities = async (searchTerm: string) => {
-    setLoading(true);
-    setError(null);
-
-    try {
-      const result = await citiesApi.search(searchTerm);
-      if (result.success) {
-        setCities(result.data);
-        setPagination(null); // Search doesn't return pagination
-      } else {
-        setError(result.error || "Failed to search cities");
-      }
-    } catch (err) {
-      setError(err instanceof Error ? err.message : "An error occurred");
-    } finally {
-      setLoading(false);
-    }
+  // Search packages
+  const searchPackages = async (searchTerm: string) => {
+    await fetchPackages({
+      page: 1,
+      name: searchTerm,
+    });
   };
 
   // Change page
   const changePage = async (page: number) => {
-    await fetchCities({ page });
+    await fetchPackages({ page });
   };
 
   // Initial fetch
   useEffect(() => {
     if (autoFetch) {
-      fetchCities();
+      fetchPackages();
     }
   }, [autoFetch]);
 
   return {
     // State
-    cities,
+    packages,
     loading,
     error,
     pagination,
     currentPage,
 
     // Actions
-    fetchCities,
-    getCity,
-    createCity,
-    updateCity,
-    deleteCity,
-    getCitiesByDestination,
-    searchCities,
+    fetchPackages,
+    getPackage,
+    createPackage,
+    updatePackage,
+    deletePackage,
+    searchPackages,
     changePage,
 
     // Utilities
     clearError: () => setError(null),
-    refresh: () => fetchCities({ page: currentPage }),
+    refresh: () => fetchPackages({ page: currentPage }),
   };
 };

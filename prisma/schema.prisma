@@ -112,7 +112,9 @@ model Package {
   pid           Int          @id @default(autoincrement())
   name          String       @unique
   basePrice     Float
-  durationDays  Int
+  imageUrl      String?
+  day           Int?
+  night         Int?
   description   String
   destination   Destination  @relation(fields: [destinationId], references: [did])
   destinationId Int
@@ -120,8 +122,8 @@ model Package {
   cityId        Int
   itineraries   Itinerary[]
   hotelPrices   PackageHotelPrice[]
-  updatedAt   DateTime  @updatedAt
-  createdAt   DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+  createdAt     DateTime  @default(now())
 }
 
 model PackageHotelPrice {

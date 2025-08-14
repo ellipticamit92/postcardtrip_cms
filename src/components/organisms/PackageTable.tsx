@@ -1,6 +1,7 @@
 "use client";
 
-import { Hotel } from "@/types/type";
+import { format } from "date-fns";
+import { Destination, Package, PaginationProps } from "@/types/type";
 import { ColumnDef } from "@tanstack/react-table";
 import { Checkbox } from "../ui/checkbox";
 import { ArrowUpDown, MoreHorizontal } from "lucide-react";
@@ -13,7 +14,7 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "../ui/dropdown-menu";
-import { FC } from "react";
+import { FC, useState } from "react";
 import CommonTable from "../molecules/CommonTable";
 import Link from "next/link";
 import DeleteData from "./DeleteData";
@@ -25,8 +26,9 @@ import {
   DialogTrigger,
 } from "../ui/dialog";
 import { getFIleName } from "@/lib/utils";
+import { toIndianCurrency } from "@/lib/helper";
 
-export const columns: ColumnDef<Hotel>[] = [
+export const columns: ColumnDef<Package>[] = [
   {
     id: "select",
     header: ({ table }) => (
@@ -57,22 +59,51 @@ export const columns: ColumnDef<Hotel>[] = [
         className="!p-0"
         onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
       >
-        Hotel Name <ArrowUpDown className="ml-2 h-4 w-4" />
+        Name <ArrowUpDown className="ml-2 h-4 w-4" />
       </Button>
     ),
   },
   {
-    accessorKey: "city",
-    header: "City Name",
+    accessorKey: "destination",
+    header: "Destination",
     cell: ({ row }) => {
-      const hotel = row.original;
-      return <span>{hotel?.city?.name}</span>;
+      return <div>{row.original?.destination?.name}</div>;
     },
   },
-
+  {
+    accessorKey: "day",
+    header: "Duration",
+    cell: ({ row }) => {
+      return (
+        <div>
+          {row.getValue("day")}D - {row.original.night}N
+        </div>
+      );
+    },
+  },
+  {
+    accessorKey: "basePrice",
+    header: "Price",
+    cell: ({ row }) => <div>{toIndianCurrency(row.getValue("basePrice"))}</div>,
+  },
+  {
+    accessorKey: "imageUrl",
+    header: "imageUrl",
+    cell: ({ row }) => (
+      <div>
+        <a
+          className="text-blue-700 hover:underline"
+          href={row.getValue("imageUrl")}
+          target="_blank"
+        >
+          {getFIleName(row.getValue("imageUrl"))}
+        </a>
+      </div>
+    ),
+  },
   {
     accessorKey: "description",
-    header: "Hotel Description",
+    header: "Description",
     cell: ({ row }) => {
       const overview = row.getValue("description") as string;
       const name = row.getValue("name") as string;
@@ -104,38 +135,19 @@ export const columns: ColumnDef<Hotel>[] = [
     },
   },
   {
-    id: "iamges",
-    header: "Hotel Images",
+    accessorKey: "createdAt",
+    header: "Created",
     cell: ({ row }) => {
-      const hotel = row.original;
-      const data = hotel?.images;
-      return (
-        <div className="flex flex-col">
-          {data?.map((item, index) => {
-            const fileName = getFIleName(item.url);
-            return (
-              <a
-                key={item.hiid}
-                href={item.url}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="text-blue-700 hover:underline"
-              >
-                {fileName}
-                {index < data.length - 1 && ", "}
-              </a>
-            );
-          })}
-        </div>
-      );
+      const value = row.getValue("createdAt");
+      return value ? format(new Date(value as any), "dd/MM/yyyy") : null;
     },
   },
   {
     id: "actions",
     enableHiding: false,
     cell: ({ row }) => {
-      const hotel = row.original;
-      const hid = String(hotel.hid);
+      const destination = row.original;
+      const pid = String(destination.pid);
       return (
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
@@ -147,7 +159,7 @@ export const columns: ColumnDef<Hotel>[] = [
           <DropdownMenuContent align="end">
             <DropdownMenuLabel>Actions</DropdownMenuLabel>
             <DropdownMenuItem
-              onClick={() => navigator.clipboard.writeText(hid)}
+              onClick={() => navigator.clipboard.writeText(pid)}
             >
               Copy ID
             </DropdownMenuItem>
@@ -155,13 +167,13 @@ export const columns: ColumnDef<Hotel>[] = [
             <DropdownMenuItem>
               <Link
                 className="hover:text-blue-400 font-semibold"
-                href={`/hotel/${hid}`}
+                href={`/package/${pid}`}
               >
                 Edit
               </Link>
             </DropdownMenuItem>
             <DropdownMenuItem>
-              <DeleteData id={hid} model="Hotel" />
+              <DeleteData id={pid} model="package" />
             </DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>
@@ -170,24 +182,23 @@ export const columns: ColumnDef<Hotel>[] = [
   },
 ];
 
-interface HotelTableProps {
-  data: Hotel[];
-  totalCount?: number;
-  totalPages?: number;
-  currentPage?: number;
+interface PackageTableProps {
+  data: Package[];
+  pagination: PaginationProps;
 }
 
-const HotelTable: FC<HotelTableProps> = ({ data }) => {
+const PackageTable: FC<PackageTableProps> = ({ data, pagination }) => {
   return (
     <div className="w-full">
       <CommonTable
         data={data}
-        placeholder="Filter by City Name"
+        placeholder="Filter by Package Name"
         columnName="name"
         columns={columns}
+        pagination={pagination}
       />
     </div>
   );
 };
 
-export default HotelTable;
+export default PackageTable;

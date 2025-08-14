@@ -4,11 +4,13 @@ export class PackageService {
   static async create(data: {
     name: string;
     basePrice: number;
-    durationDays: number;
+    day: number;
+    night: number;
     description: string;
     destinationId: number;
     cityId: number;
     hotelPrices?: { hotelId: number; price: number }[];
+    imageUrl?: string;
   }) {
     try {
       const { hotelPrices, ...packageData } = data;
@@ -427,10 +429,10 @@ export class PackageService {
     }
   }
 
-  static async getByDuration(durationDays: number) {
+  static async getByDay(day: number) {
     try {
       return await prisma.package.findMany({
-        where: { durationDays },
+        where: { day },
         include: {
           destination: true,
           city: true,

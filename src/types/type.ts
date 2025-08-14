@@ -102,7 +102,8 @@ export interface Package {
   pid: number;
   name: string;
   basePrice: number;
-  durationDays: number;
+  day: number | null;
+  night: number | null;
   description: string;
   destinationId: number;
   cityId: number;
@@ -111,6 +112,7 @@ export interface Package {
   city?: City;
   itineraries?: Itinerary[];
   hotelPrices?: PackageHotelPrice[];
+  imageUrl?: string;
 }
 
 export interface PackageHotelPrice {
@@ -183,7 +185,7 @@ export interface Exclusion {
 export interface HotelImage {
   hiid: number;
   url: string;
-  caption?: string | null;
+  caption: string | null;
   hotelId: number;
   // Optional relations
   hotel?: Hotel;

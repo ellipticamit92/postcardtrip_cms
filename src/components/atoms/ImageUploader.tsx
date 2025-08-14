@@ -24,7 +24,7 @@ interface ImageUploaderProps {
 
 export default function ImageUploader({
   label = "Upload Image",
-  value,
+  value = "https://res.cloudinary.com/dnkfly4cj/image/upload/v1755088640/cms_uploads/mabbvifnt87yhjtldx0k.jpg",
   onChange,
 }: ImageUploaderProps) {
   const [dragActive, setDragActive] = useState(false);
@@ -76,13 +76,13 @@ export default function ImageUploader({
   };
 
   return (
-    <div className="space-y-4">
-      <Label className="text-base flex items-center gap-2">
+    <div className="space-y-1">
+      <Label className="text-sm flex items-center gap-2">
         <Camera className="h-4 w-4" /> {label}
       </Label>
 
       <div
-        className={`relative border-2 border-dashed rounded-lg p-8 transition-all duration-300 ${
+        className={`relative border-2 border-dashed rounded-lg p-1 transition-all duration-300 ${
           dragActive
             ? "border-primary bg-accent/20"
             : "border-border hover:border-primary/50"
@@ -98,108 +98,78 @@ export default function ImageUploader({
           if (files?.[0]) handleFileUpload(files[0]);
         }}
       >
-        {value ? (
+        {!value ? (
           <div className="space-y-4">
-            <div className="relative group">
-              <img
-                src={value}
-                alt="Preview"
-                className="w-full h-48 object-cover rounded-lg shadow-lg"
-              />
-              <div className="absolute inset-0 bg-black/0 group-hover:bg-black/20 rounded-lg flex items-center justify-center opacity-0 group-hover:opacity-100">
+            <div className="flex-1 flex flex-col">
+              <div className="group  relative">
+                <img
+                  src={value}
+                  alt="Preview"
+                  className="w-full h-24 object-cover rounded-lg shadow-lg"
+                />
+                <div className="absolute inset-0 bg-black/0 group-hover:bg-black/20 rounded-lg flex items-center justify-center opacity-0 group-hover:opacity-100">
+                  <div className="flex gap-2">
+                    <Button
+                      type="button"
+                      size="sm"
+                      variant="secondary"
+                      onClick={() => window.open(value, "_blank")}
+                    >
+                      <Eye className="h-4 w-4 mr-1" /> Preview
+                    </Button>
+                    <Button
+                      type="button"
+                      size="sm"
+                      variant="destructive"
+                      onClick={() => onChange("")}
+                    >
+                      <X className="h-4 w-4 mr-1" /> Remove
+                    </Button>
+                  </div>
+                </div>
+              </div>
+              <div className="flex items-center justify-center py-2 gap-2 text-success">
+                <CheckCircle className="h-5 w-5" />{" "}
+                <span className="font-medium">
+                  Image uploaded successfully!
+                </span>
+              </div>
+            </div>
+            <div className="flex-1 flex flex-col gap-4">
+              <div className="space-y-2">
+                <Label className="text-sm font-medium flex items-center gap-2">
+                  <Link2 className="h-4 w-4" /> Cloudinary URL
+                </Label>
                 <div className="flex gap-2">
+                  <Input
+                    value={value}
+                    readOnly
+                    className="bg-muted/50 text-sm font-mono"
+                  />
                   <Button
                     type="button"
+                    variant="outline"
                     size="sm"
-                    variant="secondary"
-                    onClick={() => window.open(value, "_blank")}
+                    onClick={() => navigator.clipboard.writeText(value)}
                   >
-                    <Eye className="h-4 w-4 mr-1" /> Preview
-                  </Button>
-                  <Button
-                    type="button"
-                    size="sm"
-                    variant="destructive"
-                    onClick={() => onChange("")}
-                  >
-                    <X className="h-4 w-4 mr-1" /> Remove
+                    Copy
                   </Button>
                 </div>
               </div>
+
+              <Button
+                type="button"
+                variant="outline"
+                onClick={() => document.getElementById("file-input")?.click()}
+                className="w-full"
+              >
+                <Camera className="h-4 w-4 mr-2" /> Change Image
+              </Button>
             </div>
-
-            <div className="flex items-center justify-center gap-2 text-success">
-              <CheckCircle className="h-5 w-5" />{" "}
-              <span className="font-medium">Image uploaded successfully!</span>
-            </div>
-
-            {imageMetadata.fileName && (
-              <Card className="bg-accent/30 border-accent/50">
-                <CardContent className="p-4 grid md:grid-cols-3 gap-4 text-sm">
-                  <div className="flex items-center gap-2">
-                    <FileImage className="h-4 w-4 text-muted-foreground" />
-                    <div>
-                      <p className="font-medium">File Name</p>
-                      <p className="text-muted-foreground truncate">
-                        {imageMetadata.fileName}
-                      </p>
-                    </div>
-                  </div>
-                  <div className="flex items-center gap-2">
-                    <Upload className="h-4 w-4 text-muted-foreground" />
-                    <div>
-                      <p className="font-medium">File Size</p>
-                      <p className="text-muted-foreground">
-                        {imageMetadata.fileSize}
-                      </p>
-                    </div>
-                  </div>
-                  <div className="flex items-center gap-2">
-                    <Camera className="h-4 w-4 text-muted-foreground" />
-                    <div>
-                      <p className="font-medium">Upload Date</p>
-                      <p className="text-muted-foreground">
-                        {imageMetadata.uploadDate}
-                      </p>
-                    </div>
-                  </div>
-                </CardContent>
-              </Card>
-            )}
-
-            <div className="space-y-2">
-              <Label className="text-sm font-medium flex items-center gap-2">
-                <Link2 className="h-4 w-4" /> Cloudinary URL
-              </Label>
-              <div className="flex gap-2">
-                <Input
-                  value={value}
-                  readOnly
-                  className="bg-muted/50 text-sm font-mono"
-                />
-                <Button
-                  type="button"
-                  variant="outline"
-                  size="sm"
-                  onClick={() => navigator.clipboard.writeText(value)}
-                >
-                  Copy
-                </Button>
-              </div>
-            </div>
-
-            <Button
-              type="button"
-              variant="outline"
-              onClick={() => document.getElementById("file-input")?.click()}
-              className="w-full"
-            >
-              <Camera className="h-4 w-4 mr-2" /> Change Image
-            </Button>
           </div>
         ) : (
           <div className="text-center">
-            <Upload className="h-8 w-12 text-muted-foreground mx-auto mb-4" />
+            <Upload className="h-12 w-12 text-muted-foreground mx-auto mb-4" />
             <p className="text-lg font-medium mb-2">Drop your image here</p>
             <p className="text-muted-foreground mb-4">
               or click to browse files

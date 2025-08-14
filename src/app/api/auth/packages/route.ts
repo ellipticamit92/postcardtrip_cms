@@ -2,7 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { PackageService } from "@/services/package.service";
 
 /**
- * GET /api/packages
+ * GET /api/auth/packages
  * Query params:
  *  - page, limit
  *  - destinationId, cityId
@@ -75,10 +75,12 @@ export async function POST(req: NextRequest) {
     const required = [
       "name",
       "basePrice",
-      "durationDays",
+      "day",
+      "night",
       "description",
       "destinationId",
       "cityId",
+      "imageUrl",
     ];
     const missing = required.filter((k) => body[k] === undefined);
 
@@ -95,11 +97,13 @@ export async function POST(req: NextRequest) {
     const pkg = await PackageService.create({
       name: body.name,
       basePrice: Number(body.basePrice),
-      durationDays: Number(body.durationDays),
+      day: Number(body.day),
+      night: Number(body.night),
       description: body.description,
       destinationId: Number(body.destinationId),
       cityId: Number(body.cityId),
       hotelPrices: body.hotelPrices,
+      imageUrl: body.imageUrl,
     });
 
     return NextResponse.json(

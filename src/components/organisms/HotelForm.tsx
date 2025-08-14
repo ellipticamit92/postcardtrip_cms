@@ -55,8 +55,6 @@ export function HotelForm({ cities, initialData, hotelId }: HotelFormProps) {
         starRating: data.starRating,
       };
 
-      console.log("DEBUG data - ", submitData);
-
       let result;
       if (isEditMode && hotelId) {
         result = await updateHotel(hotelId, submitData);
