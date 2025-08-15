@@ -68,31 +68,14 @@ export function PackageForm({
         description: data.description.trim(),
       };
 
-      let result;
       if (isEditMode && PackageId) {
-        result = await updatePackage(PackageId, submitData);
+        await updatePackage(PackageId, submitData);
       } else {
-        result = await createPackage(submitData);
+        await createPackage(submitData);
       }
-
-      //   let result;
-      //   if (isEditMode && PackageId) {
-      //     result = await updatePackage(PackageId, submitData);
-      //   } else {
-      //     result = await createPackage(submitData);
-      //   }
-
-      /*
-      if (isEditMode) {
-        setValue("name", resData?.data?.name ?? "");
-        setValue("overview", resData?.data?.overview ?? "");
-        setValue("country", resData?.data?.country ?? "");
-        setValue("imageUrl", resData?.data?.imageUrl ?? "");
-      }
-      */
 
       if (!isEditMode) {
-        // reset();
+        reset();
       }
     } catch (err: any) {
       console.error("Error submitting Package", err);

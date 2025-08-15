@@ -10,8 +10,7 @@ export function useToast() {
     ) => {
       return showToast.promise(operation(), {
         loading: `Processing ${entity}...`,
-        success:
-          successMessage || ((data) => `${entity} processed successfully`),
+        success: successMessage || (() => `${entity} processed successfully`),
         error: (err) => `Failed to process ${entity}: ${err.message}`,
       });
     },

@@ -8,7 +8,7 @@ import { toast } from "sonner";
 import { FormInput } from "../atoms/FormInput";
 import { FormSelect } from "../atoms/FormSelect";
 import { Form } from "../ui/form";
-import { Loader2, Star } from "lucide-react";
+import { Loader2 } from "lucide-react";
 import { FormRichText } from "../atoms/FormRichText";
 import { useHotels } from "@/hooks/use-hotels";
 import { StarRating } from "../atoms/StarRating";
@@ -55,11 +55,10 @@ export function HotelForm({ cities, initialData, hotelId }: HotelFormProps) {
         starRating: data.starRating,
       };
 
-      let result;
       if (isEditMode && hotelId) {
-        result = await updateHotel(hotelId, submitData);
+        await updateHotel(hotelId, submitData);
       } else {
-        result = await createHotel(submitData);
+        await createHotel(submitData);
       }
 
       if (!isEditMode) {

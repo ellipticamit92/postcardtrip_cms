@@ -6,62 +6,12 @@ export class ItineraryService {
     title: string;
     details: string;
     packageId: number;
-    highlights?: string[];
-    inclusions?: string[];
-    exclusions?: string[];
-    places?: {
-      name: string;
-      description: string;
-      images?: { url: string; caption?: string }[];
-    }[];
+    highlights: string;
+    places: string;
   }) {
     try {
-      const { highlights, inclusions, exclusions, places, ...itineraryData } =
-        data;
-
       return await prisma.itinerary.create({
-        data: {
-          ...itineraryData,
-          highlights: highlights
-            ? {
-                create: highlights.map((text) => ({ text })),
-              }
-            : undefined,
-          inclusions: inclusions
-            ? {
-                create: inclusions.map((text) => ({ text })),
-              }
-            : undefined,
-          exclusions: exclusions
-            ? {
-                create: exclusions.map((text) => ({ text })),
-              }
-            : undefined,
-          places: places
-            ? {
-                create: places.map((place) => ({
-                  name: place.name,
-                  description: place.description,
-                  images: place.images
-                    ? {
-                        create: place.images,
-                      }
-                    : undefined,
-                })),
-              }
-            : undefined,
-        },
-        include: {
-          package: true,
-          highlights: true,
-          inclusions: true,
-          exclusions: true,
-          places: {
-            include: {
-              images: true,
-            },
-          },
-        },
+        data,
       });
     } catch (error) {
       throw new Error(`Failed to create itinerary: ${error}`);
@@ -120,14 +70,6 @@ export class ItineraryService {
                 city: true,
               },
             },
-            highlights: true,
-            inclusions: true,
-            exclusions: true,
-            places: {
-              include: {
-                images: true,
-              },
-            },
           },
           orderBy: [{ packageId: "asc" }, { [sortBy]: sortOrder }],
         }),
@@ -161,14 +103,6 @@ export class ItineraryService {
               city: true,
             },
           },
-          highlights: true,
-          inclusions: true,
-          exclusions: true,
-          places: {
-            include: {
-              images: true,
-            },
-          },
         },
       });
 
@@ -186,16 +120,6 @@ export class ItineraryService {
     try {
       return await prisma.itinerary.findMany({
         where: { packageId },
-        include: {
-          highlights: true,
-          inclusions: true,
-          exclusions: true,
-          places: {
-            include: {
-              images: true,
-            },
-          },
-        },
         orderBy: {
           day: "asc",
         },
@@ -211,16 +135,6 @@ export class ItineraryService {
         where: {
           packageId,
           day,
-        },
-        include: {
-          highlights: true,
-          inclusions: true,
-          exclusions: true,
-          places: {
-            include: {
-              images: true,
-            },
-          },
         },
       });
     } catch (error) {
@@ -256,75 +170,6 @@ export class ItineraryService {
     }
   }
 
-  static async addHighlight(itineraryId: number, text: string) {
-    try {
-      return await prisma.highlight.create({
-        data: {
-          text,
-          itineraryId,
-        },
-      });
-    } catch (error) {
-      throw new Error(`Failed to add highlight: ${error}`);
-    }
-  }
-
-  static async addInclusion(itineraryId: number, text: string) {
-    try {
-      return await prisma.inclusion.create({
-        data: {
-          text,
-          itineraryId,
-        },
-      });
-    } catch (error) {
-      throw new Error(`Failed to add inclusion: ${error}`);
-    }
-  }
-
-  static async addExclusion(itineraryId: number, text: string) {
-    try {
-      return await prisma.exclusion.create({
-        data: {
-          text,
-          itineraryId,
-        },
-      });
-    } catch (error) {
-      throw new Error(`Failed to add exclusion: ${error}`);
-    }
-  }
-
-  static async removeHighlight(hlid: number) {
-    try {
-      return await prisma.highlight.delete({
-        where: { hlid },
-      });
-    } catch (error) {
-      throw new Error(`Failed to remove highlight: ${error}`);
-    }
-  }
-
-  static async removeInclusion(lid: number) {
-    try {
-      return await prisma.inclusion.delete({
-        where: { lid },
-      });
-    } catch (error) {
-      throw new Error(`Failed to remove inclusion: ${error}`);
-    }
-  }
-
-  static async removeExclusion(eid: number) {
-    try {
-      return await prisma.exclusion.delete({
-        where: { eid },
-      });
-    } catch (error) {
-      throw new Error(`Failed to remove exclusion: ${error}`);
-    }
-  }
-
   static async searchByTitle(title: string) {
     try {
       const whereClause = title
@@ -339,14 +184,6 @@ export class ItineraryService {
             include: {
               destination: true,
               city: true,
-            },
-          },
-          highlights: true,
-          inclusions: true,
-          exclusions: true,
-          places: {
-            include: {
-              images: true,
             },
           },
         },

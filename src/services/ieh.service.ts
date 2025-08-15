@@ -29,8 +29,6 @@ export class IEHService {
 
       if (text) where.text = { contains: text, mode: "insensitive" };
 
-      console.log("TEXT = text = ", text);
-
       let updateData;
       let updateTotal = 0;
       if (type === "inclusion") {
@@ -62,7 +60,6 @@ export class IEHService {
       }
 
       if (type === "highlight") {
-        console.log("DEBIG service type = ", type);
         const [data, total] = await Promise.all([
           prisma.highlight.findMany({
             where,

@@ -235,7 +235,7 @@ export const usePackages = (options: UsePackagesOptions = {}) => {
     if (autoFetch) {
       fetchPackages();
     }
-  }, [autoFetch]);
+  }, [autoFetch, fetchPackages]);
 
   return {
     // State

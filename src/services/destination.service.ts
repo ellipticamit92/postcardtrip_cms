@@ -125,18 +125,7 @@ export class DestinationService {
           packages: {
             include: {
               city: true,
-              itineraries: {
-                include: {
-                  highlights: true,
-                  inclusions: true,
-                  exclusions: true,
-                  places: {
-                    include: {
-                      images: true,
-                    },
-                  },
-                },
-              },
+              itineraries: true,
               hotelPrices: {
                 include: {
                   hotel: {

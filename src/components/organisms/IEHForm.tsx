@@ -6,7 +6,6 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { Button } from "@/components/ui/button";
 import { toast } from "sonner";
 import { FormInput } from "../atoms/FormInput";
-import { FormSelect } from "../atoms/FormSelect";
 import { Form } from "../ui/form";
 import { Loader2 } from "lucide-react";
 import { useIEH } from "@/hooks/use-ieh";
@@ -46,14 +45,10 @@ export function IEHForm({ initialData, id, type }: IEHFormProps) {
         text: data.text.trim(),
       };
 
-      console.log("DEBUG submit data = ", submitData);
-
-      let result;
       if (isEditMode && id) {
-        console.log("EDIT mode");
-        result = await updateIEH(id, submitData, type);
+        await updateIEH(id, submitData, type);
       } else {
-        result = await createIEH(submitData, type);
+        await createIEH(submitData, type);
       }
 
       if (!isEditMode) {

@@ -1,5 +1,4 @@
 import { NextRequest, NextResponse } from "next/server";
-import { DestinationService } from "@/services/destination.service";
 import PackageService from "@/services/package.service";
 
 interface RouteParams {

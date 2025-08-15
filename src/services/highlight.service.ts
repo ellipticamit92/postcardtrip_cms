@@ -4,7 +4,7 @@ export class HighlightService {
   // Create new highlight
   static async create(data: { text: string }) {
     try {
-      return await prisma.highlight.create(data);
+      return await prisma.highlight.create({ data });
     } catch (error) {
       throw new Error(`Failed to create highlight: ${error}`);
     }

@@ -54,15 +54,14 @@ export function CityForm({ destinations, initialData, cityId }: CityFormProps) {
         destinationId: parseInt(data.destinationId),
       };
 
-      let result;
       if (isEditMode && cityId) {
-        result = await updateCity(cityId, submitData);
+        await updateCity(cityId, submitData);
       } else {
-        result = await createCity(submitData);
+        await createCity(submitData);
       }
 
       if (!isEditMode) {
-        //reset();
+        reset();
       }
     } catch (err: any) {
       console.error("Error submitting destination", err);

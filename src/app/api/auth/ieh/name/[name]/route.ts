@@ -1,5 +1,4 @@
 import { NextRequest, NextResponse } from "next/server";
-import CityService from "@/services/city.service";
 import IEHService from "@/services/ieh.service";
 
 interface RouteParams {

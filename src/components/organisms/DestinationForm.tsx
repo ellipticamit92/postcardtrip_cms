@@ -57,21 +57,11 @@ export function DestinationForm({
         imageUrl: data.imageUrl?.trim() || undefined,
       };
 
-      let result;
       if (isEditMode && destinationId) {
-        result = await updateDestination(destinationId, submitData);
+        await updateDestination(destinationId, submitData);
       } else {
-        result = await createDestination(submitData);
+        await createDestination(submitData);
       }
-
-      /*
-      if (isEditMode) {
-        setValue("name", resData?.data?.name ?? "");
-        setValue("overview", resData?.data?.overview ?? "");
-        setValue("country", resData?.data?.country ?? "");
-        setValue("imageUrl", resData?.data?.imageUrl ?? "");
-      }
-      */
 
       if (!isEditMode) {
         reset();

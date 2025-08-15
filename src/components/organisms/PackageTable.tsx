@@ -1,7 +1,7 @@
 "use client";
 
 import { format } from "date-fns";
-import { Destination, Package, PaginationProps } from "@/types/type";
+import { Package, PaginationProps } from "@/types/type";
 import { ColumnDef } from "@tanstack/react-table";
 import { Checkbox } from "../ui/checkbox";
 import { ArrowUpDown, MoreHorizontal } from "lucide-react";
@@ -14,7 +14,7 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "../ui/dropdown-menu";
-import { FC, useState } from "react";
+import { FC } from "react";
 import CommonTable from "../molecules/CommonTable";
 import Link from "next/link";
 import DeleteData from "./DeleteData";

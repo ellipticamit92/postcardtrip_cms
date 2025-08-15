@@ -4,7 +4,6 @@ import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Card, CardContent } from "@/components/ui/card";
 import {
   Upload,
   Camera,
@@ -28,7 +27,7 @@ export default function ImageUploader({
   onChange,
 }: ImageUploaderProps) {
   const [dragActive, setDragActive] = useState(false);
-  const [imageMetadata, setImageMetadata] = useState<{
+  const [_, setImageMetadata] = useState<{
     fileName?: string;
     fileSize?: string;
     uploadDate?: string;

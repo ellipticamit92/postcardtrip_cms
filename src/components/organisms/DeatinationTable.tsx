@@ -14,7 +14,7 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "../ui/dropdown-menu";
-import { FC, useState } from "react";
+import { FC } from "react";
 import CommonTable from "../molecules/CommonTable";
 import Link from "next/link";
 import DeleteData from "./DeleteData";

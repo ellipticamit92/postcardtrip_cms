@@ -36,7 +36,7 @@ export const useDestinations = (options: UseDestinationsOptions = {}) => {
   const [destinations, setDestinations] = useState<Destination[]>([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
-  const [pagination, setPagination] = useState<PaginationInfo | null>(null);
+  const [pagination, _] = useState<PaginationInfo | null>(null);
   const [currentPage, setCurrentPage] = useState(initialPage);
 
   // Fetch destinations with filters

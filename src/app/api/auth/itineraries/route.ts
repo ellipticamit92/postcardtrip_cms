@@ -79,10 +79,8 @@ export async function POST(req: NextRequest) {
       title: body.title,
       details: body.details,
       packageId: Number(body.packageId),
-      highlights: body.highlights,
-      inclusions: body.inclusions,
-      exclusions: body.exclusions,
       places: body.places,
+      highlights: body.highlights,
     });
 
     return NextResponse.json(

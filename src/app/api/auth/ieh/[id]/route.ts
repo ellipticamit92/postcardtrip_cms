@@ -87,7 +87,6 @@ export async function DELETE(request: NextRequest, { params }: RouteParams) {
     const { id } = await params;
     const idArray = id.split("_");
     const newId = parseInt(idArray[0]);
-    console.log("BEBUG id = ", id);
 
     if (isNaN(newId)) {
       return NextResponse.json(

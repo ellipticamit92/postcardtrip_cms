@@ -1,6 +1,5 @@
 import { FC } from "react";
 import { Button } from "../ui/button";
-import { PaginationShadcn } from "./PaginationShadcn";
 import Pagination from "./Pagination";
 
 interface CommonTableFooterProps {
@@ -30,7 +29,7 @@ export const CommonTableFooter: FC<CommonTableFooterProps> = ({
       <Pagination
         totalPages={totalPages}
         currentPage={page ?? 1}
-        onPageChange={() => console.log("asdf")}
+        onPageChange={() => {}}
         hasNext={hasNext}
         hasPrev={hasPrev}
         limit={limit}

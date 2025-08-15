@@ -1,27 +1,27 @@
 // lib/store/serverDataStore.ts
 import { create } from "zustand";
-import { Queries, QueryData, User } from "@/types/type";
+import { User } from "@/types/type";
 
 interface ServerData {
   title: string;
   date: string;
   userData: User[];
-  query: Queries;
-  queries: Queries[];
-  queryData: QueryData;
+  query: any;
+  queries: any[];
+  queryData: any;
 }
 
 interface ServerDataState {
   data: ServerData | null;
   userData: User[] | null;
-  query: Queries | null;
-  queries: Queries[] | null;
-  queryData: QueryData;
+  query: any | null;
+  queries: any[] | null;
+  queryData: any;
   setData: (data: ServerData) => void;
-  setQuery: (query: Queries) => void;
-  setQueries: (query: Queries[]) => void;
+  setQuery: (query: any) => void;
+  setQueries: (query: any[]) => void;
   setUserData: (userData: User[]) => void;
-  setQueryData: (queryData: QueryData) => void;
+  setQueryData: (queryData: any) => void;
 }
 
 export const useServerData = create<ServerDataState>((set) => ({

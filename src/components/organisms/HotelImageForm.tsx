@@ -55,15 +55,14 @@ export function HotelImageForm({
         hotelId: parseInt(data.hotelId),
       };
 
-      let result;
       if (isEditMode && hotelImageId) {
-        result = await updateImage(hotelImageId, submitData);
+        await updateImage(hotelImageId, submitData);
       } else {
-        result = await createImage(submitData);
+        await createImage(submitData);
       }
 
       if (!isEditMode) {
-        //reset();
+        reset();
       }
     } catch (err: any) {
       console.error("Error submitting destination", err);

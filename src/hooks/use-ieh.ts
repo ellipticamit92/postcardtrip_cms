@@ -1,15 +1,15 @@
 import { IEHApi } from "@/lib/api/ieh";
 import { showToast } from "@/lib/toast";
 import { IEHType } from "@/types/type";
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { toast } from "sonner";
 
-interface IEH {
-  hlid?: number;
-  lid?: number;
-  eid?: number;
-  name: string;
-}
+// interface IEH {
+//   hlid?: number;
+//   lid?: number;
+//   eid?: number;
+//   name: string;
+// }
 
 interface UseIEHOptions {
   autoFetch?: boolean;
@@ -18,28 +18,28 @@ interface UseIEHOptions {
   type: IEHType;
 }
 
-interface PaginationInfo {
-  page: number;
-  limit: number;
-  total: number;
-  totalPages: number;
-  hasNext: boolean;
-  hasPrev: boolean;
-}
+// interface PaginationInfo {
+//   page: number;
+//   limit: number;
+//   total: number;
+//   totalPages: number;
+//   hasNext: boolean;
+//   hasPrev: boolean;
+// }
 
 export const useIEH = (options: UseIEHOptions) => {
-  const {
-    autoFetch = false,
-    initialPage = 1,
-    initialLimit = 10,
-    type,
-  } = options;
+  // const {
+  //   // autoFetch = false,
+  //   // initialPage = 1,
+  //   // initialLimit = 10,
+  //   // type,
+  // } = options;
 
-  const [ieh, setIEH] = useState<IEH[]>([]);
+  // const [ieh, setIEH] = useState<IEH[]>([]);
   const [loading, setLoading] = useState(false);
-  const [error, setError] = useState<string | null>(null);
-  const [pagination, setPagination] = useState<PaginationInfo | null>(null);
-  const [currentPage, setCurrentPage] = useState(initialPage);
+  const [_, setError] = useState<string | null>(null);
+  // const [pagination, setPagination] = useState<PaginationInfo | null>(null);
+  // const [currentPage, setCurrentPage] = useState(initialPage);
 
   const createIEH = async (
     data: {

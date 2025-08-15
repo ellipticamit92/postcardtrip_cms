@@ -1,5 +1,4 @@
 import { NextRequest, NextResponse } from "next/server";
-import { HotelService } from "@/services/hotel.service";
 import HotelImageService from "@/services/hotelImage.service";
 
 /**
