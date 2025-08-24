@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { DestinationService } from "@/services/destination.service";
 
+const API_KEY = process.env.PUBLIC_API_KEY;
 /**
  * GET /api/destinations
  * Query params:
@@ -12,6 +13,12 @@ import { DestinationService } from "@/services/destination.service";
  */
 export async function GET(req: NextRequest) {
   try {
+    const authHeader = req.headers.get("x-api-key");
+
+    if (authHeader !== API_KEY) {
+      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+    }
+
     const { searchParams } = new URL(req.url);
 
     const result = await DestinationService.getAll({
@@ -33,46 +40,6 @@ export async function GET(req: NextRequest) {
         success: false,
         error:
           err instanceof Error ? err.message : "Failed to fetch destinations",
-      },
-      { status: 500 }
-    );
-  }
-}
-
-/**
- * POST /api/destinations
- * Body: { name, country, overview?, imageUrl? }
- */
-export async function POST(req: NextRequest) {
-  try {
-    const body = await req.json();
-
-    if (!body.name || !body.country) {
-      return NextResponse.json(
-        { success: false, error: 'Fields "name" and "country" are required' },
-        { status: 400 }
-      );
-    }
-
-    const destination = await DestinationService.create({
-      name: body.name,
-      country: body.country,
-      overview: body.overview,
-      imageUrl: body.imageUrl,
-      trending: body.trending,
-    });
-
-    return NextResponse.json(
-      { success: true, data: destination, message: "Destination created" },
-      { status: 201 }
-    );
-  } catch (err) {
-    console.error("POST /api/destinations error:", err);
-    return NextResponse.json(
-      {
-        success: false,
-        error:
-          err instanceof Error ? err.message : "Failed to create destination",
       },
       { status: 500 }
     );

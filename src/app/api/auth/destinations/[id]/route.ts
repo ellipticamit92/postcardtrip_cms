@@ -64,6 +64,7 @@ export async function PUT(request: NextRequest, { params }: RouteParams) {
       country: body.country,
       overview: body.overview,
       imageUrl: body.imageUrl,
+      trending: body.trending,
     });
 
     return NextResponse.json({

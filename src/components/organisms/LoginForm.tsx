@@ -65,12 +65,6 @@ export const LoginForm = () => {
         <Button type="submit" className="w-full h-12 rounded-xl">
           Sign In
         </Button>
-
-        <div className="flex items-center gap-2 my-6">
-          <div className="flex-1 border-t dark:border-gray-800" />
-          <span className="text-sm font-semibold">or continue with</span>
-          <div className="flex-1 border-t dark:border-gray-800" />
-        </div>
       </form>
     </Form>
   );

@@ -68,6 +68,7 @@ model Destination {
   country     String
   overview    String?   @db.Text
   imageUrl    String?
+  trending    Boolean   @default(false)
   packages    Package[]
   cities      City[]
   updatedAt   DateTime  @updatedAt

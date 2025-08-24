@@ -83,6 +83,11 @@ export const columns: ColumnDef<Destination>[] = [
     ),
   },
   {
+    accessorKey: "trending",
+    header: "Trending",
+    cell: ({ row }) => <div>{row.getValue("trending")?.toString()}</div>,
+  },
+  {
     accessorKey: "overview",
     header: "Overview",
     cell: ({ row }) => {
@@ -154,7 +159,7 @@ export const columns: ColumnDef<Destination>[] = [
               </Link>
             </DropdownMenuItem>
             <DropdownMenuItem>
-              <DeleteData id={did} model="destination" />
+              <DeleteData id={did} model="destinations" />
             </DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>

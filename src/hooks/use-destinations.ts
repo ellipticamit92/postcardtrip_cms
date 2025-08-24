@@ -147,6 +147,7 @@ export const useDestinations = (options: UseDestinationsOptions = {}) => {
       country?: string;
       overview?: string;
       imageUrl?: string;
+      trending?: boolean;
     }
   ): Promise<{ success: boolean; data?: Destination; error?: string }> => {
     setLoading(true);

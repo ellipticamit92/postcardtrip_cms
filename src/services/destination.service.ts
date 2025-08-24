@@ -7,6 +7,7 @@ export class DestinationService {
     country: string;
     overview?: string;
     imageUrl?: string;
+    trending?: boolean;
   }) {
     try {
       return await prisma.destination.create({
@@ -41,6 +42,7 @@ export class DestinationService {
       name?: string;
       sortBy?: "name" | "country" | "createdAt";
       sortOrder?: "asc" | "desc";
+      include?: boolean;
     } = {}
   ) {
     try {
@@ -51,6 +53,7 @@ export class DestinationService {
         name,
         sortBy = "createdAt",
         sortOrder = "desc",
+        include = true,
       } = options;
 
       const skip = (page - 1) * limit;
@@ -75,19 +78,21 @@ export class DestinationService {
           where,
           skip,
           take: limit,
-          include: {
-            cities: true,
-            packages: {
-              include: {
-                city: true,
-                hotelPrices: {
+          include: include
+            ? {
+                cities: true,
+                packages: {
                   include: {
-                    hotel: true,
+                    city: true,
+                    hotelPrices: {
+                      include: {
+                        hotel: true,
+                      },
+                    },
                   },
                 },
-              },
-            },
-          },
+              }
+            : undefined,
           orderBy: {
             [sortBy]: sortOrder,
           },
@@ -113,8 +118,8 @@ export class DestinationService {
 
   static async getById(did: number) {
     try {
-      const destination = await prisma.destination.findUnique({
-        where: { did },
+      const destination = await prisma.destination.findFirst({
+        where: { did: did },
         include: {
           cities: {
             include: {
@@ -171,6 +176,7 @@ export class DestinationService {
       country?: string;
       overview?: string;
       imageUrl?: string;
+      trending?: boolean;
     }
   ) {
     try {
@@ -210,6 +216,18 @@ export class DestinationService {
       });
     } catch (error) {
       throw new Error(`Failed to search destinations by country: ${error}`);
+    }
+  }
+
+  static async getTrending() {
+    try {
+      return await prisma.destination.findMany({
+        where: {
+          trending: true,
+        },
+      });
+    } catch (error) {
+      throw new Error(`Failed to fetch destination by name: ${error}`);
     }
   }
 }

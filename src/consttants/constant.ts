@@ -14,6 +14,7 @@ import {
   TriangleAlert,
   Siren,
   ScanEye,
+  EyeOff,
 } from "lucide-react";
 
 export const SIDEBAR_URLS = {
@@ -50,6 +51,11 @@ export const SIDEBAR_URLS = {
           title: "View Destination",
           url: "/destination",
           icon: Eye,
+        },
+        {
+          title: "View Destination API",
+          url: "/destination/view",
+          icon: EyeOff,
         },
         {
           title: "Add Destination",
