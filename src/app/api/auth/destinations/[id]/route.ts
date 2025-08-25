@@ -65,6 +65,8 @@ export async function PUT(request: NextRequest, { params }: RouteParams) {
       overview: body.overview,
       imageUrl: body.imageUrl,
       trending: body.trending,
+      heading: body.heading,
+      basePrice: body.basePrice,
     });
 
     return NextResponse.json({

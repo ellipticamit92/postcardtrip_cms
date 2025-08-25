@@ -43,6 +43,7 @@ export const destinationsApi = {
     overview?: string;
     imageUrl?: string;
     trending?: boolean;
+    heading: string;
   }) => {
     const response = await fetch(API_BASE_URL, {
       method: "POST",
@@ -63,6 +64,7 @@ export const destinationsApi = {
       overview?: string;
       imageUrl?: string;
       trending?: boolean;
+      heading: string;
     }
   ) => {
     const response = await fetch(`${API_BASE_URL}/${id}`, {

@@ -14,12 +14,16 @@ export default async function EditDestinationPage({
   const country = destination?.country ?? "";
   const overview = destination?.overview ?? "";
   const imageUrl = destination?.imageUrl ?? "";
+  const heading = destination?.heading ?? "";
+  const trending = destination?.trending ?? false;
 
   const updatedDestination = {
     name,
     country,
     overview,
     imageUrl,
+    heading,
+    trending,
   };
 
   return (

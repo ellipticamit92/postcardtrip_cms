@@ -8,6 +8,8 @@ export class DestinationService {
     overview?: string;
     imageUrl?: string;
     trending?: boolean;
+    heading: string;
+    basePrice?: number;
   }) {
     try {
       return await prisma.destination.create({
@@ -177,8 +179,12 @@ export class DestinationService {
       overview?: string;
       imageUrl?: string;
       trending?: boolean;
+      heading?: string;
+      basePrice?: number;
     }
   ) {
+    console.log("Updating destination with data line 184:", data);
+    console.log("Updating destination with did:", did);
     try {
       return await prisma.destination.update({
         where: { did },
@@ -221,11 +227,24 @@ export class DestinationService {
 
   static async getTrending() {
     try {
-      return await prisma.destination.findMany({
+      const data = await prisma.destination.findMany({
         where: {
           trending: true,
         },
+        include: {
+          packages: true, // we need it temporarily to count
+        },
+        take: 4,
       });
+
+      const updatedData = data.map(({ packages, ...destination }) => ({
+        ...destination,
+        packagesCount: packages.length,
+      }));
+
+      console.log("Trending destinations updatedData:", updatedData);
+
+      return updatedData;
     } catch (error) {
       throw new Error(`Failed to fetch destination by name: ${error}`);
     }

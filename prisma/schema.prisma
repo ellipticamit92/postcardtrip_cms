@@ -65,10 +65,12 @@ model VerificationToken {
 model Destination {
   did         Int       @id @default(autoincrement())
   name        String    @unique
+  heading     String    @unique
   country     String
   overview    String?   @db.Text
   imageUrl    String?
   trending    Boolean   @default(false)
+  basePrice   Int?
   packages    Package[]
   cities      City[]
   updatedAt   DateTime  @updatedAt

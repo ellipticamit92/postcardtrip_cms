@@ -60,6 +60,8 @@ export async function POST(req: NextRequest) {
       overview: body.overview,
       imageUrl: body.imageUrl,
       trending: body.trending,
+      heading: body.heading,
+      basePrice: body.basePrice,
     });
 
     return NextResponse.json(

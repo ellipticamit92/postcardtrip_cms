@@ -98,6 +98,8 @@ export const useDestinations = (options: UseDestinationsOptions = {}) => {
     country: string;
     overview?: string;
     imageUrl?: string;
+    heading: string;
+    basePrice?: number;
   }): Promise<{ success: boolean; data?: Destination; error?: string }> => {
     setLoading(true);
     setError(null);
@@ -148,6 +150,8 @@ export const useDestinations = (options: UseDestinationsOptions = {}) => {
       overview?: string;
       imageUrl?: string;
       trending?: boolean;
+      heading: string;
+      basePrice?: number;
     }
   ): Promise<{ success: boolean; data?: Destination; error?: string }> => {
     setLoading(true);

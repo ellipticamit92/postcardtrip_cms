@@ -17,10 +17,12 @@ import { FormCheckbox } from "../atoms/FormCheckbox";
 
 const schema = z.object({
   name: z.string().min(1),
+  heading: z.string().min(1),
   country: z.string().min(1),
   overview: z.string().min(1),
   imageUrl: z.string().optional(),
   trending: z.boolean().optional(),
+  basePrice: z.string().optional(),
 });
 
 export type DestinationFormData = z.infer<typeof schema>;
@@ -40,9 +42,11 @@ export function DestinationForm({
     resolver: zodResolver(schema),
     defaultValues: initialData ?? {
       name: "",
+      heading: "",
       country: "",
       overview: "",
       imageUrl: "",
+      basePrice: "0",
       trending: false,
     },
   });
@@ -55,11 +59,15 @@ export function DestinationForm({
 
       const submitData = {
         name: data.name.trim(),
+        heading: data.heading.trim(),
         country: data.country.trim(),
         overview: data.overview?.trim() || undefined,
         imageUrl: data.imageUrl?.trim() || undefined,
         trending: data.trending || false,
+        basePrice: data.basePrice ? Number(data.basePrice) : 0,
       };
+
+      console.log("Submitting destination data:", submitData);
 
       if (isEditMode && destinationId) {
         await updateDestination(destinationId, submitData);
@@ -68,7 +76,7 @@ export function DestinationForm({
       }
 
       if (!isEditMode) {
-        reset();
+        //  reset();
       }
     } catch (err: any) {
       console.error("Error submitting destination", err);
@@ -79,8 +87,19 @@ export function DestinationForm({
   return (
     <Form {...form}>
       <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4 mb-10">
-        <div className="grid grid-cols-3 gap-4">
+        <div className="grid grid-cols-5 gap-4">
           <FormInput name="name" control={control} label="Destination Name" />
+          <FormInput
+            name="heading"
+            control={control}
+            label="Destination heading"
+          />
+          <FormInput
+            name="basePrice"
+            type="number"
+            control={control}
+            label="Destination base Price"
+          />
 
           <FormSelect
             name="country"
@@ -97,7 +116,7 @@ export function DestinationForm({
             label="Image URL"
           />
 
-          <div className="col-span-2">
+          <div className="col-span-4">
             <FormRichText
               label="Overview"
               name="overview"

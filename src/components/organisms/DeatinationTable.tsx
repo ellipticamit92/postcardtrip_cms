@@ -63,6 +63,11 @@ export const columns: ColumnDef<Destination>[] = [
     ),
   },
   {
+    accessorKey: "heading",
+    header: "Heading",
+    cell: ({ row }) => <div>{row.getValue("heading")}</div>,
+  },
+  {
     accessorKey: "country",
     header: "Country",
     cell: ({ row }) => <div>{row.getValue("country")}</div>,
