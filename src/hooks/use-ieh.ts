@@ -4,13 +4,6 @@ import { IEHType } from "@/types/type";
 import { useState } from "react";
 import { toast } from "sonner";
 
-// interface IEH {
-//   hlid?: number;
-//   lid?: number;
-//   eid?: number;
-//   name: string;
-// }
-
 interface UseIEHOptions {
   autoFetch?: boolean;
   initialPage?: number;
