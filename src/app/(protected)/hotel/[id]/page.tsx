@@ -14,12 +14,14 @@ export default async function EditHotelPage({
   const country = destination?.country ?? "";
   const overview = destination?.overview ?? "";
   const imageUrl = destination?.imageUrl ?? "";
+  const heading = destination?.heading ?? "";
 
   const updatedDestination = {
     name,
     country,
     overview,
     imageUrl,
+    heading,
   };
 
   return (
