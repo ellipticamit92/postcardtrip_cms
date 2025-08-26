@@ -22,9 +22,6 @@ export async function GET(req: NextRequest) {
       destinationId: searchParams.get("destinationId")
         ? Number(searchParams.get("destinationId"))
         : undefined,
-      cityId: searchParams.get("cityId")
-        ? Number(searchParams.get("cityId"))
-        : undefined,
       name: searchParams.get("name") || undefined,
       minPrice: searchParams.get("minPrice")
         ? Number(searchParams.get("minPrice"))
@@ -79,7 +76,6 @@ export async function POST(req: NextRequest) {
       "night",
       "description",
       "destinationId",
-      "cityId",
       "imageUrl",
     ];
     const missing = required.filter((k) => body[k] === undefined);
@@ -101,9 +97,10 @@ export async function POST(req: NextRequest) {
       night: Number(body.night),
       description: body.description,
       destinationId: Number(body.destinationId),
-      cityId: Number(body.cityId),
       hotelPrices: body.hotelPrices,
       imageUrl: body.imageUrl,
+      popular: body.popular || false,
+      tourType: body.tourType,
     });
 
     return NextResponse.json(

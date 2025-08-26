@@ -47,6 +47,11 @@ export async function PUT(req: NextRequest, { params }: RouteParams) {
       basePrice: body.basePrice,
       durationDays: body.durationDays,
       description: body.description,
+      popular: body.popular,
+      tourType: body.tourType,
+      imageUrl: body.imageUrl,
+      day: body.day,
+      night: body.night,
     });
 
     return NextResponse.json({

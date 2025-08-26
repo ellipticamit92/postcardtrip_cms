@@ -13,8 +13,6 @@ export async function GET(req: NextRequest) {
 
     const result = await DestinationService.getTrending();
 
-    console.log("Trending destinations result: line 18", result);
-
     return NextResponse.json({ success: true, data: result });
   } catch (err) {
     return NextResponse.json(

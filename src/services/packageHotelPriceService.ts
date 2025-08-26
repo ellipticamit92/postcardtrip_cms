@@ -37,7 +37,6 @@ export class PackageHotelPriceService {
           package: {
             include: {
               destination: true,
-              city: true,
             },
           },
         },
@@ -111,7 +110,6 @@ export class PackageHotelPriceService {
             package: {
               include: {
                 destination: true,
-                city: true,
               },
             },
           },
@@ -150,7 +148,6 @@ export class PackageHotelPriceService {
           package: {
             include: {
               destination: true,
-              city: true,
               itineraries: {
                 orderBy: { day: "asc" },
               },
@@ -194,7 +191,6 @@ export class PackageHotelPriceService {
           package: {
             include: {
               destination: true,
-              city: true,
             },
           },
         },
@@ -276,7 +272,6 @@ export class PackageHotelPriceService {
           package: {
             include: {
               destination: true,
-              city: true,
             },
           },
         },

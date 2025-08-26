@@ -67,8 +67,6 @@ export function DestinationForm({
         basePrice: data.basePrice ? Number(data.basePrice) : 0,
       };
 
-      console.log("Submitting destination data:", submitData);
-
       if (isEditMode && destinationId) {
         await updateDestination(destinationId, submitData);
       } else {

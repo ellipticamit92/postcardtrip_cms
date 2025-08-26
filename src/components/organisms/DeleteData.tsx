@@ -28,8 +28,6 @@ const DeleteData = ({
         });
       }
 
-      console.log("DEBUG res  = ", res);
-
       const resData = await res.json();
 
       if (!res.ok || !resData.success) {

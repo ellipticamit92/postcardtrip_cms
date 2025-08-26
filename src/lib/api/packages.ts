@@ -6,8 +6,10 @@ export interface PackagePayload {
   night: number;
   description: string;
   destinationId: number;
-  cityId: number;
   hotelPrices?: { hotelId: number; price: number }[];
+  tourType?: string;
+  imageUrl?: string;
+  popular?: boolean;
 }
 
 export interface ApiResponse<T = unknown> {
@@ -123,6 +125,7 @@ export const packagesApi = {
     starRating?: number;
     page?: number;
     limit?: number;
+    tourType?: string;
   }) => {
     const search = new URLSearchParams();
     Object.entries(filters).forEach(([key, value]) => {

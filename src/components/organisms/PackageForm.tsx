@@ -12,6 +12,7 @@ import { FormRichText } from "../atoms/FormRichText";
 import { toast } from "sonner";
 import ImageUploader from "../atoms/ImageUploader";
 import { usePackages } from "@/hooks/use-packages";
+import { FormCheckbox } from "../atoms/FormCheckbox";
 
 const schema = z.object({
   name: z.string().min(1),
@@ -21,6 +22,8 @@ const schema = z.object({
   basePrice: z.string().optional(),
   day: z.string().min(1, "Please select day"),
   night: z.string().min(1, "Please select night"),
+  popular: z.boolean().optional(),
+  tourType: z.string().optional(),
 });
 
 export type PackageFormData = z.infer<typeof schema>;
@@ -48,6 +51,8 @@ export function PackageForm({
       day: "",
       night: "",
       basePrice: "",
+      tourType: "",
+      popular: false,
     },
   });
 
@@ -62,10 +67,11 @@ export function PackageForm({
         day: parseInt(data.day),
         night: parseInt(data.night),
         destinationId: parseInt(data.destinationId ?? "1"),
-        cityId: 1,
         imageUrl: data.imageUrl ?? "not-url",
         basePrice: parseFloat(data.basePrice ?? "0"),
         description: data.description.trim(),
+        popular: data.popular ?? false,
+        tourType: data.tourType?.trim() || "",
       };
 
       if (isEditMode && PackageId) {
@@ -75,7 +81,7 @@ export function PackageForm({
       }
 
       if (!isEditMode) {
-        reset();
+        // reset();
       }
     } catch (err: any) {
       console.error("Error submitting Package", err);
@@ -129,6 +135,18 @@ export function PackageForm({
                 label="Upload Package Image"
               />
             )}
+          />
+        </div>
+        <div className="grid grid-cols-2 gap-4">
+          <FormCheckbox
+            name="popular"
+            control={control}
+            label="Package is Popular"
+          />
+          <FormInput
+            name="tourType"
+            control={control}
+            label="Package Tour Type"
           />
         </div>
 

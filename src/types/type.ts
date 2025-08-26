@@ -126,10 +126,8 @@ export interface Package {
   night: number | null;
   description: string;
   destinationId: number;
-  cityId: number;
   // Optional relations
   destination?: Destination;
-  city?: City;
   itineraries?: Itinerary[];
   hotelPrices?: PackageHotelPrice[];
   imageUrl?: string | null;

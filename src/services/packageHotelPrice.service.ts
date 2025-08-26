@@ -21,7 +21,6 @@ export class PackageHotelPriceService {
         package: {
           include: {
             destination: true,
-            city: true,
           },
         },
         hotel: {
@@ -41,7 +40,6 @@ export class PackageHotelPriceService {
         package: {
           include: {
             destination: true,
-            city: true,
           },
         },
         hotel: {
@@ -75,7 +73,6 @@ export class PackageHotelPriceService {
         package: {
           include: {
             destination: true,
-            city: true,
           },
         },
       },

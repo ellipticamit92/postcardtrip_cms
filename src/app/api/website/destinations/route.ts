@@ -19,18 +19,7 @@ export async function GET(req: NextRequest) {
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
 
-    const { searchParams } = new URL(req.url);
-
-    const result = await DestinationService.getAll({
-      page: Number(searchParams.get("page")) || 1,
-      limit: Number(searchParams.get("limit")) || 10,
-      name: searchParams.get("name") || undefined,
-      country: searchParams.get("country") || undefined,
-      sortBy:
-        (searchParams.get("sortBy") as "name" | "country" | "createdAt") ||
-        "createdAt",
-      sortOrder: (searchParams.get("sortOrder") as "asc" | "desc") || "desc",
-    });
+    const result = await DestinationService.getWebAll();
 
     return NextResponse.json({ success: true, ...result });
   } catch (err) {

@@ -9,9 +9,10 @@ export class PackageService {
     night: number;
     description: string;
     destinationId: number;
-    cityId: number;
     hotelPrices?: { hotelId: number; price: number }[];
     imageUrl?: string;
+    popular?: boolean;
+    tourType?: string;
   }) {
     try {
       const { hotelPrices, ...packageData } = data;
@@ -26,7 +27,6 @@ export class PackageService {
         },
         include: {
           destination: true,
-          city: true,
           itineraries: true,
           hotelPrices: {
             include: {
@@ -57,7 +57,6 @@ export class PackageService {
       page?: number;
       limit?: number;
       destinationId?: number;
-      cityId?: number;
       minPrice?: number;
       maxPrice?: number;
       minDuration?: number;
@@ -72,7 +71,6 @@ export class PackageService {
         page = 1,
         limit = 10,
         destinationId,
-        cityId,
         minPrice,
         maxPrice,
         minDuration,
@@ -87,10 +85,6 @@ export class PackageService {
 
       if (destinationId) {
         where.destinationId = destinationId;
-      }
-
-      if (cityId) {
-        where.cityId = cityId;
       }
 
       if (minPrice || maxPrice) {
@@ -119,7 +113,6 @@ export class PackageService {
           take: limit,
           include: {
             destination: true,
-            city: true,
             itineraries: true,
             hotelPrices: {
               include: {
@@ -160,7 +153,6 @@ export class PackageService {
         where: { pid },
         include: {
           destination: true,
-          city: true,
           itineraries: true,
           hotelPrices: {
             include: {
@@ -189,7 +181,6 @@ export class PackageService {
       return await prisma.package.findMany({
         where: { destinationId },
         include: {
-          city: true,
           itineraries: true,
           hotelPrices: {
             include: {
@@ -207,32 +198,12 @@ export class PackageService {
     }
   }
 
-  static async getByCity(cityId: number) {
-    try {
-      return await prisma.package.findMany({
-        where: { cityId },
-        include: {
-          destination: true,
-          itineraries: true,
-          hotelPrices: {
-            include: {
-              hotel: true,
-            },
-          },
-        },
-      });
-    } catch (error) {
-      throw new Error(`Failed to fetch packages by city: ${error}`);
-    }
-  }
-
   static async getByName(name: string) {
     try {
       return await prisma.package.findUnique({
         where: { name },
         include: {
           destination: true,
-          city: true,
           itineraries: true,
           hotelPrices: {
             include: {
@@ -253,6 +224,11 @@ export class PackageService {
       basePrice?: number;
       durationDays?: number;
       description?: string;
+      popular?: boolean;
+      tourType?: string;
+      imageUrl?: string;
+      day?: number;
+      night?: number;
     }
   ) {
     try {
@@ -345,7 +321,6 @@ export class PackageService {
           take: limit,
           include: {
             destination: true,
-            city: true,
             hotelPrices: {
               include: {
                 hotel: {
@@ -390,7 +365,6 @@ export class PackageService {
         },
         include: {
           destination: true,
-          city: true,
           hotelPrices: {
             include: {
               hotel: true,
@@ -409,12 +383,25 @@ export class PackageService {
         where: { day },
         include: {
           destination: true,
-          city: true,
           itineraries: true,
         },
       });
     } catch (error) {
       throw new Error(`Failed to fetch packages by duration: ${error}`);
+    }
+  }
+
+  static async getPopular() {
+    try {
+      return await prisma.package.findMany({
+        where: { popular: true },
+        orderBy: {
+          updatedAt: "desc",
+        },
+        take: 3,
+      });
+    } catch (error) {
+      throw new Error(`Failed to fetch popular packages: ${error}`);
     }
   }
 }

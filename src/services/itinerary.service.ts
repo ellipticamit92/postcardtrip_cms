@@ -67,7 +67,6 @@ export class ItineraryService {
             package: {
               include: {
                 destination: true,
-                city: true,
               },
             },
           },
@@ -100,7 +99,6 @@ export class ItineraryService {
           package: {
             include: {
               destination: true,
-              city: true,
             },
           },
         },
@@ -183,7 +181,6 @@ export class ItineraryService {
           package: {
             include: {
               destination: true,
-              city: true,
             },
           },
         },

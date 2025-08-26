@@ -85,7 +85,6 @@ export class DestinationService {
                 cities: true,
                 packages: {
                   include: {
-                    city: true,
                     hotelPrices: {
                       include: {
                         hotel: true,
@@ -126,12 +125,10 @@ export class DestinationService {
           cities: {
             include: {
               hotels: true,
-              packages: true,
             },
           },
           packages: {
             include: {
-              city: true,
               itineraries: true,
               hotelPrices: {
                 include: {
@@ -183,8 +180,6 @@ export class DestinationService {
       basePrice?: number;
     }
   ) {
-    console.log("Updating destination with data line 184:", data);
-    console.log("Updating destination with did:", did);
     try {
       return await prisma.destination.update({
         where: { did },
@@ -242,11 +237,24 @@ export class DestinationService {
         packagesCount: packages.length,
       }));
 
-      console.log("Trending destinations updatedData:", updatedData);
-
       return updatedData;
     } catch (error) {
       throw new Error(`Failed to fetch destination by name: ${error}`);
+    }
+  }
+
+  static async getWebAll() {
+    try {
+      const destinations = await prisma.destination.findMany({
+        take: 20,
+        orderBy: {
+          createdAt: "desc",
+        },
+      });
+
+      return destinations;
+    } catch (error) {
+      throw new Error(`Failed to fetch destinations: ${error}`);
     }
   }
 }

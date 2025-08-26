@@ -83,8 +83,18 @@ export const columns: ColumnDef<Package>[] = [
   },
   {
     accessorKey: "basePrice",
-    header: "Price",
+    header: "Starting Price",
     cell: ({ row }) => <div>{toIndianCurrency(row.getValue("basePrice"))}</div>,
+  },
+  {
+    accessorKey: "popular",
+    header: "Popular",
+    cell: ({ row }) => <div>{String(row.getValue("popular"))}</div>,
+  },
+  {
+    accessorKey: "tourType",
+    header: "Tour Type",
+    cell: ({ row }) => <div>{String(row.getValue("tourType"))}</div>,
   },
   {
     accessorKey: "imageUrl",

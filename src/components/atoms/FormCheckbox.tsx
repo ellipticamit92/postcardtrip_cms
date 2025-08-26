@@ -26,8 +26,7 @@ export const FormCheckbox = <T extends FieldValues>({
       control={control}
       name={name}
       render={({ field }) => (
-        <FormItem className="flex gap-4">
-          <FormLabel>{label}</FormLabel>
+        <FormItem className="flex gap-2 items-center">
           <FormControl>
             <Checkbox
               checked={field.value}
@@ -37,6 +36,7 @@ export const FormCheckbox = <T extends FieldValues>({
               className="border-2 border-black"
             />
           </FormControl>
+          <FormLabel>{label}</FormLabel>
           <FormMessage />
         </FormItem>
       )}

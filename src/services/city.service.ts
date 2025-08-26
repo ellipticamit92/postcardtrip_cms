@@ -13,7 +13,6 @@ export class CityService {
         include: {
           destination: true,
           hotels: true,
-          packages: true,
         },
       });
     } catch (error) {
@@ -79,7 +78,6 @@ export class CityService {
                 images: true,
               },
             },
-            packages: true,
           },
           orderBy: {
             [sortBy]: sortOrder,
@@ -116,11 +114,6 @@ export class CityService {
               prices: true,
             },
           },
-          packages: {
-            include: {
-              itineraries: true,
-            },
-          },
         },
       });
 
@@ -144,7 +137,6 @@ export class CityService {
               images: true,
             },
           },
-          packages: true,
         },
       });
     } catch (error) {
@@ -159,7 +151,6 @@ export class CityService {
         include: {
           destination: true,
           hotels: true,
-          packages: true,
         },
       });
     } catch (error) {
@@ -207,7 +198,6 @@ export class CityService {
         include: {
           destination: true,
           hotels: true,
-          packages: true,
         },
       });
     } catch (error) {
