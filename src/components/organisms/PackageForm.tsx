@@ -1,7 +1,7 @@
 "use client";
 
 import { Controller, useForm } from "react-hook-form";
-import z from "zod";
+import z, { overwrite } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Form } from "@/components/ui/form";
 import { FormInput } from "@/components/atoms/FormInput";
@@ -13,17 +13,24 @@ import { toast } from "sonner";
 import ImageUploader from "../atoms/ImageUploader";
 import { usePackages } from "@/hooks/use-packages";
 import { FormCheckbox } from "../atoms/FormCheckbox";
+import { FormTextarea } from "../atoms/FormTextarea";
 
 const schema = z.object({
   name: z.string().min(1),
   destinationId: z.string().min(1, "Please atleast one number"),
   imageUrl: z.string().optional(),
   description: z.string().min(5, "Package Description is too short"),
+  overview: z.string().optional(),
   basePrice: z.string().optional(),
+  originalPrice: z.string().optional(),
   day: z.string().min(1, "Please select day"),
   night: z.string().min(1, "Please select night"),
   popular: z.boolean().optional(),
   tourType: z.string().optional(),
+  featured: z.boolean().optional(),
+  heroTitle: z.string().optional(),
+  rating: z.string().optional(),
+  text: z.string().optional(),
 });
 
 export type PackageFormData = z.infer<typeof schema>;
@@ -92,8 +99,15 @@ export function PackageForm({
   return (
     <Form {...form}>
       <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4 mb-10">
-        <div className="grid grid-cols-3 gap-4">
-          <FormInput name="name" control={control} label="Package Name" />
+        <div className="grid grid-cols-6 gap-4">
+          <div className="col-span-2">
+            <FormInput name="name" control={control} label="Name" />
+          </div>
+          <div className="col-span-2">
+            <FormInput name="heroTitle" control={control} label="Hero Title" />
+          </div>
+          <FormInput name="tourType" control={control} label="Tour Type" />
+          <FormInput name="rating" control={control} label="Rating" />
           <FormSelect
             label="Destination"
             name="destinationId"
@@ -101,53 +115,72 @@ export function PackageForm({
             options={destinations}
             placeholder="Select destination"
           />
+          <div className="flex gap-2">
+            <FormInput name="day" control={control} label=" Day" />
+            <FormInput name="night" control={control} label=" Night" />
+          </div>
 
-          <FormInput
-            disabled
-            name="imageUrl"
-            control={control}
-            label="Image URL"
-          />
-
-          <FormInput name="day" control={control} label="Package Day" />
-          <FormInput name="night" control={control} label="Package Night" />
+          <FormInput name="basePrice" control={control} label="Base Price" />
           <FormInput
             name="basePrice"
             control={control}
-            label="Package Base Price"
+            label="Original Price"
           />
-
-          <div className="col-span-2">
-            <FormRichText
-              label="Package Overview"
-              name="description"
-              control={control}
-              height={260}
-            />
-          </div>
-          <Controller
-            control={control}
-            name="imageUrl"
-            render={({ field }) => (
-              <ImageUploader
-                value={field.value}
-                onChange={field.onChange}
-                label="Upload Package Image"
-              />
-            )}
-          />
-        </div>
-        <div className="grid grid-cols-2 gap-4">
           <FormCheckbox
             name="popular"
             control={control}
             label="Package is Popular"
           />
-          <FormInput
-            name="tourType"
+          <FormCheckbox
+            name="featured"
             control={control}
-            label="Package Tour Type"
+            label="Featured Package"
           />
+
+          <div className="col-span-3">
+            <FormTextarea
+              name="description"
+              control={control}
+              label="Description"
+            />
+          </div>
+          <div className="col-span-3">
+            <FormTextarea
+              name="text"
+              control={control}
+              label="Package Card Text"
+            />
+          </div>
+
+          <div className="col-span-4">
+            <FormRichText
+              label="Package Overview"
+              name="overview"
+              control={control}
+              height={260}
+            />
+          </div>
+          <div className="col-span-2">
+            <Controller
+              control={control}
+              name="imageUrl"
+              render={({ field }) => (
+                <ImageUploader
+                  value={field.value}
+                  onChange={field.onChange}
+                  label="Upload Package Image"
+                />
+              )}
+            />
+          </div>
+          <div className="col-span-2">
+            <FormInput
+              disabled
+              name="imageUrl"
+              control={control}
+              label="Image URL"
+            />
+          </div>
         </div>
 
         <Button type="submit" disabled={loading}>

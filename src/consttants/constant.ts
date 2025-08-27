@@ -92,6 +92,23 @@ export const SIDEBAR_URLS = {
       ],
     },
     {
+      title: "Tour",
+      url: "#",
+      icon: Building,
+      items: [
+        {
+          title: "View Tours",
+          url: "/tour",
+          icon: Eye,
+        },
+        {
+          title: "Add Tour",
+          url: "/tour/add",
+          icon: Plus,
+        },
+      ],
+    },
+    {
       title: "Hotels",
       url: "#",
       icon: Hotel,

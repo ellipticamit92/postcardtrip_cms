@@ -1,6 +1,7 @@
 "use client";
 
-import { Destination, PaginationProps } from "@/types/type";
+import { format } from "date-fns";
+import { PaginationProps, Tours } from "@/types/type";
 import { ColumnDef } from "@tanstack/react-table";
 import { Checkbox } from "../ui/checkbox";
 import { ArrowUpDown, MoreHorizontal } from "lucide-react";
@@ -25,7 +26,7 @@ import {
   DialogTrigger,
 } from "../ui/dialog";
 
-export const columns: ColumnDef<Destination>[] = [
+export const columns: ColumnDef<Tours>[] = [
   {
     id: "select",
     header: ({ table }) => (
@@ -49,7 +50,7 @@ export const columns: ColumnDef<Destination>[] = [
     enableHiding: false,
   },
   {
-    accessorKey: "name",
+    accessorKey: "text",
     header: ({ column }) => (
       <Button
         variant="ghost"
@@ -61,64 +62,20 @@ export const columns: ColumnDef<Destination>[] = [
     ),
   },
   {
-    accessorKey: "heading",
-    header: "Heading",
-    cell: ({ row }) => (
-      <div className="w-24 overflow-hidden">{row.getValue("heading")}</div>
-    ),
-    size: 50,
+    accessorKey: "icon",
+    header: "Tour Icon",
+    cell: ({ row }) => <div>{String(row.getValue("icon"))}</div>,
   },
+
   {
-    accessorKey: "country",
-    header: "Country",
-    cell: ({ row }) => (
-      <div className="w-16 overflow-hidden">{row.getValue("country")}</div>
-    ),
-    size: 20,
-  },
-  {
-    accessorKey: "basePrice",
-    header: "B Price",
-    cell: ({ row }) => <div>{row.getValue("basePrice")}</div>,
-  },
-  {
-    accessorKey: "originalPrice",
-    header: "O Price",
-    cell: ({ row }) => <div>{row.getValue("originalPrice")}</div>,
-  },
-  {
-    accessorKey: "rating",
-    header: "Rating",
-    cell: ({ row }) => <div>{row.getValue("rating")}</div>,
-  },
-  {
-    accessorKey: "imageUrl",
-    header: "imageUrl",
-    cell: ({ row }) => (
-      <div>
-        <a
-          className="text-blue-700 hover:underline"
-          href={row.getValue("imageUrl")}
-          target="_blank"
-        >
-          See Image
-        </a>
-      </div>
-    ),
-  },
-  {
-    accessorKey: "trending",
-    header: "Trending",
-    cell: ({ row }) => <div>{row.getValue("trending")?.toString()}</div>,
-  },
-  {
-    accessorKey: "overview",
-    header: "Overview",
+    accessorKey: "description",
+    header: "Description",
     cell: ({ row }) => {
-      const overview = row.getValue("overview") as string;
-      const name = row.getValue("name") as string;
+      const overview = row.getValue("description") as string;
+      const name = row.getValue("text") as string;
+
       return (
-        <div className="space-y-2 w-6">
+        <div className="space-y-2">
           <Dialog>
             <DialogTrigger asChild>
               <Button variant="outline" size="sm">
@@ -140,48 +97,19 @@ export const columns: ColumnDef<Destination>[] = [
     },
   },
   {
-    accessorKey: "description",
-    header: "Description",
+    accessorKey: "createdAt",
+    header: "Created",
     cell: ({ row }) => {
-      const overview = row.getValue("description") as string;
-      const name = row.getValue("name") as string;
-
-      return (
-        <div className="space-y-2 w-6">
-          <Dialog>
-            <DialogTrigger asChild>
-              <Button variant="outline" size="sm">
-                View
-              </Button>
-            </DialogTrigger>
-            <DialogContent className="max-w-4xl max-h-[80vh] overflow-y-auto">
-              <DialogHeader>
-                <DialogTitle>{name} - Description</DialogTitle>
-              </DialogHeader>
-              <div
-                className="prose prose-sm max-w-none"
-                dangerouslySetInnerHTML={{ __html: overview }}
-              />
-            </DialogContent>
-          </Dialog>
-        </div>
-      );
+      const value = row.getValue("createdAt");
+      return value ? format(new Date(value as any), "dd/MM/yyyy") : null;
     },
   },
-  // {
-  //   accessorKey: "createdAt",
-  //   header: "Created",
-  //   cell: ({ row }) => {
-  //     const value = row.getValue("createdAt");
-  //     return value ? format(new Date(value as any), "dd/MM/yyyy") : null;
-  //   },
-  // },
   {
     id: "actions",
     enableHiding: false,
     cell: ({ row }) => {
-      const destination = row.original;
-      const did = String(destination.did);
+      const tour = row.original;
+      const tid = String(tour.tid);
       return (
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
@@ -193,7 +121,7 @@ export const columns: ColumnDef<Destination>[] = [
           <DropdownMenuContent align="end">
             <DropdownMenuLabel>Actions</DropdownMenuLabel>
             <DropdownMenuItem
-              onClick={() => navigator.clipboard.writeText(did)}
+              onClick={() => navigator.clipboard.writeText(tid)}
             >
               Copy ID
             </DropdownMenuItem>
@@ -201,13 +129,13 @@ export const columns: ColumnDef<Destination>[] = [
             <DropdownMenuItem>
               <Link
                 className="hover:text-blue-400 font-semibold"
-                href={`/destination/${did}`}
+                href={`/tour/${tid}`}
               >
                 Edit
               </Link>
             </DropdownMenuItem>
             <DropdownMenuItem>
-              <DeleteData id={did} model="destinations" />
+              <DeleteData id={tid} model="package" />
             </DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>
@@ -216,18 +144,18 @@ export const columns: ColumnDef<Destination>[] = [
   },
 ];
 
-interface DestinationTableProps {
-  data: Destination[];
+interface TourTableProps {
+  data: Tours[];
   pagination: PaginationProps;
 }
 
-const DestinationTable: FC<DestinationTableProps> = ({ data, pagination }) => {
+const TourTable: FC<TourTableProps> = ({ data, pagination }) => {
   return (
     <div className="w-full">
       <CommonTable
         data={data}
-        placeholder="Filter by Destination Name"
-        columnName="name"
+        placeholder="Filter by Tour Name"
+        columnName="text"
         columns={columns}
         pagination={pagination}
       />
@@ -235,4 +163,4 @@ const DestinationTable: FC<DestinationTableProps> = ({ data, pagination }) => {
   );
 };
 
-export default DestinationTable;
+export default TourTable;

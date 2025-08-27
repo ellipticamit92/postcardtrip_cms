@@ -16,6 +16,12 @@ export default async function EditDestinationPage({
   const imageUrl = destination?.imageUrl ?? "";
   const heading = destination?.heading ?? "";
   const trending = destination?.trending ?? false;
+  const basePrice = destination?.basePrice ?? 0;
+  const originalPrice = destination?.originalPrice ?? 0;
+  const description = destination?.description ?? "";
+  const text = destination?.text ?? "";
+  const heroTitle = destination?.heroTitle ?? "";
+  const rating = destination?.rating ?? "";
 
   const updatedDestination = {
     name,
@@ -24,6 +30,12 @@ export default async function EditDestinationPage({
     imageUrl,
     heading,
     trending,
+    basePrice: String(basePrice),
+    originalPrice: String(originalPrice),
+    description,
+    text,
+    heroTitle,
+    rating,
   };
 
   return (

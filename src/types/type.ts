@@ -88,6 +88,13 @@ export interface Destination {
   country: string;
   overview?: string | null;
   imageUrl?: string | null;
+  basePrice?: number | null;
+  originalPrice?: number | null;
+  heading: string;
+  trending: boolean;
+  heroTitle?: string | null;
+  description?: string | null; // Rich text HTML content
+  text?: string | null; // Rich text HTML content
   updatedAt: Date;
   createdAt: Date;
   // Optional relations
@@ -121,11 +128,15 @@ export interface Hotel {
 export interface Package {
   pid: number;
   name: string;
-  basePrice: number;
+  basePrice: number | null;
+  originalPrice: number | null;
   day: number | null;
   night: number | null;
-  description: string;
+  description: string | null;
+  overview: string | null;
   destinationId: number;
+  popular: boolean | null;
+  featured: boolean | null;
   // Optional relations
   destination?: Destination;
   itineraries?: Itinerary[];
@@ -203,6 +214,13 @@ export interface HotelImage {
   hotelId: number;
   // Optional relations
   hotel?: Hotel;
+}
+
+export interface Tours {
+  tid: number;
+  text: string;
+  description?: string | null;
+  icons?: string | null;
 }
 
 export type IEHType = "inclusion" | "exclusion" | "highlight";

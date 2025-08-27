@@ -63,18 +63,23 @@ model VerificationToken {
 }
 
 model Destination {
-  did         Int       @id @default(autoincrement())
-  name        String    @unique
-  heading     String    @unique
-  country     String
-  overview    String?   @db.Text
-  imageUrl    String?
-  trending    Boolean   @default(false)
-  basePrice   Int?
-  packages    Package[]
-  cities      City[]
-  updatedAt   DateTime  @updatedAt
-  createdAt   DateTime  @default(now())
+  did            Int       @id @default(autoincrement())
+  name           String    @unique
+  heading        String    @unique
+  heroTitle      String?
+  country        String
+  overview       String?   @db.Text
+  description    String?   @db.Text
+  text           String?
+  imageUrl       String?
+  trending       Boolean   @default(false)
+  basePrice      Int?
+  originalPrice  Int?
+  rating         String?
+  packages       Package[]
+  cities         City[]
+  updatedAt      DateTime  @updatedAt
+  createdAt      DateTime  @default(now())
 }
 
 model City {
@@ -85,7 +90,7 @@ model City {
   destination   Destination  @relation(fields: [destinationId], references: [did])
   destinationId Int
   hotels        Hotel[]
-  createdAt   DateTime  @default(now())
+  createdAt     DateTime  @default(now())
 }
 
 model Hotel {
@@ -113,13 +118,19 @@ model HotelImage {
 model Package {
   pid           Int          @id @default(autoincrement())
   name          String       @unique
-  basePrice     Float
+  basePrice     Int?
+  originalPrice Int?
   imageUrl      String?
   day           Int?
   night         Int?
   popular       Boolean?
+  featured      Boolean?
   tourType      String?
-  description   String
+  description   String?   @db.Text
+  overview      String?   @db.Text
+  rating        String?
+  heroTitle     String?  @db.Text
+  text           String?
   destination   Destination  @relation(fields: [destinationId], references: [did])
   destinationId Int
   itineraries   Itinerary[]
@@ -129,12 +140,12 @@ model Package {
 }
 
 model PackageHotelPrice {
-  phid       Int     @id @default(autoincrement())
-  price      Float
-  hotel      Hotel   @relation(fields: [hotelId], references: [hid])
-  hotelId    Int
-  package    Package @relation(fields: [packageId], references: [pid])
-  packageId  Int
+  phid        Int     @id @default(autoincrement())
+  price       Float
+  hotel       Hotel   @relation(fields: [hotelId], references: [hid])
+  hotelId     Int
+  package     Package @relation(fields: [packageId], references: [pid])
+  packageId   Int
   updatedAt   DateTime  @updatedAt
   createdAt   DateTime  @default(now())
 
@@ -171,6 +182,15 @@ model Inclusion {
 model Exclusion {
   eid         Int       @id @default(autoincrement())
   text        String    @unique
+  updatedAt   DateTime  @updatedAt
+  createdAt   DateTime  @default(now())
+}
+
+model Tours {
+  tid         Int       @id @default(autoincrement())
+  text        String    @unique
+  icon        String?
+  description String    @db.Text
   updatedAt   DateTime  @updatedAt
   createdAt   DateTime  @default(now())
 }

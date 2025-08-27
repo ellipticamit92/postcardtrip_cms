@@ -10,6 +10,11 @@ export class DestinationService {
     trending?: boolean;
     heading: string;
     basePrice?: number;
+    originalPrice?: number;
+    heroTitle?: string;
+    description?: string;
+    text?: string;
+    rating?: string;
   }) {
     try {
       return await prisma.destination.create({
@@ -119,7 +124,7 @@ export class DestinationService {
 
   static async getById(did: number) {
     try {
-      const destination = await prisma.destination.findFirst({
+      const destination = await prisma.destination.findUnique({
         where: { did: did },
         include: {
           cities: {
@@ -158,9 +163,12 @@ export class DestinationService {
     try {
       return await prisma.destination.findUnique({
         where: { name },
-        include: {
-          cities: true,
-          packages: true,
+        select: {
+          did: true,
+          name: true,
+          description: true,
+          imageUrl: true,
+          heroTitle: true,
         },
       });
     } catch (error) {
@@ -178,6 +186,11 @@ export class DestinationService {
       trending?: boolean;
       heading?: string;
       basePrice?: number;
+      originalPrice?: number;
+      heroTitle?: string;
+      description?: string;
+      text?: string;
+      rating?: string;
     }
   ) {
     try {

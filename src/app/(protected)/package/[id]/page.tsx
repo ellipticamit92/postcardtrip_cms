@@ -21,7 +21,7 @@ export default async function EditPackagePage({
     night: packages?.night?.toString() ?? "",
     destinationId: packages?.destinationId.toString() ?? "",
     imageUrl: packages?.imageUrl ?? "",
-    basePrice: packages?.basePrice.toString() ?? "",
+    basePrice: packages?.basePrice?.toString() ?? "",
     description: packages?.description ?? "",
     popular: packages?.popular ?? false,
     tourType: packages?.tourType ?? "",

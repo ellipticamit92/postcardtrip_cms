@@ -100,6 +100,12 @@ export const useDestinations = (options: UseDestinationsOptions = {}) => {
     imageUrl?: string;
     heading: string;
     basePrice?: number;
+    originalPrice?: number;
+    trending?: boolean;
+    description?: string;
+    text?: string;
+    heroTitle?: string;
+    rating?: string;
   }): Promise<{ success: boolean; data?: Destination; error?: string }> => {
     setLoading(true);
     setError(null);
@@ -152,6 +158,11 @@ export const useDestinations = (options: UseDestinationsOptions = {}) => {
       trending?: boolean;
       heading: string;
       basePrice?: number;
+      originalPrice?: number;
+      description?: string;
+      text?: string;
+      heroTitle?: string;
+      rating?: string;
     }
   ): Promise<{ success: boolean; data?: Destination; error?: string }> => {
     setLoading(true);

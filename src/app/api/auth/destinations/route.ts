@@ -62,6 +62,11 @@ export async function POST(req: NextRequest) {
       trending: body.trending,
       heading: body.heading,
       basePrice: body.basePrice,
+      originalPrice: body.originalPrice,
+      heroTitle: body.heroTitle,
+      description: body.description,
+      text: body.text,
+      rating: body.rating,
     });
 
     return NextResponse.json(
