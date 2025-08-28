@@ -1,3 +1,4 @@
+import { getTourOptions } from "@/lib/helper";
 import { prisma } from "@/lib/prisma";
 
 export class TourService {
@@ -102,6 +103,23 @@ export class TourService {
       return await prisma.tours.delete({ where: { tid } });
     } catch (error) {
       throw new Error(`Failed to delete tour: ${error}`);
+    }
+  }
+
+  static async getNameId() {
+    try {
+      const tours = await prisma.tours.findMany();
+      const toursWithStringDates = tours.map((tour) => ({
+        ...tour,
+        createdAt: tour.createdAt.toISOString(),
+        updatedAt: tour.updatedAt.toISOString(),
+      }));
+      const destinationsData = getTourOptions(toursWithStringDates);
+      return {
+        data: destinationsData,
+      };
+    } catch (error) {
+      throw new Error(`Failed to fetch destinations name and id: ${error}`);
     }
   }
 }

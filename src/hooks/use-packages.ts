@@ -160,6 +160,10 @@ export const usePackages = (options: UsePackagesOptions = {}) => {
       day?: number;
       night?: number;
       basePrice?: number;
+      originalPrice?: number;
+      overview?: string;
+      featured?: boolean;
+      rating?: string;
     }
   ): Promise<{ success: boolean; data?: Package; error?: string }> => {
     setLoading(true);

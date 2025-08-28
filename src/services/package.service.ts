@@ -13,6 +13,12 @@ export class PackageService {
     imageUrl?: string;
     popular?: boolean;
     tourType?: string;
+    overview?: string;
+    originalPrice?: number;
+    featured?: boolean;
+    heroTitle?: string;
+    text?: string;
+    rating?: string;
   }) {
     try {
       const { hotelPrices, ...packageData } = data;
@@ -229,6 +235,12 @@ export class PackageService {
       imageUrl?: string;
       day?: number;
       night?: number;
+      overview?: string;
+      originalPrice?: number;
+      featured?: boolean;
+      heroTitle?: string;
+      text?: string;
+      rating?: string;
     }
   ) {
     try {

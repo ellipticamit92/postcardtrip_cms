@@ -9,6 +9,17 @@ export const getFieldOptions = (data: any, id: string) => {
   });
 };
 
+export const getTourOptions = (tours?: any[]) => {
+  return tours
+    ?.map((item) => {
+      return {
+        label: item.text, // Assuming 'text' is the field to display
+        value: item.text, // Assuming 'tid' is the unique identifier
+      };
+    })
+    .filter(Boolean);
+};
+
 export const getDestinationOptions = (destination: Destination[]) => {
   return destination?.map((item) => {
     return {

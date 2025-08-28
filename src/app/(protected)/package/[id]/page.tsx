@@ -2,6 +2,7 @@ import { Heading } from "@/components/atoms/Heading";
 import { PackageForm } from "@/components/organisms/PackageForm";
 import DestinationService from "@/services/destination.service";
 import PackageService from "@/services/package.service";
+import TourService from "@/services/tours.service";
 
 export default async function EditPackagePage({
   params,
@@ -13,6 +14,7 @@ export default async function EditPackagePage({
   const destinationsData = await DestinationService.getNameId();
   const packages = await PackageService.getById(id);
 
+  const tours = await TourService.getNameId();
   const name = packages?.name ?? "";
 
   const updatePackage = {
@@ -25,9 +27,15 @@ export default async function EditPackagePage({
     description: packages?.description ?? "",
     popular: packages?.popular ?? false,
     tourType: packages?.tourType ?? "",
+    originalPrice: packages?.originalPrice?.toString() ?? "",
+    overview: packages?.overview ?? "",
+    featured: packages?.featured ?? false,
+    herorTitle: packages?.heroTitle ?? "",
+    text: packages?.text ?? "",
+    rating: packages?.rating ?? "1.0",
   };
 
-  console.log("updatePackage", packages);
+  // console.log("updatePackage", packages);
 
   return (
     <>
@@ -36,6 +44,7 @@ export default async function EditPackagePage({
         initialData={updatePackage}
         PackageId={id}
         destinations={destinationsData.data}
+        tours={tours.data}
       />
     </>
   );

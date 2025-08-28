@@ -158,6 +158,8 @@ export const useCities = (options: UseCitiesOptions = {}) => {
     data: {
       name?: string;
       description?: string;
+      imageUrlk?: string;
+      destinationId?: number;
     }
   ): Promise<{ success: boolean; data?: City; error?: string }> => {
     setLoading(true);

@@ -52,6 +52,12 @@ export async function PUT(req: NextRequest, { params }: RouteParams) {
       imageUrl: body.imageUrl,
       day: body.day,
       night: body.night,
+      overview: body.overview,
+      originalPrice: body.originalPrice,
+      featured: body.featured,
+      heroTitle: body.heroTitle,
+      text: body.text,
+      rating: body.rating,
     });
 
     return NextResponse.json({

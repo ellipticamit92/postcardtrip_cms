@@ -25,7 +25,6 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "../ui/dialog";
-import { getFIleName } from "@/lib/utils";
 import { toIndianCurrency } from "@/lib/helper";
 
 export const columns: ColumnDef<Package>[] = [
@@ -62,6 +61,9 @@ export const columns: ColumnDef<Package>[] = [
         Name <ArrowUpDown className="ml-2 h-4 w-4" />
       </Button>
     ),
+    cell: ({ row }) => {
+      return <div className="w-12 overflow-hidden">{row.original?.name}</div>;
+    },
   },
   {
     accessorKey: "destination",
@@ -83,8 +85,22 @@ export const columns: ColumnDef<Package>[] = [
   },
   {
     accessorKey: "basePrice",
-    header: "Starting Price",
+    header: "S Price",
     cell: ({ row }) => <div>{toIndianCurrency(row.getValue("basePrice"))}</div>,
+  },
+  {
+    accessorKey: "originalPrice",
+    header: "O Price",
+    cell: ({ row }) => (
+      <div>{toIndianCurrency(row.getValue("originalPrice") ?? "0")}</div>
+    ),
+  },
+  {
+    accessorKey: "rating",
+    header: "Rating",
+    cell: ({ row }) => (
+      <div>{toIndianCurrency(row.getValue("rating") ?? "1.0")}</div>
+    ),
   },
   {
     accessorKey: "popular",
@@ -106,7 +122,7 @@ export const columns: ColumnDef<Package>[] = [
           href={row.getValue("imageUrl")}
           target="_blank"
         >
-          {getFIleName(row.getValue("imageUrl"))}
+          See image
         </a>
       </div>
     ),
@@ -118,16 +134,12 @@ export const columns: ColumnDef<Package>[] = [
       const overview = row.getValue("description") as string;
       const name = row.getValue("name") as string;
 
-      // Preview (first 100 chars without HTML)
-      const previewText = overview.replace(/<[^>]*>/g, "").substring(0, 15);
-
       return (
         <div className="space-y-2">
-          <p className="text-sm text-gray-600 line-clamp-2">{previewText}...</p>
           <Dialog>
             <DialogTrigger asChild>
               <Button variant="outline" size="sm">
-                View Full Content
+                View
               </Button>
             </DialogTrigger>
             <DialogContent className="max-w-4xl max-h-[80vh] overflow-y-auto">

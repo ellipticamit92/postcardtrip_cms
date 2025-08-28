@@ -58,6 +58,7 @@ export async function POST(request: NextRequest) {
       name: body.name,
       description: body.description,
       destinationId: body.destinationId,
+      imageUrl: body.imageUrl,
     });
 
     return NextResponse.json(

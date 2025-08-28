@@ -67,16 +67,12 @@ export const columns: ColumnDef<City>[] = [
       const overview = row.getValue("description") as string;
       const name = row.getValue("name") as string;
 
-      // Preview (first 100 chars without HTML)
-      const previewText = overview.replace(/<[^>]*>/g, "").substring(0, 15);
-
       return (
         <div className="space-y-2">
-          <p className="text-sm text-gray-600 line-clamp-2">{previewText}...</p>
           <Dialog>
             <DialogTrigger asChild>
               <Button variant="outline" size="sm">
-                View Full Content
+                View
               </Button>
             </DialogTrigger>
             <DialogContent className="max-w-4xl max-h-[80vh] overflow-y-auto">
@@ -126,7 +122,7 @@ export const columns: ColumnDef<City>[] = [
             <DropdownMenuItem>
               <Link
                 className="hover:text-blue-400 font-semibold"
-                href={`/City/${cid}`}
+                href={`/city/${cid}`}
               >
                 Edit
               </Link>

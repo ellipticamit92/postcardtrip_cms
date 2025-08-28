@@ -39,10 +39,12 @@ export function PackageForm({
   destinations,
   initialData,
   PackageId,
+  tours,
 }: {
   destinations: { label: string; value: string }[];
   initialData?: PackageFormData;
   PackageId?: number;
+  tours?: { label: string; value: string }[];
 }) {
   const { createPackage, updatePackage, loading } = usePackages({
     autoFetch: false,
@@ -60,6 +62,12 @@ export function PackageForm({
       basePrice: "",
       tourType: "",
       popular: false,
+      rating: "1.0",
+      featured: false,
+      overview: "",
+      originalPrice: "",
+      heroTitle: "",
+      text: "",
     },
   });
 
@@ -79,6 +87,12 @@ export function PackageForm({
         description: data.description.trim(),
         popular: data.popular ?? false,
         tourType: data.tourType?.trim() || "",
+        rating: data.rating ?? "1.0",
+        originalPrice: parseFloat(data.originalPrice ?? "0"),
+        overview: data.overview?.trim() || "",
+        featured: data.featured ?? false,
+        heroTitle: data.heroTitle?.trim() || "",
+        text: data.text?.trim() || "",
       };
 
       if (isEditMode && PackageId) {
@@ -106,7 +120,16 @@ export function PackageForm({
           <div className="col-span-2">
             <FormInput name="heroTitle" control={control} label="Hero Title" />
           </div>
-          <FormInput name="tourType" control={control} label="Tour Type" />
+          {tours && tours.length > 0 && (
+            <FormSelect
+              label="Tour Types"
+              name="tourType"
+              control={control}
+              options={tours}
+              placeholder="Select destination"
+            />
+          )}
+
           <FormInput name="rating" control={control} label="Rating" />
           <FormSelect
             label="Destination"
@@ -115,6 +138,7 @@ export function PackageForm({
             options={destinations}
             placeholder="Select destination"
           />
+
           <div className="flex gap-2">
             <FormInput name="day" control={control} label=" Day" />
             <FormInput name="night" control={control} label=" Night" />
@@ -122,7 +146,7 @@ export function PackageForm({
 
           <FormInput name="basePrice" control={control} label="Base Price" />
           <FormInput
-            name="basePrice"
+            name="originalPrice"
             control={control}
             label="Original Price"
           />

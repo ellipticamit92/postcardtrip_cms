@@ -6,6 +6,7 @@ export class CityService {
     name: string;
     description: string;
     destinationId: number;
+    imageUrl?: string;
   }) {
     try {
       return await prisma.city.create({
@@ -163,6 +164,8 @@ export class CityService {
     data: {
       name?: string;
       description?: string;
+      destinationId?: number;
+      imageUrl?: string;
     }
   ) {
     try {
