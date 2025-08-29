@@ -13,11 +13,13 @@ export default async function EditTourPage({
   const text = tour?.text ?? "";
   const description = tour?.description ?? "";
   const icon = tour?.icon ?? "";
+  const basePrice = tour?.basePrice?.toString() ?? "0";
 
   const updatedDestination = {
     text,
     description,
     icon,
+    basePrice,
   };
 
   return (

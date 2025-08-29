@@ -28,7 +28,7 @@ export async function GET(req: NextRequest) {
 export async function POST(req: NextRequest) {
   try {
     const body = await req.json();
-    if (!body.text || !body.description) {
+    if (!body.text || !body.description || !body.basePrice) {
       return NextResponse.json(
         { success: false, error: "Text and description are required" },
         { status: 400 }
@@ -38,6 +38,7 @@ export async function POST(req: NextRequest) {
       text: body.text,
       icon: body.icon,
       description: body.description,
+      basePrice: body.basePrice ?? 0,
     });
     return NextResponse.json(
       { success: true, data: tour, message: "Tour created" },

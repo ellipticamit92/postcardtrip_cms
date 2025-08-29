@@ -62,6 +62,11 @@ export const columns: ColumnDef<Tours>[] = [
     ),
   },
   {
+    accessorKey: "basePrice",
+    header: "Tour Base Price",
+    cell: ({ row }) => <div>{String(row.getValue("basePrice"))}</div>,
+  },
+  {
     accessorKey: "icon",
     header: "Tour Icon",
     cell: ({ row }) => <div>{String(row.getValue("icon"))}</div>,
@@ -135,7 +140,7 @@ export const columns: ColumnDef<Tours>[] = [
               </Link>
             </DropdownMenuItem>
             <DropdownMenuItem>
-              <DeleteData id={tid} model="package" />
+              <DeleteData id={tid} model="tours" />
             </DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>

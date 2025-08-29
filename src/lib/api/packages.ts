@@ -7,9 +7,15 @@ export interface PackagePayload {
   description: string;
   destinationId: number;
   hotelPrices?: { hotelId: number; price: number }[];
-  tourType?: string;
   imageUrl?: string;
   popular?: boolean;
+  tourId?: number;
+  overview?: string;
+  originalPrice?: number;
+  featured?: boolean;
+  heroTitle?: string;
+  text?: string;
+  rating?: string;
 }
 
 export interface ApiResponse<T = unknown> {

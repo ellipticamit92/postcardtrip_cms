@@ -62,7 +62,7 @@ export const columns: ColumnDef<Package>[] = [
       </Button>
     ),
     cell: ({ row }) => {
-      return <div className="w-12 overflow-hidden">{row.original?.name}</div>;
+      return <div className="w32 overflow-hidden">{row.original?.name}</div>;
     },
   },
   {
@@ -107,11 +107,7 @@ export const columns: ColumnDef<Package>[] = [
     header: "Popular",
     cell: ({ row }) => <div>{String(row.getValue("popular"))}</div>,
   },
-  {
-    accessorKey: "tourType",
-    header: "Tour Type",
-    cell: ({ row }) => <div>{String(row.getValue("tourType"))}</div>,
-  },
+
   {
     accessorKey: "imageUrl",
     header: "imageUrl",

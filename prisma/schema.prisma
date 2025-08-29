@@ -125,16 +125,16 @@ model Package {
   night         Int?
   popular       Boolean?
   featured      Boolean?
-  tourType      String?
   description   String?   @db.Text
   overview      String?   @db.Text
   rating        String?
   heroTitle     String?  @db.Text
-  text           String?
+  text          String?
   destination   Destination  @relation(fields: [destinationId], references: [did])
   destinationId Int
   itineraries   Itinerary[]
   hotelPrices   PackageHotelPrice[]
+  tours         Tours[]
   updatedAt     DateTime  @updatedAt
   createdAt     DateTime  @default(now())
 }
@@ -191,6 +191,8 @@ model Tours {
   text        String    @unique
   icon        String?
   description String    @db.Text
+  basePrice   Int?
+  packages  Package[] 
   updatedAt   DateTime  @updatedAt
   createdAt   DateTime  @default(now())
 }

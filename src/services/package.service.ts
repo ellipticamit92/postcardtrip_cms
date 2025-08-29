@@ -12,19 +12,22 @@ export class PackageService {
     hotelPrices?: { hotelId: number; price: number }[];
     imageUrl?: string;
     popular?: boolean;
-    tourType?: string;
     overview?: string;
     originalPrice?: number;
     featured?: boolean;
     heroTitle?: string;
     text?: string;
     rating?: string;
+    tours: number[];
   }) {
     try {
       const { hotelPrices, ...packageData } = data;
       return await prisma.package.create({
         data: {
           ...packageData,
+          tours: {
+            connect: data.tours.map((tid) => ({ tid })), // 👈 connect multiple tours
+          },
           hotelPrices: hotelPrices
             ? {
                 create: hotelPrices,
@@ -120,6 +123,7 @@ export class PackageService {
           include: {
             destination: true,
             itineraries: true,
+            tours: true,
             hotelPrices: {
               include: {
                 hotel: {
@@ -160,6 +164,7 @@ export class PackageService {
         include: {
           destination: true,
           itineraries: true,
+          tours: true,
           hotelPrices: {
             include: {
               hotel: {
@@ -208,14 +213,27 @@ export class PackageService {
     try {
       return await prisma.package.findUnique({
         where: { name },
-        include: {
-          destination: true,
-          itineraries: true,
-          hotelPrices: {
-            include: {
-              hotel: true,
+        select: {
+          name: true,
+          pid: true,
+          basePrice: true,
+          originalPrice: true,
+          day: true,
+          night: true,
+          description: true,
+          imageUrl: true,
+          popular: true,
+          overview: true,
+          featured: true,
+          rating: true,
+          heroTitle: true,
+          destination: {
+            select: {
+              country: true,
             },
           },
+          itineraries: true,
+          hotelPrices: true,
         },
       });
     } catch (error) {
@@ -231,7 +249,8 @@ export class PackageService {
       durationDays?: number;
       description?: string;
       popular?: boolean;
-      tourType?: string;
+      tourId: number;
+      destinationId?: number;
       imageUrl?: string;
       day?: number;
       night?: number;
@@ -241,12 +260,21 @@ export class PackageService {
       heroTitle?: string;
       text?: string;
       rating?: string;
+      tours: string[];
     }
   ) {
     try {
       return await prisma.package.update({
         where: { pid },
-        data,
+        data: {
+          ...data,
+          tours: {
+            set: [],
+            connect: data.tours?.map((id: string) => ({
+              tid: Number(id),
+            })),
+          },
+        },
       });
     } catch (error) {
       throw new Error(`Failed to update package: ${error}`);

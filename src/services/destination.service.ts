@@ -167,8 +167,10 @@ export class DestinationService {
           did: true,
           name: true,
           description: true,
+          country: true,
           imageUrl: true,
           heroTitle: true,
+          packages: true,
         },
       });
     } catch (error) {

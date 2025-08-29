@@ -81,7 +81,7 @@ export default function ImageUploader({
       </Label>
 
       <div
-        className={`relative border-2 border-dashed rounded-lg p-1 py-3 transition-all duration-300 ${
+        className={`relative border-2 border-dashed rounded-lg p-1 py-2 transition-all duration-300 ${
           dragActive
             ? "border-primary bg-accent/20"
             : "border-border hover:border-primary/50"
@@ -98,9 +98,9 @@ export default function ImageUploader({
         }}
       >
         {value ? (
-          <div className="space-y-4">
+          <div className="space-y-4 -py-1">
             <div className="flex-1 flex flex-col">
-              <div className="group  relative">
+              <div className="group relative">
                 <img
                   src={value}
                   alt="Preview"

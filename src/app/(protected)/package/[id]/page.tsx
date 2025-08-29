@@ -26,16 +26,15 @@ export default async function EditPackagePage({
     basePrice: packages?.basePrice?.toString() ?? "",
     description: packages?.description ?? "",
     popular: packages?.popular ?? false,
-    tourType: packages?.tourType ?? "",
     originalPrice: packages?.originalPrice?.toString() ?? "",
     overview: packages?.overview ?? "",
     featured: packages?.featured ?? false,
     herorTitle: packages?.heroTitle ?? "",
     text: packages?.text ?? "",
     rating: packages?.rating ?? "1.0",
+    tours:
+      (packages as any)?.tours?.map((tour: { tid: number }) => tour.tid) ?? [],
   };
-
-  // console.log("updatePackage", packages);
 
   return (
     <>
@@ -44,7 +43,6 @@ export default async function EditPackagePage({
         initialData={updatePackage}
         PackageId={id}
         destinations={destinationsData.data}
-        tours={tours.data}
       />
     </>
   );

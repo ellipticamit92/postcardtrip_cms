@@ -48,7 +48,7 @@ export async function PUT(req: NextRequest, { params }: RouteParams) {
       durationDays: body.durationDays,
       description: body.description,
       popular: body.popular,
-      tourType: body.tourType,
+      tourId: body.tourId,
       imageUrl: body.imageUrl,
       day: body.day,
       night: body.night,
@@ -58,6 +58,7 @@ export async function PUT(req: NextRequest, { params }: RouteParams) {
       heroTitle: body.heroTitle,
       text: body.text,
       rating: body.rating,
+      tours: body.tours,
     });
 
     return NextResponse.json({

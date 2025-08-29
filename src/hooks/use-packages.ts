@@ -1,5 +1,6 @@
 import { packagesApi } from "@/lib/api/packages";
 import { showToast } from "@/lib/toast";
+import { Options } from "@/types/type";
 import { useState, useEffect } from "react";
 import { toast } from "sonner";
 
@@ -103,6 +104,11 @@ export const usePackages = (options: UsePackagesOptions = {}) => {
     night: number;
     imageUrl: string;
     popular?: boolean;
+    tours?: number[];
+    overview?: string;
+    featured?: boolean;
+    rating?: string;
+    originalPrice?: number;
   }): Promise<{ success: boolean; data?: Package; error?: string }> => {
     setLoading(true);
     setError(null);
@@ -156,7 +162,6 @@ export const usePackages = (options: UsePackagesOptions = {}) => {
       duration?: number;
       imageUrl?: string;
       popular?: boolean;
-      tourType?: string;
       day?: number;
       night?: number;
       basePrice?: number;
@@ -164,6 +169,7 @@ export const usePackages = (options: UsePackagesOptions = {}) => {
       overview?: string;
       featured?: boolean;
       rating?: string;
+      tours?: number[];
     }
   ): Promise<{ success: boolean; data?: Package; error?: string }> => {
     setLoading(true);

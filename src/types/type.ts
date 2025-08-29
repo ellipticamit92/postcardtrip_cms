@@ -39,6 +39,13 @@ export interface PaginatedResponse<T> {
   pagination: PaginationProps;
 }
 
+export interface Option {
+  label: string;
+  value: string;
+}
+
+export type Options = Option[];
+
 export interface User {
   id: number;
   name?: string;
@@ -141,6 +148,7 @@ export interface Package {
   destination?: Destination;
   itineraries?: Itinerary[];
   hotelPrices?: PackageHotelPrice[];
+  tours?: Tours[];
   imageUrl?: string | null;
 }
 

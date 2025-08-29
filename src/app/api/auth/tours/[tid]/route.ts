@@ -47,6 +47,7 @@ export async function PUT(req: NextRequest, { params }: Params) {
       text: body.text,
       icon: body.icon,
       description: body.description,
+      basePrice: body.basePrice,
     });
     return NextResponse.json({
       success: true,

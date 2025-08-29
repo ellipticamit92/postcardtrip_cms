@@ -100,7 +100,13 @@ export async function POST(req: NextRequest) {
       hotelPrices: body.hotelPrices,
       imageUrl: body.imageUrl,
       popular: body.popular || false,
-      tourType: body.tourType,
+      tours: body.tours || [],
+      rating: body.rating ?? "1.0",
+      overview: body.overview || "",
+      featured: body.featured || false,
+      originalPrice: body.originalPrice ? Number(body.originalPrice) : 0,
+      heroTitle: body.heroTitle || "",
+      text: body.text || "",
     });
 
     return NextResponse.json(

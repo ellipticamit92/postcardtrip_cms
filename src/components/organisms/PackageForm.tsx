@@ -1,7 +1,7 @@
 "use client";
 
 import { Controller, useForm } from "react-hook-form";
-import z, { overwrite } from "zod";
+import z from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Form } from "@/components/ui/form";
 import { FormInput } from "@/components/atoms/FormInput";
@@ -14,6 +14,8 @@ import ImageUploader from "../atoms/ImageUploader";
 import { usePackages } from "@/hooks/use-packages";
 import { FormCheckbox } from "../atoms/FormCheckbox";
 import { FormTextarea } from "../atoms/FormTextarea";
+import { FormMultiSelect } from "../atoms/FormMultiSelect";
+import { Options } from "@/types/type";
 
 const schema = z.object({
   name: z.string().min(1),
@@ -26,11 +28,11 @@ const schema = z.object({
   day: z.string().min(1, "Please select day"),
   night: z.string().min(1, "Please select night"),
   popular: z.boolean().optional(),
-  tourType: z.string().optional(),
   featured: z.boolean().optional(),
   heroTitle: z.string().optional(),
   rating: z.string().optional(),
   text: z.string().optional(),
+  tours: z.array(z.number()).optional(),
 });
 
 export type PackageFormData = z.infer<typeof schema>;
@@ -39,12 +41,12 @@ export function PackageForm({
   destinations,
   initialData,
   PackageId,
-  tours,
+  toursOptions,
 }: {
-  destinations: { label: string; value: string }[];
+  destinations: Options;
   initialData?: PackageFormData;
   PackageId?: number;
-  tours?: { label: string; value: string }[];
+  toursOptions?: Options;
 }) {
   const { createPackage, updatePackage, loading } = usePackages({
     autoFetch: false,
@@ -60,14 +62,13 @@ export function PackageForm({
       day: "",
       night: "",
       basePrice: "",
-      tourType: "",
       popular: false,
       rating: "1.0",
       featured: false,
       overview: "",
       originalPrice: "",
       heroTitle: "",
-      text: "",
+      tours: [],
     },
   });
 
@@ -86,14 +87,16 @@ export function PackageForm({
         basePrice: parseFloat(data.basePrice ?? "0"),
         description: data.description.trim(),
         popular: data.popular ?? false,
-        tourType: data.tourType?.trim() || "",
         rating: data.rating ?? "1.0",
         originalPrice: parseFloat(data.originalPrice ?? "0"),
         overview: data.overview?.trim() || "",
         featured: data.featured ?? false,
         heroTitle: data.heroTitle?.trim() || "",
         text: data.text?.trim() || "",
+        tours: data.tours || [],
       };
+
+      console.log("submitData", data);
 
       if (isEditMode && PackageId) {
         await updatePackage(PackageId, submitData);
@@ -120,15 +123,6 @@ export function PackageForm({
           <div className="col-span-2">
             <FormInput name="heroTitle" control={control} label="Hero Title" />
           </div>
-          {tours && tours.length > 0 && (
-            <FormSelect
-              label="Tour Types"
-              name="tourType"
-              control={control}
-              options={tours}
-              placeholder="Select destination"
-            />
-          )}
 
           <FormInput name="rating" control={control} label="Rating" />
           <FormSelect
@@ -139,10 +133,8 @@ export function PackageForm({
             placeholder="Select destination"
           />
 
-          <div className="flex gap-2">
-            <FormInput name="day" control={control} label=" Day" />
-            <FormInput name="night" control={control} label=" Night" />
-          </div>
+          <FormInput name="day" control={control} label=" Day" />
+          <FormInput name="night" control={control} label=" Night" />
 
           <FormInput name="basePrice" control={control} label="Base Price" />
           <FormInput
@@ -195,6 +187,14 @@ export function PackageForm({
                   label="Upload Package Image"
                 />
               )}
+            />
+          </div>
+          <div className="col-span-3">
+            <FormMultiSelect
+              name="tours"
+              control={control}
+              label="Select Tours"
+              options={toursOptions || []}
             />
           </div>
           <div className="col-span-2">

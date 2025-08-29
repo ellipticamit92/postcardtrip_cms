@@ -9,15 +9,13 @@ export const getFieldOptions = (data: any, id: string) => {
   });
 };
 
-export const getTourOptions = (tours?: any[]) => {
-  return tours
-    ?.map((item) => {
-      return {
-        label: item.text, // Assuming 'text' is the field to display
-        value: item.text, // Assuming 'tid' is the unique identifier
-      };
-    })
-    .filter(Boolean);
+export const getTourOptions = (tours: any) => {
+  return tours?.map((item: any) => {
+    return {
+      label: item.text, // Assuming 'text' is the field to display
+      value: item.tid, // Assuming 'tid' is the unique identifier
+    };
+  });
 };
 
 export const getDestinationOptions = (destination: Destination[]) => {
@@ -45,3 +43,6 @@ export function toIndianCurrency(amount: number): string {
     minimumFractionDigits: 2,
   });
 }
+
+export const unslugifyPackageName = (id: string): string =>
+  id.replace(/-/g, " ").replace(/\b\w/g, (char) => char.toUpperCase());

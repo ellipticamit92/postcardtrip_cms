@@ -4,6 +4,7 @@ export interface TourPayload {
   text: string;
   icon?: string | null;
   description: string;
+  basePrice?: number;
 }
 
 export interface Tour {

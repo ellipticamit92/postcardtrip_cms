@@ -7,6 +7,7 @@ export class TourService {
     text: string;
     icon?: string;
     description: string;
+    basePrice?: number;
   }) {
     try {
       return await prisma.tours.create({ data });
@@ -85,7 +86,12 @@ export class TourService {
   // Update tour
   static async update(
     tid: number,
-    data: { text?: string; icon?: string; description?: string }
+    data: {
+      text?: string;
+      icon?: string;
+      description?: string;
+      basePrice?: number;
+    }
   ) {
     try {
       return await prisma.tours.update({
@@ -114,12 +120,33 @@ export class TourService {
         createdAt: tour.createdAt.toISOString(),
         updatedAt: tour.updatedAt.toISOString(),
       }));
-      const destinationsData = getTourOptions(toursWithStringDates);
+      const toursData = getTourOptions(toursWithStringDates);
       return {
-        data: destinationsData,
+        data: toursData,
       };
     } catch (error) {
-      throw new Error(`Failed to fetch destinations name and id: ${error}`);
+      throw new Error(`Failed to fetch tours name and id: ${error}`);
+    }
+  }
+
+  static async getToursHomePage() {
+    try {
+      const data = await prisma.tours.findMany({
+        take: 4,
+        include: {
+          packages: true,
+        },
+        orderBy: { createdAt: "desc" },
+      });
+
+      const updatedData = data.map(({ packages, ...tours }) => ({
+        ...tours,
+        packagesCount: packages.length,
+      }));
+
+      return updatedData;
+    } catch (error) {
+      throw new Error(`Failed to fetch tours name and id: ${error}`);
     }
   }
 }

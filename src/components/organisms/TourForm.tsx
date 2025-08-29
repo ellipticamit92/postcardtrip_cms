@@ -15,6 +15,7 @@ const tourSchema = z.object({
   text: z.string().min(2, "Tour name is required"),
   description: z.string().min(5, "tour Description is too short"),
   icon: z.string().optional(),
+  basePrice: z.string().optional(),
 });
 
 type CityFormValues = z.infer<typeof tourSchema>;
@@ -34,6 +35,7 @@ export function TourForm({ initialData, tourId }: TourFormProps) {
       text: "",
       description: "",
       icon: "",
+      basePrice: "",
     },
   });
 
@@ -47,6 +49,7 @@ export function TourForm({ initialData, tourId }: TourFormProps) {
         text: data.text.trim(),
         description: data.description.trim(),
         icon: data.icon?.trim(),
+        basePrice: data.basePrice ? parseInt(data.basePrice) : 0,
       };
 
       if (isEditMode && tourId) {
@@ -67,16 +70,22 @@ export function TourForm({ initialData, tourId }: TourFormProps) {
   return (
     <Form {...form}>
       <form onSubmit={handleSubmit(onSubmit)} className="space-y-4 mt-4">
-        <div className="grid grid-cols-2 gap-4 mb-6">
+        <div className="grid grid-cols-3 gap-4 mb-6">
           <FormInput
             label="Tour Name"
             name="text"
             placeholder="Enter tour name"
             control={control}
           />
+          <FormInput
+            label="Tour Base Price"
+            name="basePrice"
+            placeholder="Enter tour base price"
+            control={control}
+          />
 
           <FormInput name="icon" control={control} label="Tour Icon" />
-          <div className="col-span-2">
+          <div className="col-span-3">
             <FormTextarea
               label="tour Description"
               name="description"

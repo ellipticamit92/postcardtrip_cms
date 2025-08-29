@@ -16,6 +16,7 @@ export interface TourPayload {
   text: string;
   icon?: string | null;
   description: string;
+  baePrice?: number;
 }
 
 interface PaginationInfo {
