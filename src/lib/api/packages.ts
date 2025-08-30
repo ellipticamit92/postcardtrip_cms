@@ -20,6 +20,9 @@ export interface PackagePayload {
   cities?: number[];
   inclusions?: number[];
   exclusions?: number[];
+  threePrice?: number;
+  fourPrice?: number;
+  fivePrice?: number;
 }
 
 export interface ApiResponse<T = unknown> {

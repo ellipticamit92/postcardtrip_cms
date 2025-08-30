@@ -1,4 +1,4 @@
-import { getFieldOptions } from "@/lib/helper";
+import { getFieldOptions, getFieldOptionsNum } from "@/lib/helper";
 import { prisma } from "@/lib/prisma";
 
 export class CityService {
@@ -24,7 +24,7 @@ export class CityService {
           name: true,
         },
       });
-      const cityData = getFieldOptions(cities, "cid");
+      const cityData = getFieldOptionsNum(cities, "cid");
       return {
         data: cityData,
       };

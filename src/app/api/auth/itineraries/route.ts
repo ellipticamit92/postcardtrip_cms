@@ -61,7 +61,7 @@ export async function POST(req: NextRequest) {
   try {
     const body = await req.json();
 
-    const required = ["day", "title", "details", "packageId"];
+    const required = ["days", "packageId"];
     const missing = required.filter((k) => body[k] === undefined);
 
     if (missing.length) {
@@ -75,12 +75,8 @@ export async function POST(req: NextRequest) {
     }
 
     const itinerary = await ItineraryService.create({
-      day: Number(body.day),
-      title: body.title,
-      details: body.details,
       packageId: Number(body.packageId),
-      places: body.places,
-      highlights: body.highlights,
+      days: body.days,
     });
 
     return NextResponse.json(

@@ -1,15 +1,17 @@
 import { Heading } from "@/components/atoms/Heading";
-import DestinationTable from "@/components/organisms/DestinationTable";
-import { DestinationService } from "@/services/destination.service";
+import ItineraryTable from "@/components/organisms/ItineraryTable";
+import ItineraryService from "@/services/itinerary.service";
 
 export default async function ItinerariesPage() {
-  const destinationsData = await DestinationService.getAll();
-  const { data, pagination } = destinationsData;
+  const itineraryData = await ItineraryService.getAll();
+  const { data, pagination } = itineraryData;
+
+  console.log("Data =- ", data);
 
   return (
     <>
       <Heading text="All Destinations" />
-      <DestinationTable data={data ?? []} pagination={pagination} />
+      <ItineraryTable data={data ?? []} pagination={pagination} />
     </>
   );
 }

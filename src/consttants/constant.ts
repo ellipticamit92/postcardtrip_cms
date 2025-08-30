@@ -79,16 +79,6 @@ export const SIDEBAR_URLS = {
           url: "/package/add",
           icon: Plus,
         },
-        {
-          title: "View Package Price",
-          url: "/package/hotel-price",
-          icon: Eye,
-        },
-        {
-          title: "Add Package Price",
-          url: "/package/hotel-price/add",
-          icon: Plus,
-        },
       ],
     },
     {
@@ -285,3 +275,14 @@ export const COUNTRIES = [
   { label: "Switzerland", value: "Switzerland" },
   { label: "Austria", value: "Austria" },
 ];
+
+// {
+//   title: "View Package Price",
+//   url: "/package/hotel-price",
+//   icon: Eye,
+// },
+// {
+//   title: "Add Package Price",
+//   url: "/package/hotel-price/add",
+//   icon: Plus,
+// },

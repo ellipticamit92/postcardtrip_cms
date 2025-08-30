@@ -27,6 +27,7 @@ import {
 } from "../ui/dialog";
 import { toIndianCurrency } from "@/lib/helper";
 import ShowData from "../molecules/ShowData";
+import ShowPrice from "../molecules/ShowPrices";
 
 export const columns: ColumnDef<Package>[] = [
   {
@@ -134,15 +135,49 @@ export const columns: ColumnDef<Package>[] = [
   },
   {
     accessorKey: "basePrice",
-    header: "S Price",
-    cell: ({ row }) => <div>{toIndianCurrency(row.getValue("basePrice"))}</div>,
-  },
-  {
-    accessorKey: "originalPrice",
-    header: "O Price",
-    cell: ({ row }) => (
-      <div>{toIndianCurrency(row.getValue("originalPrice") ?? "0")}</div>
-    ),
+    header: "All Prices",
+    cell: ({ row }) => {
+      const name = row.getValue("name") as string;
+
+      return (
+        <div className="space-y-2">
+          <Dialog>
+            <DialogTrigger asChild>
+              <Button variant="outline" size="sm">
+                View Prices
+              </Button>
+            </DialogTrigger>
+            <DialogContent className="max-w-4xl max-h-[80vh] overflow-y-auto">
+              <DialogHeader>
+                <DialogTitle>{name} - All Prices</DialogTitle>
+              </DialogHeader>
+              <div className="flex flex-col gap-4">
+                <ShowPrice
+                  title="Base price"
+                  price={row.original?.basePrice ?? 0}
+                />
+                <ShowPrice
+                  title="Original price"
+                  price={row.original?.originalPrice ?? 0}
+                />
+                <ShowPrice
+                  title="3 Star price"
+                  price={row.original?.threePrice ?? 0}
+                />
+                <ShowPrice
+                  title="4 Star price"
+                  price={row.original?.fourPrice ?? 0}
+                />
+                <ShowPrice
+                  title="Base price"
+                  price={row.original?.fivePrice ?? 0}
+                />
+              </div>
+            </DialogContent>
+          </Dialog>
+        </div>
+      );
+    },
   },
   {
     accessorKey: "rating",

@@ -111,6 +111,9 @@ export async function POST(req: NextRequest) {
       inclusions: body.inclusions,
       exclusions: body.exclusions,
       highlights: body.highlights,
+      threePrice: body.threePrice,
+      fourPrice: body.fourPrice,
+      fivePrice: body.fivePrice,
     });
 
     return NextResponse.json(

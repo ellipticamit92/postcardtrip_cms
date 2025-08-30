@@ -6,17 +6,20 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { Button } from "@/components/ui/button";
 import { FormInput } from "../atoms/FormInput";
 import { useFieldArray, useForm } from "react-hook-form";
-import { Itinerary } from "@/types/type";
+import { Itinerary, Options } from "@/types/type";
 import { Form } from "../ui/form";
 import { useItineraries } from "@/hooks/use-itineraries";
 import { Loader2 } from "lucide-react";
 import { FormSelect } from "../atoms/FormSelect";
 import { FormRichText } from "../atoms/FormRichText";
+import { FormMultiSelect } from "../atoms/FormMultiSelect";
 
 const daySchema = z.object({
   day: z.number().min(1, "Day number required"),
   title: z.string().min(1, "Title required"),
   details: z.string().min(1, "Details required"),
+  highlights: z.array(z.number()).optional(),
+  places: z.array(z.number()).optional(),
 });
 
 const itinerariesSchema = z.object({
@@ -28,16 +31,30 @@ type ItinerariesFormData = z.infer<typeof itinerariesSchema>;
 
 interface ItinerariesFormProps {
   packages: { label: string; value: string }[];
-  initialDays?: Array<{ day: number; title: string; details: string }>;
+  initialDays?: Array<{
+    day: number;
+    title: string;
+    details: string;
+    highlights: number[];
+    places: number[];
+  }>;
   initialData?: Itinerary[];
+  cityOptions?: Options;
+  highlightOptions: Options;
+  itineraryId?: number;
 }
 
 export default function ItinerariesForm({
-  initialDays = [{ day: 1, title: "", details: "" }],
+  initialDays = [
+    { day: 1, title: "", details: "", highlights: [], places: [] },
+  ],
+  itineraryId,
   initialData,
   packages,
+  cityOptions,
+  highlightOptions,
 }: ItinerariesFormProps) {
-  const { loading } = useItineraries();
+  const { loading, createItinerary, updateItinerary } = useItineraries();
   const form = useForm<ItinerariesFormData>({
     resolver: zodResolver(itinerariesSchema),
   });
@@ -54,8 +71,36 @@ export default function ItinerariesForm({
     name: "days",
   });
 
-  const onSubmit = (data: any) => {
-    reset();
+  const onSubmit = async (data: any) => {
+    console.log("DEBUG data  = ", data);
+    try {
+      const isEditMode = Boolean(itineraryId);
+
+      const submitData = {
+        packageId: data.packageId,
+        days: data.days,
+      };
+
+      console.log("DEBUG submit data  = ", submitData);
+      console.log("DEBUG submit isEditMode  = ", isEditMode);
+      console.log("DEBUG itineraryId  = ", itineraryId);
+
+      if (isEditMode && itineraryId) {
+        //await updatePackage(PackageId, submitData);
+      } else {
+        console.log("DEBUG submit data  = create ");
+        await createItinerary(submitData);
+      }
+
+      if (!isEditMode) {
+        //reset();
+      }
+    } catch (err: any) {
+      console.error("Error submitting Package", err);
+      //toast.error(err.message || "Error submitting Package");
+    }
+
+    //reset();
   };
 
   // Demo of using your entire atomic inputs for composition
@@ -72,7 +117,7 @@ export default function ItinerariesForm({
           />
         </div>
 
-        <div className=" space-y-3">
+        <div className="space-y-3">
           {fields.map((field, i) => (
             <div
               key={field.id}
@@ -82,6 +127,18 @@ export default function ItinerariesForm({
                 control={control}
                 name={`days.${i}.title`}
                 label={`Day ${i + 1} Title`}
+              />
+              <FormMultiSelect
+                name={`days.${i}.places`}
+                control={control}
+                label="Select Ciities"
+                options={cityOptions || []}
+              />
+              <FormMultiSelect
+                name={`days.${i}.highlights`}
+                control={control}
+                label="Select Highlihts"
+                options={highlightOptions || []}
               />
               {fields.length > 1 && (
                 <div className="absolute right-5 top-4">

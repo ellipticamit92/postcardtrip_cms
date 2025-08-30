@@ -18,18 +18,23 @@ export default async function EditPackagePage({
   const destinationsData = await DestinationService.getNameId();
   const packages = await PackageService.getById(id);
 
+  console.log("DEBUG pacakge = ", packages);
+
   const name = packages?.name ?? "";
 
   const updatePackage = {
     name: packages?.name ?? "",
-    day: packages?.day?.toString() ?? "",
-    night: packages?.night?.toString() ?? "",
+    day: packages?.day ?? 1,
+    night: packages?.night ?? 1,
     destinationId: packages?.destinationId.toString() ?? "",
     imageUrl: packages?.imageUrl ?? "",
-    basePrice: packages?.basePrice?.toString() ?? "",
     description: packages?.description ?? "",
     popular: packages?.popular ?? false,
-    originalPrice: packages?.originalPrice?.toString() ?? "",
+    basePrice: packages?.basePrice ?? 0,
+    originalPrice: packages?.originalPrice ?? 0,
+    threePrice: packages?.threePrice ?? 0,
+    fourPrice: packages?.fourPrice ?? 0,
+    fivePrice: packages?.fivePrice ?? 0,
     overview: packages?.overview ?? "",
     featured: packages?.featured ?? false,
     herorTitle: packages?.heroTitle ?? "",

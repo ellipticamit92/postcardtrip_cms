@@ -23,6 +23,9 @@ export class PackageService {
     highlights: number[];
     inclusions: number[];
     exclusions: number[];
+    threePrice?: number;
+    fourPrice?: number;
+    fivePrice?: number;
   }) {
     try {
       const { hotelPrices, ...packageData } = data;
@@ -320,7 +323,6 @@ export class PackageService {
     data: {
       name?: string;
       basePrice?: number;
-      durationDays?: number;
       description?: string;
       popular?: boolean;
       tourId: number;
@@ -339,9 +341,13 @@ export class PackageService {
       highlights: number[];
       inclusions: number[];
       exclusions: number[];
+      threePrice?: number;
+      fourPrice?: number;
+      fivePrice?: number;
     }
   ) {
     try {
+      console.log("DEBUG line 351 data  = ", data);
       return await prisma.package.update({
         where: { pid },
         data: {

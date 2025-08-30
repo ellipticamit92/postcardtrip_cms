@@ -1,5 +1,4 @@
 import { NextRequest, NextResponse } from "next/server";
-import { PackageService } from "@/services/package.service";
 import PackagePricesService from "@/services/packagePrices.service";
 
 /**
@@ -17,7 +16,7 @@ export async function GET(req: NextRequest) {
   try {
     const { searchParams } = new URL(req.url);
 
-    const result = await PackageService.getAll({
+    const result = await PackagePricesService.getAll({
       page: Number(searchParams.get("page")) || 1,
       limit: Number(searchParams.get("limit")) || 10,
       destinationId: searchParams.get("destinationId")

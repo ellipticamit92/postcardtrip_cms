@@ -38,6 +38,16 @@ export const FormInput = <T extends FieldValues>({
               placeholder={placeholder}
               type={type}
               disabled={disabled}
+              value={field.value ?? ""}
+              onChange={(e) =>
+                field.onChange(
+                  type === "number"
+                    ? e.target.value === ""
+                      ? undefined
+                      : +e.target.value
+                    : e.target.value
+                )
+              }
             />
           </FormControl>
           <FormMessage />

@@ -146,6 +146,9 @@ export interface Package {
   destinationId: number;
   popular: boolean | null;
   featured: boolean | null;
+  threePrice: number;
+  fourPrice: number;
+  fivePrice: number;
   // Optional relations
   destination?: Partial<Destination>;
   itineraries?: Itinerary[];
@@ -165,8 +168,8 @@ export interface PackageHotelPrice {
   hotelId: number;
   packageId: number;
   // Optional relations
-  hotel?: Hotel;
-  package?: Package;
+  hotel?: Partial<Hotel>;
+  package?: Partial<Package>;
 }
 
 export interface Itinerary {
@@ -176,7 +179,9 @@ export interface Itinerary {
   details: string; // Rich text HTML content
   packageId: number;
   // Optional relations
-  package?: Package;
+  package: Partial<Package>;
+  highlights?: Partial<Highlight>[];
+  cities?: Partial<City>[];
 }
 
 export interface ItineraryPlace {

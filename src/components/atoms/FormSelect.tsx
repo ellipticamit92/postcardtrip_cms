@@ -19,7 +19,8 @@ interface FormSelectProps<T extends FieldValues> {
   control: Control<T>;
   label: string;
   placeholder?: string;
-  options: { label: string; value: string }[]; // options array
+  options: { label: string; value: string | number }[]; // allow numbers
+  isNumber?: boolean; // flag to cast values
 }
 
 export const FormSelect = <T extends FieldValues>({
@@ -28,6 +29,7 @@ export const FormSelect = <T extends FieldValues>({
   label,
   placeholder = "Select an option",
   options,
+  isNumber = false,
 }: FormSelectProps<T>) => {
   return (
     <FormField
@@ -38,16 +40,16 @@ export const FormSelect = <T extends FieldValues>({
           <FormLabel>{label}</FormLabel>
           <FormControl>
             <Select
-              onValueChange={field.onChange}
-              value={field.value || ""}
-              defaultValue={field.value || ""}
+              onValueChange={(val) => field.onChange(isNumber ? +val : val)}
+              value={field.value?.toString() ?? ""}
+              defaultValue={field.value?.toString() ?? ""}
             >
               <SelectTrigger className="w-full">
                 <SelectValue placeholder={placeholder} />
               </SelectTrigger>
               <SelectContent>
                 {options.map(({ label, value }) => (
-                  <SelectItem key={value} value={value}>
+                  <SelectItem key={value} value={value.toString()}>
                     {label}
                   </SelectItem>
                 ))}

@@ -3,8 +3,10 @@ import {
   itinerariesApi,
   ItineraryPayload,
 } from "@/lib/api/itineraries";
+import { showToast } from "@/lib/toast";
 import { Itinerary } from "@/types/type";
 import { useEffect, useState } from "react";
+import { toast } from "sonner";
 
 interface ItineraryFilters {
   packageId?: number;
@@ -82,18 +84,25 @@ export function useItineraries(
   const createItinerary = async (data: ItineraryPayload) => {
     setLoading(true);
     setError(null);
+    const loadingToast = showToast.createLoading("itinerary");
     try {
       const res = await itinerariesApi.create(data);
       if (res.success) {
         fetchItineraries();
+        toast.dismiss(loadingToast);
+        showToast.createSuccess("Itinerary");
         return res.data;
       } else {
+        toast.dismiss(loadingToast);
+        showToast.createError("itinerary");
         setError(res.error || "Failed to create itinerary");
         throw new Error(res.error || "Failed to create itinerary");
       }
-    } catch (e: any) {
-      setError(e?.message || "Failed to create itinerary");
-      throw e;
+    } catch (err: any) {
+      const errorMsg = err?.message || "Failed to create itinerary";
+      toast.dismiss(loadingToast);
+      showToast.createError("itinerary", errorMsg);
+      setError(errorMsg);
     } finally {
       setLoading(false);
     }

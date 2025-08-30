@@ -98,7 +98,6 @@ export const usePackages = (options: UsePackagesOptions = {}) => {
     name: string;
     destinationId: number;
     description: string;
-    basePrice: number;
     day: number;
     night: number;
     imageUrl: string;
@@ -107,9 +106,13 @@ export const usePackages = (options: UsePackagesOptions = {}) => {
     overview?: string;
     featured?: boolean;
     rating?: string;
-    originalPrice?: number;
     cities: number[];
     highlights: number[];
+    basePrice: number;
+    originalPrice?: number;
+    threePrice: number;
+    fourPrice: number;
+    fivePrice: number;
   }): Promise<{ success: boolean; data?: Package; error?: string }> => {
     setLoading(true);
     setError(null);
@@ -167,6 +170,9 @@ export const usePackages = (options: UsePackagesOptions = {}) => {
       night?: number;
       basePrice?: number;
       originalPrice?: number;
+      threePrice: number;
+      fourPrice: number;
+      fivePrice: number;
       overview?: string;
       featured?: boolean;
       rating?: string;

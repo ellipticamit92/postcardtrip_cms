@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
-import { PackageService } from "@/services/package.service";
+import PackagePricesService from "@/services/packagePrices.service";
 
 interface RouteParams {
   params: Promise<{ id: string }>;
@@ -16,7 +16,7 @@ export async function GET(_: NextRequest, { params }: RouteParams) {
       );
     }
 
-    const pkg = await PackageService.getById(id);
+    const pkg = await PackagePricesService.getById(id);
     return NextResponse.json({ success: true, data: pkg });
   } catch (err) {
     console.error("GET /api/packages/:id error:", err);
@@ -42,27 +42,11 @@ export async function PUT(req: NextRequest, { params }: RouteParams) {
     }
 
     const body = await req.json();
-    const updated = await PackageService.update(id, {
-      name: body.name,
+    const updated = await PackagePricesService.update(id, {
+      hotelId: body.hotelId,
+      packageId: body.packageId,
       basePrice: body.basePrice,
-      durationDays: body.durationDays,
-      description: body.description,
-      popular: body.popular,
-      tourId: body.tourId,
-      imageUrl: body.imageUrl,
-      day: body.day,
-      night: body.night,
-      overview: body.overview,
       originalPrice: body.originalPrice,
-      featured: body.featured,
-      heroTitle: body.heroTitle,
-      text: body.text,
-      rating: body.rating,
-      tours: body.tours,
-      cities: body.cities,
-      highlights: body.highlights,
-      inclusions: body.inclusions,
-      exclusions: body.exclusions,
     });
 
     return NextResponse.json({
@@ -93,7 +77,7 @@ export async function DELETE(_: NextRequest, { params }: RouteParams) {
       );
     }
 
-    await PackageService.delete(id);
+    await PackagePricesService.delete(id);
     return NextResponse.json({ success: true, message: "Package deleted" });
   } catch (err) {
     console.error("DELETE /api/packages/:id error:", err);

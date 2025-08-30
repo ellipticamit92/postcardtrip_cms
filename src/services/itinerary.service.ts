@@ -1,18 +1,50 @@
+import { ItineraryDays } from "@/lib/api/itineraries";
 import { prisma } from "@/lib/prisma";
 
 export class ItineraryService {
-  static async create(data: {
-    day: number;
-    title: string;
-    details: string;
-    packageId: number;
-    highlights: string;
-    places: string;
-  }) {
+  static async create(data: { packageId: number; days: ItineraryDays[] }) {
     try {
-      return await prisma.itinerary.create({
-        data,
-      });
+      if (data?.days?.length > 0) {
+        // Delete existing itineraries for the package to avoid duplicates
+        await prisma.itinerary.deleteMany({
+          where: { packageId: data.packageId },
+        });
+
+        // Create multiple itineraries using transaction for atomic operations
+        const createdItineraries = await prisma.$transaction(
+          data.days.map((day: ItineraryDays) =>
+            prisma.itinerary.create({
+              data: {
+                day: day.day,
+                title: day.title,
+                details: day.details,
+                packageId: data.packageId,
+                cities: {
+                  connect:
+                    day?.cities?.map((cid: number) => ({
+                      cid,
+                    })) || [],
+                },
+                highlights: {
+                  connect:
+                    day?.highlights?.map((hlid: number) => ({
+                      hlid,
+                    })) || [],
+                },
+              },
+              include: {
+                cities: true,
+                highlights: true,
+                package: true,
+              },
+            })
+          )
+        );
+
+        return createdItineraries;
+      }
+
+      throw new Error("No itinerary days provided");
     } catch (error) {
       throw new Error(`Failed to create itinerary: ${error}`);
     }
@@ -65,8 +97,8 @@ export class ItineraryService {
           take: limit,
           include: {
             package: {
-              include: {
-                destination: true,
+              select: {
+                name: true,
               },
             },
           },

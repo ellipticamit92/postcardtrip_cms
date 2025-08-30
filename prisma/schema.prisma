@@ -88,6 +88,7 @@ model City {
   imageUrl      String?
   hotels        Hotel[]
   packages      Package[] 
+  itineraries   Itinerary[]
   createdAt     DateTime  @default(now())
 }
 
@@ -118,6 +119,9 @@ model Package {
   name          String       @unique
   basePrice     Int?
   originalPrice Int?
+  threePrice    Int?
+  fourPrice     Int?
+  fivePrice     Int?
   imageUrl      String?
   day           Int?
   night         Int?
@@ -161,8 +165,8 @@ model Itinerary {
   details     String     @db.Text
   package     Package    @relation(fields: [packageId], references: [pid])
   packageId   Int
-  highlights  String    @db.Text
-  places      String    @db.Text
+  cities      City[]
+  highlights  Highlight[]
   updatedAt   DateTime  @updatedAt
   createdAt   DateTime  @default(now())
 }
@@ -171,6 +175,7 @@ model Highlight {
   hlid        Int       @id @default(autoincrement())
   text        String    @unique
   packages    Package[] 
+  itineraries Itinerary[]
   updatedAt   DateTime  @updatedAt
   createdAt   DateTime  @default(now())
 }

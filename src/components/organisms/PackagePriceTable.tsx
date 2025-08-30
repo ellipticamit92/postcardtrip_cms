@@ -1,7 +1,7 @@
 "use client";
 
 import { format } from "date-fns";
-import { Package, PaginationProps } from "@/types/type";
+import { PackageHotelPrice, PaginationProps } from "@/types/type";
 import { ColumnDef } from "@tanstack/react-table";
 import { Checkbox } from "../ui/checkbox";
 import { ArrowUpDown, MoreHorizontal } from "lucide-react";
@@ -18,17 +18,8 @@ import { FC } from "react";
 import CommonTable from "../molecules/CommonTable";
 import Link from "next/link";
 import DeleteData from "./DeleteData";
-import {
-  Dialog,
-  DialogContent,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
-} from "../ui/dialog";
-import { toIndianCurrency } from "@/lib/helper";
-import ShowData from "../molecules/ShowData";
 
-export const columns: ColumnDef<Package>[] = [
+export const columns: ColumnDef<PackageHotelPrice>[] = [
   {
     id: "select",
     header: ({ table }) => (
@@ -52,111 +43,53 @@ export const columns: ColumnDef<Package>[] = [
     enableHiding: false,
   },
   {
-    accessorKey: "name",
+    accessorKey: "phid",
     header: ({ column }) => (
       <Button
         variant="ghost"
         className="!p-0"
         onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
       >
-        Name <ArrowUpDown className="ml-2 h-4 w-4" />
+        ID <ArrowUpDown className="ml-2 h-4 w-4" />
       </Button>
     ),
-    cell: ({ row }) => {
-      return <div className="w32 overflow-hidden">{row.original?.name}</div>;
-    },
-  },
-  {
-    accessorKey: "destination",
-    header: "Destination",
-    cell: ({ row }) => {
-      return <div>{row.original?.destination?.name}</div>;
-    },
-  },
-  {
-    accessorKey: "day",
-    header: "Duration",
-    cell: ({ row }) => {
-      return (
-        <div>
-          {row.getValue("day")}D - {row.original.night}N
-        </div>
-      );
-    },
-  },
-  {
-    accessorKey: "inclusions",
-    header: "INC/EXC/HLG/Cities",
-    cell: ({ row }) => {
-      const name = row.getValue("name") as string;
-
-      return (
-        <div className="space-y-2">
-          <Dialog>
-            <DialogTrigger asChild>
-              <Button variant="outline" size="sm">
-                View Details
-              </Button>
-            </DialogTrigger>
-            <DialogContent className="max-w-4xl max-h-[80vh] overflow-y-auto">
-              <DialogHeader>
-                <DialogTitle>
-                  {name} - Inclusions/Exclusion/Highlights{" "}
-                </DialogTitle>
-              </DialogHeader>
-              <div className="flex flex-col gap-4">
-                <ShowData
-                  title="Inclusions"
-                  data={(row.original?.inclusions as string[]) ?? []}
-                  id="lid"
-                />
-                <ShowData
-                  title="Exclusions"
-                  data={(row.original?.exclusions as string[]) ?? []}
-                  id="eid"
-                />
-                <ShowData
-                  title="Highlights"
-                  data={(row.original?.highlights as string[]) ?? []}
-                  id="hlid"
-                />
-                <ShowData
-                  title="Cities"
-                  data={(row.original?.cities as string[]) ?? []}
-                  id="cid"
-                />
-              </div>
-            </DialogContent>
-          </Dialog>
-        </div>
-      );
-    },
   },
   {
     accessorKey: "basePrice",
-    header: "S Price",
-    cell: ({ row }) => <div>{toIndianCurrency(row.getValue("basePrice"))}</div>,
+    header: ({ column }) => (
+      <Button
+        variant="ghost"
+        className="!p-0"
+        onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+      >
+        Base Price <ArrowUpDown className="ml-2 h-4 w-4" />
+      </Button>
+    ),
+    cell: ({ row }) => {
+      return (
+        <div className="w32 overflow-hidden">{row.original?.basePrice}</div>
+      );
+    },
   },
   {
     accessorKey: "originalPrice",
-    header: "O Price",
-    cell: ({ row }) => (
-      <div>{toIndianCurrency(row.getValue("originalPrice") ?? "0")}</div>
-    ),
+    header: "originalPrice",
+    cell: ({ row }) => {
+      return <div>{row.original?.originalPrice}</div>;
+    },
   },
   {
-    accessorKey: "rating",
-    header: "Rating",
-    cell: ({ row }) => (
-      <div>{toIndianCurrency(row.getValue("rating") ?? "1.0")}</div>
-    ),
+    accessorKey: "hotel",
+    header: "hotels",
+    cell: ({ row }) => {
+      return <div>{row?.original?.hotel?.name}</div>;
+    },
   },
   {
-    accessorKey: "popular",
-    header: "Popular",
-    cell: ({ row }) => <div>{String(row.getValue("popular"))}</div>,
+    accessorKey: "package",
+    header: "Package name",
+    cell: ({ row }) => <div>{row?.original?.package?.name}</div>,
   },
-
   {
     accessorKey: "imageUrl",
     header: "imageUrl",
@@ -173,35 +106,6 @@ export const columns: ColumnDef<Package>[] = [
     ),
   },
   {
-    accessorKey: "description",
-    header: "Description",
-    cell: ({ row }) => {
-      const overview = row.getValue("description") as string;
-      const name = row.getValue("name") as string;
-
-      return (
-        <div className="space-y-2">
-          <Dialog>
-            <DialogTrigger asChild>
-              <Button variant="outline" size="sm">
-                View
-              </Button>
-            </DialogTrigger>
-            <DialogContent className="max-w-4xl max-h-[80vh] overflow-y-auto">
-              <DialogHeader>
-                <DialogTitle>{name} - Overview</DialogTitle>
-              </DialogHeader>
-              <div
-                className="prose prose-sm max-w-none"
-                dangerouslySetInnerHTML={{ __html: overview }}
-              />
-            </DialogContent>
-          </Dialog>
-        </div>
-      );
-    },
-  },
-  {
     accessorKey: "createdAt",
     header: "Created",
     cell: ({ row }) => {
@@ -214,7 +118,7 @@ export const columns: ColumnDef<Package>[] = [
     enableHiding: false,
     cell: ({ row }) => {
       const destination = row.original;
-      const pid = String(destination.pid);
+      const phid = String(destination.phid);
       return (
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
@@ -229,13 +133,13 @@ export const columns: ColumnDef<Package>[] = [
             <DropdownMenuItem>
               <Link
                 className="hover:text-blue-400 font-semibold"
-                href={`/package/${pid}`}
+                href={`/package/hotel-price/${phid}`}
               >
                 Edit
               </Link>
             </DropdownMenuItem>
             <DropdownMenuItem>
-              <DeleteData id={pid} model="package" />
+              <DeleteData id={phid} model="package" />
             </DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>
@@ -245,7 +149,7 @@ export const columns: ColumnDef<Package>[] = [
 ];
 
 interface PackageTableProps {
-  data: Package[];
+  data: PackageHotelPrice[];
   pagination: PaginationProps;
 }
 
@@ -255,7 +159,7 @@ const PackagePriceTable: FC<PackageTableProps> = ({ data, pagination }) => {
       <CommonTable
         data={data}
         placeholder="Filter by Package Name"
-        columnName="name"
+        columnName="phid"
         columns={columns}
         pagination={pagination}
       />

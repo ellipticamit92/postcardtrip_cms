@@ -19,7 +19,7 @@ export class PackagePricesService {
 
   static async getNameId() {
     try {
-      const packages = await prisma.package.findMany();
+      const packages = await prisma.packageHotelPrice.findMany();
       const pagkagesData = getFieldOptions(packages, "pid");
       return {
         data: pagkagesData,
@@ -83,54 +83,20 @@ export class PackagePricesService {
         };
       }
 
-      const [packages, total] = await Promise.all([
-        prisma.package.findMany({
+      const [packagesPrice, total] = await Promise.all([
+        prisma.packageHotelPrice.findMany({
           where,
           skip,
           take: limit,
           include: {
-            destination: {
+            hotel: {
               select: {
                 name: true,
               },
             },
-            itineraries: true,
-            tours: {
+            package: {
               select: {
-                text: true,
-              },
-            },
-            inclusions: {
-              select: {
-                lid: true,
-                text: true,
-              },
-            },
-            exclusions: {
-              select: {
-                eid: true,
-                text: true,
-              },
-            },
-            highlights: {
-              select: {
-                hlid: true,
-                text: true,
-              },
-            },
-            cities: {
-              select: {
-                cid: true,
                 name: true,
-              },
-            },
-            hotelPrices: {
-              include: {
-                hotel: {
-                  include: {
-                    images: true,
-                  },
-                },
               },
             },
           },
@@ -138,11 +104,11 @@ export class PackagePricesService {
             [sortBy]: sortOrder,
           },
         }),
-        prisma.package.count({ where }),
+        prisma.packageHotelPrice.count({ where }),
       ]);
 
       return {
-        data: packages,
+        data: packagesPrice,
         pagination: {
           page,
           limit,
@@ -157,57 +123,15 @@ export class PackagePricesService {
     }
   }
 
-  static async getById(pid: number) {
+  static async getById(phid: number) {
     try {
-      const packageData = await prisma.package.findUnique({
-        where: { pid },
-        include: {
-          destination: {
-            select: {
-              did: true,
-              name: true,
-              country: true,
-            },
-          },
-          tours: {
-            select: {
-              tid: true,
-              text: true,
-            },
-          },
-          cities: {
-            select: {
-              cid: true,
-              name: true,
-            },
-          },
-          highlights: {
-            select: {
-              hlid: true,
-              text: true,
-            },
-          },
-          inclusions: {
-            select: {
-              lid: true,
-              text: true,
-            },
-          },
-          exclusions: {
-            select: {
-              eid: true,
-              text: true,
-            },
-          },
-          hotelPrices: {
-            include: {
-              hotel: {
-                include: {
-                  images: true,
-                },
-              },
-            },
-          },
+      const packageData = await prisma.packageHotelPrice.findUnique({
+        where: { phid },
+        select: {
+          basePrice: true,
+          originalPrice: true,
+          hotelId: true,
+          packageId: true,
         },
       });
 
@@ -221,132 +145,29 @@ export class PackagePricesService {
     }
   }
 
-  static async getByDestination(destinationId: number) {
-    try {
-      return await prisma.package.findMany({
-        where: { destinationId },
-        include: {
-          itineraries: true,
-          hotelPrices: {
-            include: {
-              hotel: {
-                include: {
-                  images: true,
-                },
-              },
-            },
-          },
-        },
-      });
-    } catch (error) {
-      throw new Error(`Failed to fetch packages by destination: ${error}`);
-    }
-  }
-
-  static async getByName(name: string) {
-    try {
-      return await prisma.package.findUnique({
-        where: { name },
-        select: {
-          name: true,
-          pid: true,
-          basePrice: true,
-          originalPrice: true,
-          day: true,
-          night: true,
-          description: true,
-          imageUrl: true,
-          popular: true,
-          overview: true,
-          featured: true,
-          rating: true,
-          heroTitle: true,
-          destination: {
-            select: {
-              country: true,
-            },
-          },
-          itineraries: true,
-          hotelPrices: true,
-        },
-      });
-    } catch (error) {
-      throw new Error(`Failed to fetch package by name: ${error}`);
-    }
-  }
-
   static async update(
-    pid: number,
+    phid: number,
     data: {
-      name?: string;
+      hotelId?: number;
+      packageId?: number;
       basePrice?: number;
-      durationDays?: number;
-      description?: string;
-      popular?: boolean;
-      tourId: number;
-      destinationId?: number;
-      imageUrl?: string;
-      day?: number;
-      night?: number;
-      overview?: string;
       originalPrice?: number;
-      featured?: boolean;
-      heroTitle?: string;
-      text?: string;
-      rating?: string;
-      tours: string[];
-      cities: number[];
-      highlights: number[];
-      inclusions: number[];
-      exclusions: number[];
     }
   ) {
     try {
-      return await prisma.package.update({
-        where: { pid },
-        data: {
-          ...data,
-          tours: {
-            set: [],
-            connect: data.tours?.map((id: string) => ({
-              tid: Number(id),
-            })),
-          },
-          cities: {
-            set: [],
-            connect: data.cities?.map((cid: number) => ({
-              cid,
-            })),
-          },
-          highlights: {
-            set: [],
-            connect: data.highlights?.map((hlid: number) => ({
-              hlid,
-            })),
-          },
-          inclusions: {
-            set: [],
-            connect: data.inclusions?.map((lid: number) => ({
-              lid,
-            })),
-          },
-          exclusions: {
-            set: [],
-            connect: data.exclusions?.map((eid: number) => ({
-              eid,
-            })),
-          },
-        },
+      return await prisma.packageHotelPrice.update({
+        where: { phid },
+        data,
       });
     } catch (error) {
       throw new Error(`Failed to update package: ${error}`);
     }
   }
 
-  static async delete(pid: number) {
+  static async delete(phid: number) {
     try {
-      return await prisma.package.delete({
-        where: { pid },
+      return await prisma.packageHotelPrice.delete({
+        where: { phid },
       });
     } catch (error) {
       throw new Error(`Failed to delete package: ${error}`);
@@ -354,7 +175,6 @@ export class PackagePricesService {
   }
 
   static async search(filters: {
-    destination?: string;
     city?: string;
     minPrice?: number;
     maxPrice?: number;
@@ -369,15 +189,6 @@ export class PackagePricesService {
 
       const skip = (page - 1) * limit;
       const where: any = {};
-
-      if (searchFilters.destination) {
-        where.destination = {
-          name: {
-            contains: searchFilters.destination,
-            mode: "insensitive",
-          },
-        };
-      }
 
       if (searchFilters.city) {
         where.city = {
@@ -417,27 +228,12 @@ export class PackagePricesService {
       }
 
       const [packages, total] = await Promise.all([
-        prisma.package.findMany({
+        prisma.packageHotelPrice.findMany({
           where,
           skip,
           take: limit,
-          include: {
-            destination: true,
-            hotelPrices: {
-              include: {
-                hotel: {
-                  include: {
-                    images: true,
-                  },
-                },
-              },
-            },
-            itineraries: {
-              take: 1,
-            },
-          },
         }),
-        prisma.package.count({ where }),
+        prisma.packageHotelPrice.count({ where }),
       ]);
 
       return {
@@ -458,52 +254,16 @@ export class PackagePricesService {
 
   static async getByPriceRange(minPrice: number, maxPrice: number) {
     try {
-      return await prisma.package.findMany({
+      return await prisma.packageHotelPrice.findMany({
         where: {
           basePrice: {
             gte: minPrice,
             lte: maxPrice,
           },
         },
-        include: {
-          destination: true,
-          hotelPrices: {
-            include: {
-              hotel: true,
-            },
-          },
-        },
       });
     } catch (error) {
       throw new Error(`Failed to fetch packages by price range: ${error}`);
-    }
-  }
-
-  static async getByDay(day: number) {
-    try {
-      return await prisma.package.findMany({
-        where: { day },
-        include: {
-          destination: true,
-          itineraries: true,
-        },
-      });
-    } catch (error) {
-      throw new Error(`Failed to fetch packages by duration: ${error}`);
-    }
-  }
-
-  static async getPopular() {
-    try {
-      return await prisma.package.findMany({
-        where: { popular: true },
-        orderBy: {
-          updatedAt: "desc",
-        },
-        take: 3,
-      });
-    } catch (error) {
-      throw new Error(`Failed to fetch popular packages: ${error}`);
     }
   }
 }

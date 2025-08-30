@@ -1,17 +1,15 @@
 // src/lib/api/itineraries.ts
-export interface ItineraryPayload {
+export interface ItineraryDays {
   day: number;
   title: string;
   details: string;
+  highlights: number[];
+  cities: number[];
+}
+
+export interface ItineraryPayload {
   packageId: number;
-  highlights?: string[];
-  inclusions?: string[];
-  exclusions?: string[];
-  places?: {
-    name: string;
-    description: string;
-    images?: { url: string; caption?: string }[];
-  }[];
+  days: ItineraryDays[];
 }
 
 export interface ApiResponse<T = unknown> {

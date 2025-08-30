@@ -45,7 +45,6 @@ export async function PUT(req: NextRequest, { params }: RouteParams) {
     const updated = await PackageService.update(id, {
       name: body.name,
       basePrice: body.basePrice,
-      durationDays: body.durationDays,
       description: body.description,
       popular: body.popular,
       tourId: body.tourId,
@@ -63,6 +62,9 @@ export async function PUT(req: NextRequest, { params }: RouteParams) {
       highlights: body.highlights,
       inclusions: body.inclusions,
       exclusions: body.exclusions,
+      threePrice: body.threePrice,
+      fourPrice: body.fourPrice,
+      fivePrice: body.fivePrice,
     });
 
     return NextResponse.json({

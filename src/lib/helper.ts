@@ -55,3 +55,9 @@ export function toIndianCurrency(amount: number): string {
 
 export const unslugifyPackageName = (id: string): string =>
   id.replace(/-/g, " ").replace(/\b\w/g, (char) => char.toUpperCase());
+
+export const numberOptions = (max: number = 20, labelPrefix = "") =>
+  Array.from({ length: max }, (_, i) => ({
+    label: labelPrefix ? `${labelPrefix} ${i + 1}` : `${i + 1}`,
+    value: String(i + 1),
+  }));
