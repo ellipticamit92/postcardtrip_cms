@@ -192,11 +192,6 @@ export const columns: ColumnDef<Destination>[] = [
           </DropdownMenuTrigger>
           <DropdownMenuContent align="end">
             <DropdownMenuLabel>Actions</DropdownMenuLabel>
-            <DropdownMenuItem
-              onClick={() => navigator.clipboard.writeText(did)}
-            >
-              Copy ID
-            </DropdownMenuItem>
             <DropdownMenuSeparator />
             <DropdownMenuItem>
               <Link

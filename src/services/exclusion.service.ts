@@ -1,3 +1,4 @@
+import { getFieldOptionsNum } from "@/lib/helper";
 import { prisma } from "@/lib/prisma";
 
 export class ExclusionService {
@@ -90,6 +91,22 @@ export class ExclusionService {
       return await prisma.exclusion.delete({ where: { eid } });
     } catch (error) {
       throw new Error(`Failed to delete exclusion: ${error}`);
+    }
+  }
+
+  static async getNameId() {
+    try {
+      const exclusion = await prisma.exclusion.findMany({
+        select: { eid: true, text: true },
+        orderBy: { text: "asc" },
+      });
+
+      const exclusionData = getFieldOptionsNum(exclusion, "eid", "text");
+      return {
+        data: exclusionData,
+      };
+    } catch (error) {
+      throw new Error(`Failed to fetch tours name and id: ${error}`);
     }
   }
 }

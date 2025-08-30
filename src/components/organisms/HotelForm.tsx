@@ -62,7 +62,7 @@ export function HotelForm({ cities, initialData, hotelId }: HotelFormProps) {
       }
 
       if (!isEditMode) {
-        reset();
+        //reset();
       }
     } catch (err: any) {
       console.error("Error submitting destination", err);

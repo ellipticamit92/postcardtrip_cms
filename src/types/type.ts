@@ -45,6 +45,10 @@ export interface Option {
 }
 
 export type Options = Option[];
+export type OptionsNum = {
+  label: string;
+  value: number;
+};
 
 export interface User {
   id: number;
@@ -113,9 +117,7 @@ export interface City {
   cid: number;
   name: string;
   description: string; // Rich text HTML content
-  destinationId: number;
   // Optional relations
-  destination?: Destination;
   packages?: Package[];
   hotels?: Hotel[];
 }
@@ -127,7 +129,7 @@ export interface Hotel {
   starRating: number;
   cityId: number;
   // Optional relations
-  city?: City;
+  city?: Partial<City>;
   prices?: PackageHotelPrice[];
   images?: HotelImage[];
 }
@@ -145,16 +147,21 @@ export interface Package {
   popular: boolean | null;
   featured: boolean | null;
   // Optional relations
-  destination?: Destination;
+  destination?: Partial<Destination>;
   itineraries?: Itinerary[];
   hotelPrices?: PackageHotelPrice[];
-  tours?: Tours[];
+  tours?: Partial<Tours>[];
   imageUrl?: string | null;
+  inclusions?: Partial<Inclusion>[];
+  exclusions?: Partial<Exclusion>[];
+  highlights?: Partial<Highlight>[];
+  cities?: Partial<City>[];
 }
 
 export interface PackageHotelPrice {
   phid: number;
-  price: number;
+  basePrice: number | null;
+  originalPrice: number | null;
   hotelId: number;
   packageId: number;
   // Optional relations
@@ -194,25 +201,25 @@ export interface ItineraryPlaceImage {
 export interface Highlight {
   hlid: number;
   text: string;
-  itineraryId: number;
-  // Optional relations
-  itinerary?: Itinerary;
+  packages: Package[];
+  updatedAt: Date;
+  createdAt: Date;
 }
 
 export interface Inclusion {
   lid: number;
   text: string;
-  itineraryId: number;
-  // Optional relations
-  itinerary?: Itinerary;
+  packages: Package[];
+  updatedAt: Date;
+  createdAt: Date;
 }
 
 export interface Exclusion {
   eid: number;
   text: string;
-  itineraryId: number;
-  // Optional relations
-  itinerary?: Itinerary;
+  packages: Package[];
+  updatedAt: Date;
+  createdAt: Date;
 }
 
 export interface HotelImage {

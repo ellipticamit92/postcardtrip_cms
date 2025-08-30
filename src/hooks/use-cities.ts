@@ -109,17 +109,16 @@ export const useCities = (options: UseCitiesOptions = {}) => {
   const createCity = async (data: {
     name: string;
     description: string;
-    destinationId: number;
   }): Promise<{ success: boolean; data?: City; error?: string }> => {
     setLoading(true);
     setError(null);
-    const loadingToast = showToast.createLoading("destination");
+    const loadingToast = showToast.createLoading("city");
 
     try {
       const nameResult = await citiesApi.getByName(data.name);
 
       if (nameResult.success) {
-        const errorMsg = "Destination name already exist";
+        const errorMsg = "City name already exist";
         toast.dismiss(loadingToast);
         showToast.error(errorMsg);
         return { success: false, error: errorMsg };

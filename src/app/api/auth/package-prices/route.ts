@@ -1,8 +1,9 @@
 import { NextRequest, NextResponse } from "next/server";
 import { PackageService } from "@/services/package.service";
+import PackagePricesService from "@/services/packagePrices.service";
 
 /**
- * GET /api/auth/packages
+ * GET /api/auth/package-price
  * Query params:
  *  - page, limit
  *  - destinationId, cityId
@@ -58,7 +59,7 @@ export async function GET(req: NextRequest) {
 }
 
 /**
- * POST /api/packages
+ * POST /api/package-price
  * Body: {
  *   name, basePrice, durationDays, description,
  *   destinationId, cityId,
@@ -68,16 +69,7 @@ export async function GET(req: NextRequest) {
 export async function POST(req: NextRequest) {
   try {
     const body = await req.json();
-
-    const required = [
-      "name",
-      "basePrice",
-      "day",
-      "night",
-      "description",
-      "destinationId",
-      "imageUrl",
-    ];
+    const required = ["basePrice", "originalPrice", "packageId", "hotelId"];
     const missing = required.filter((k) => body[k] === undefined);
 
     if (missing.length) {
@@ -90,27 +82,11 @@ export async function POST(req: NextRequest) {
       );
     }
 
-    const pkg = await PackageService.create({
-      name: body.name,
-      basePrice: Number(body.basePrice),
-      day: Number(body.day),
-      night: Number(body.night),
-      description: body.description,
-      destinationId: Number(body.destinationId),
-      hotelPrices: body.hotelPrices,
-      imageUrl: body.imageUrl,
-      popular: body.popular || false,
-      tours: body.tours || [],
-      rating: body.rating ?? "1.0",
-      overview: body.overview || "",
-      featured: body.featured || false,
-      originalPrice: body.originalPrice ? Number(body.originalPrice) : 0,
-      heroTitle: body.heroTitle || "",
-      text: body.text || "",
-      cities: body.cities || [],
-      inclusions: body.inclusions,
-      exclusions: body.exclusions,
-      highlights: body.highlights,
+    const pkg = await PackagePricesService.create({
+      basePrice: body.basePrice,
+      originalPrice: body.originalPrice,
+      hotelId: body.hotelId,
+      packageId: body.packageId,
     });
 
     return NextResponse.json(

@@ -114,13 +114,12 @@ export class TourService {
 
   static async getNameId() {
     try {
-      const tours = await prisma.tours.findMany();
-      const toursWithStringDates = tours.map((tour) => ({
-        ...tour,
-        createdAt: tour.createdAt.toISOString(),
-        updatedAt: tour.updatedAt.toISOString(),
-      }));
-      const toursData = getTourOptions(toursWithStringDates);
+      const tours = await prisma.tours.findMany({
+        select: { tid: true, text: true },
+        orderBy: { text: "asc" },
+      });
+
+      const toursData = getTourOptions(tours);
       return {
         data: toursData,
       };

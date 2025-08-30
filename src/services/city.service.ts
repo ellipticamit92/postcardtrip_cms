@@ -5,16 +5,11 @@ export class CityService {
   static async create(data: {
     name: string;
     description: string;
-    destinationId: number;
     imageUrl?: string;
   }) {
     try {
       return await prisma.city.create({
         data,
-        include: {
-          destination: true,
-          hotels: true,
-        },
       });
     } catch (error) {
       throw new Error(`Failed to create city: ${error}`);
@@ -23,7 +18,12 @@ export class CityService {
 
   static async getNameId() {
     try {
-      const cities = await prisma.city.findMany();
+      const cities = await prisma.city.findMany({
+        select: {
+          cid: true,
+          name: true,
+        },
+      });
       const cityData = getFieldOptions(cities, "cid");
       return {
         data: cityData,
@@ -73,7 +73,6 @@ export class CityService {
           skip,
           take: limit,
           include: {
-            destination: true,
             hotels: {
               include: {
                 images: true,
@@ -108,7 +107,6 @@ export class CityService {
       const city = await prisma.city.findUnique({
         where: { cid },
         include: {
-          destination: true,
           hotels: {
             include: {
               images: true,
@@ -128,29 +126,11 @@ export class CityService {
     }
   }
 
-  static async getByDestination(destinationId: number) {
-    try {
-      return await prisma.city.findMany({
-        where: { destinationId },
-        include: {
-          hotels: {
-            include: {
-              images: true,
-            },
-          },
-        },
-      });
-    } catch (error) {
-      throw new Error(`Failed to fetch cities by destination: ${error}`);
-    }
-  }
-
   static async getByName(name: string) {
     try {
       return await prisma.city.findUnique({
         where: { name },
         include: {
-          destination: true,
           hotels: true,
         },
       });
@@ -164,7 +144,6 @@ export class CityService {
     data: {
       name?: string;
       description?: string;
-      destinationId?: number;
       imageUrl?: string;
     }
   ) {
@@ -199,7 +178,6 @@ export class CityService {
       return await prisma.city.findMany({
         where: whereClause,
         include: {
-          destination: true,
           hotels: true,
         },
       });

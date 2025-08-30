@@ -16,6 +16,10 @@ export interface PackagePayload {
   heroTitle?: string;
   text?: string;
   rating?: string;
+  highlights?: number[];
+  cities?: number[];
+  inclusions?: number[];
+  exclusions?: number[];
 }
 
 export interface ApiResponse<T = unknown> {

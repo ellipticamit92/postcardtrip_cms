@@ -13,12 +13,9 @@ export default async function EditCityPage({
   const id = Number(idString);
   const cityData = await CityService.getById(id);
 
-  console.log("cityData DATA", cityData);
-
   const updateCity = {
     name: cityData?.name ?? "",
     description: cityData?.description ?? "",
-    destinationId: cityData?.destinationId.toString() ?? "",
     imageUrl: cityData?.imageUrl ?? "",
   };
 

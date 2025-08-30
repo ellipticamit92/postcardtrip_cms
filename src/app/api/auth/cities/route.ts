@@ -44,11 +44,11 @@ export async function POST(request: NextRequest) {
     const body = await request.json();
 
     // Validate required fields
-    if (!body.name || !body.description || !body.destinationId) {
+    if (!body.name || !body.description) {
       return NextResponse.json(
         {
           success: false,
-          error: "Missing required fields: name, description, destinationId",
+          error: "Missing required fields: name, description",
         },
         { status: 400 }
       );
@@ -57,7 +57,6 @@ export async function POST(request: NextRequest) {
     const city = await CityService.create({
       name: body.name,
       description: body.description,
-      destinationId: body.destinationId,
       imageUrl: body.imageUrl,
     });
 

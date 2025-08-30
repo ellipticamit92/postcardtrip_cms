@@ -90,14 +90,6 @@ export const columns: ColumnDef<City>[] = [
     },
   },
   {
-    accessorKey: "destination",
-    header: "Destination Name",
-    cell: ({ row }) => {
-      const city = row.original;
-      return <span>{city?.destination?.name}</span>;
-    },
-  },
-  {
     id: "actions",
     enableHiding: false,
     cell: ({ row }) => {

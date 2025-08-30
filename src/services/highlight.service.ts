@@ -1,3 +1,4 @@
+import { getFieldOptionsNum } from "@/lib/helper";
 import { prisma } from "@/lib/prisma";
 
 export class HighlightService {
@@ -96,6 +97,22 @@ export class HighlightService {
       return await prisma.highlight.delete({ where: { hlid } });
     } catch (error) {
       throw new Error(`Failed to delete highlight: ${error}`);
+    }
+  }
+
+  static async getNameId() {
+    try {
+      const highlight = await prisma.highlight.findMany({
+        select: { hlid: true, text: true },
+        orderBy: { text: "asc" },
+      });
+
+      const highlightData = getFieldOptionsNum(highlight, "hlid", "text");
+      return {
+        data: highlightData,
+      };
+    } catch (error) {
+      throw new Error(`Failed to fetch tours name and id: ${error}`);
     }
   }
 }

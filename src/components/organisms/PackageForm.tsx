@@ -33,6 +33,10 @@ const schema = z.object({
   rating: z.string().optional(),
   text: z.string().optional(),
   tours: z.array(z.number()).optional(),
+  cities: z.array(z.number()).optional(),
+  highlights: z.array(z.number()).optional(),
+  inclusions: z.array(z.number()).optional(),
+  exclusions: z.array(z.number()).optional(),
 });
 
 export type PackageFormData = z.infer<typeof schema>;
@@ -42,11 +46,19 @@ export function PackageForm({
   initialData,
   PackageId,
   toursOptions,
+  cityOptions,
+  highlightOptions,
+  inclusionOptions,
+  exclusionOptions,
 }: {
   destinations: Options;
   initialData?: PackageFormData;
   PackageId?: number;
   toursOptions?: Options;
+  cityOptions?: Options;
+  highlightOptions: Options;
+  inclusionOptions: Options;
+  exclusionOptions: Options;
 }) {
   const { createPackage, updatePackage, loading } = usePackages({
     autoFetch: false,
@@ -56,7 +68,7 @@ export function PackageForm({
     resolver: zodResolver(schema),
     defaultValues: initialData ?? {
       name: "",
-      destinationId: destinations?.[0]?.value || "0",
+      destinationId: String(destinations?.[0]?.value) || "0",
       imageUrl: "",
       description: "",
       day: "",
@@ -69,6 +81,11 @@ export function PackageForm({
       originalPrice: "",
       heroTitle: "",
       tours: [],
+      cities: [],
+      highlights: [],
+      inclusions: [],
+      exclusions: [],
+      text: "",
     },
   });
 
@@ -94,9 +111,11 @@ export function PackageForm({
         heroTitle: data.heroTitle?.trim() || "",
         text: data.text?.trim() || "",
         tours: data.tours || [],
+        cities: data.cities || [],
+        highlights: data.highlights || [],
+        inclusions: data.inclusions || [],
+        exclusions: data.exclusions || [],
       };
-
-      console.log("submitData", data);
 
       if (isEditMode && PackageId) {
         await updatePackage(PackageId, submitData);
@@ -105,7 +124,7 @@ export function PackageForm({
       }
 
       if (!isEditMode) {
-        // reset();
+        reset();
       }
     } catch (err: any) {
       console.error("Error submitting Package", err);
@@ -167,6 +186,46 @@ export function PackageForm({
               label="Package Card Text"
             />
           </div>
+          <div className="col-span-2">
+            <FormMultiSelect
+              name="cities"
+              control={control}
+              label="Select Ciities"
+              options={cityOptions || []}
+            />
+          </div>
+          <div className="col-span-2">
+            <FormMultiSelect
+              name="tours"
+              control={control}
+              label="Select Tours"
+              options={toursOptions || []}
+            />
+          </div>
+          <div className="col-span-2">
+            <FormMultiSelect
+              name="highlights"
+              control={control}
+              label="Select Highlihts"
+              options={highlightOptions || []}
+            />
+          </div>
+          <div className="col-span-3">
+            <FormMultiSelect
+              name="inclusions"
+              control={control}
+              label="Select Inclsions"
+              options={inclusionOptions || []}
+            />
+          </div>
+          <div className="col-span-3">
+            <FormMultiSelect
+              name="exclusions"
+              control={control}
+              label="Select Exclusions"
+              options={exclusionOptions || []}
+            />
+          </div>
 
           <div className="col-span-4">
             <FormRichText
@@ -187,14 +246,6 @@ export function PackageForm({
                   label="Upload Package Image"
                 />
               )}
-            />
-          </div>
-          <div className="col-span-3">
-            <FormMultiSelect
-              name="tours"
-              control={control}
-              label="Select Tours"
-              options={toursOptions || []}
             />
           </div>
           <div className="col-span-2">

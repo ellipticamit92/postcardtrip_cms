@@ -69,7 +69,13 @@ export const columns: ColumnDef<Hotel>[] = [
       return <span>{hotel?.city?.name}</span>;
     },
   },
-
+  {
+    accessorKey: "starRating",
+    header: "Star Rating",
+    cell: ({ row }) => {
+      return <span>{row.getValue("starRating")}</span>;
+    },
+  },
   {
     accessorKey: "description",
     header: "Hotel Description",

@@ -20,7 +20,6 @@ export class DestinationService {
       return await prisma.destination.create({
         data,
         include: {
-          cities: true,
           packages: true,
         },
       });
@@ -31,7 +30,15 @@ export class DestinationService {
 
   static async getNameId() {
     try {
-      const destinations = await prisma.destination.findMany();
+      const destinations = await prisma.destination.findMany({
+        select: {
+          did: true,
+          name: true,
+        },
+        orderBy: {
+          name: "asc",
+        },
+      });
       const destinationsData = getFieldOptions(destinations, "did");
       return {
         data: destinationsData,
@@ -87,7 +94,6 @@ export class DestinationService {
           take: limit,
           include: include
             ? {
-                cities: true,
                 packages: {
                   include: {
                     hotelPrices: {
@@ -127,11 +133,6 @@ export class DestinationService {
       const destination = await prisma.destination.findUnique({
         where: { did: did },
         include: {
-          cities: {
-            include: {
-              hotels: true,
-            },
-          },
           packages: {
             include: {
               itineraries: true,
@@ -226,7 +227,6 @@ export class DestinationService {
       return await prisma.destination.findMany({
         where: whereClause,
         include: {
-          cities: true,
           packages: true,
         },
       });

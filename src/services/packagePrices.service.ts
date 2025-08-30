@@ -1,64 +1,16 @@
 import { getFieldOptions } from "@/lib/helper";
 import { prisma } from "@/lib/prisma";
 
-export class PackageService {
+export class PackagePricesService {
   static async create(data: {
-    name: string;
     basePrice: number;
-    day: number;
-    night: number;
-    description: string;
-    destinationId: number;
-    hotelPrices?: { hotelId: number; price: number }[];
-    imageUrl?: string;
-    popular?: boolean;
-    overview?: string;
-    originalPrice?: number;
-    featured?: boolean;
-    heroTitle?: string;
-    text?: string;
-    rating?: string;
-    tours: number[];
-    cities: number[];
-    highlights: number[];
-    inclusions: number[];
-    exclusions: number[];
+    originalPrice: number;
+    hotelId: number;
+    packageId: number;
   }) {
     try {
-      const { hotelPrices, ...packageData } = data;
-      return await prisma.package.create({
-        data: {
-          ...packageData,
-          tours: {
-            connect: data.tours.map((tid) => ({ tid })), // 👈 connect multiple tours
-          },
-          cities: {
-            connect: data.cities.map((cid) => ({ cid })), // 👈 connect multiple tours
-          },
-          highlights: {
-            connect: data.highlights.map((hlid) => ({ hlid })), // 👈 connect multiple tours
-          },
-          inclusions: {
-            connect: data.inclusions.map((lid) => ({ lid })), // 👈 connect multiple tours
-          },
-          exclusions: {
-            connect: data.exclusions.map((eid) => ({ eid })), // 👈 connect multiple tours
-          },
-          hotelPrices: hotelPrices
-            ? {
-                create: hotelPrices,
-              }
-            : undefined,
-        },
-        include: {
-          destination: true,
-          itineraries: true,
-          hotelPrices: {
-            include: {
-              hotel: true,
-            },
-          },
-        },
+      return await prisma.packageHotelPrice.create({
+        data,
       });
     } catch (error) {
       throw new Error(`Failed to create package: ${error}`);
@@ -556,4 +508,4 @@ export class PackageService {
   }
 }
 
-export default PackageService;
+export default PackagePricesService;

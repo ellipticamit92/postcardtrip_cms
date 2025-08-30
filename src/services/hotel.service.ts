@@ -1,4 +1,4 @@
-import { getFieldOptions } from "@/lib/helper";
+import { getHotelOptions } from "@/lib/helper";
 import { prisma } from "@/lib/prisma";
 
 export class HotelService {
@@ -33,8 +33,19 @@ export class HotelService {
 
   static async getNameId() {
     try {
-      const hotels = await prisma.hotel.findMany();
-      const hotelData = getFieldOptions(hotels, "hid");
+      const hotels = await prisma.hotel.findMany({
+        select: {
+          name: true,
+          hid: true,
+          starRating: true,
+          city: {
+            select: {
+              name: true,
+            },
+          },
+        },
+      });
+      const hotelData = getHotelOptions(hotels);
       return {
         data: hotelData,
       };
@@ -100,16 +111,11 @@ export class HotelService {
           take: limit,
           include: {
             city: {
-              include: {
-                destination: true,
+              select: {
+                name: true,
               },
             },
             images: true,
-            prices: {
-              include: {
-                package: true,
-              },
-            },
           },
           orderBy: {
             [sortBy]: sortOrder,
@@ -140,8 +146,8 @@ export class HotelService {
         where: { hid },
         include: {
           city: {
-            include: {
-              destination: true,
+            select: {
+              name: true,
             },
           },
           images: true,

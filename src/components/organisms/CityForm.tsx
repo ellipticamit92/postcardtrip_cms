@@ -6,7 +6,6 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { Button } from "@/components/ui/button";
 import { toast } from "sonner";
 import { FormInput } from "../atoms/FormInput";
-import { FormSelect } from "../atoms/FormSelect";
 import { Form } from "../ui/form";
 import { Loader2 } from "lucide-react";
 import { FormRichText } from "../atoms/FormRichText";
@@ -16,7 +15,6 @@ import ImageUploader from "../atoms/ImageUploader";
 const citySchema = z.object({
   name: z.string().min(2, "City name is required"),
   description: z.string().min(5, "City Description is too short"),
-  destinationId: z.string().min(1, "Please atleast one number"),
   imageUrl: z.string().optional(),
 });
 
@@ -37,7 +35,6 @@ export function CityForm({ destinations, initialData, cityId }: CityFormProps) {
     defaultValues: initialData || {
       name: "",
       description: "",
-      destinationId: destinations?.[0]?.value || "0",
       imageUrl: "",
     },
   });
@@ -51,7 +48,6 @@ export function CityForm({ destinations, initialData, cityId }: CityFormProps) {
       const submitData = {
         name: data.name.trim(),
         description: data.description.trim(),
-        destinationId: parseInt(data.destinationId),
       };
 
       if (isEditMode && cityId) {
@@ -61,11 +57,11 @@ export function CityForm({ destinations, initialData, cityId }: CityFormProps) {
       }
 
       if (!isEditMode) {
-        reset();
+        //reset();
       }
     } catch (err: any) {
-      console.error("Error submitting destination", err);
-      toast.error(err.message || "Error submitting destination");
+      console.error("Error submitting city", err);
+      toast.error(err.message || "Error submitting city");
     }
   };
 
@@ -79,13 +75,13 @@ export function CityForm({ destinations, initialData, cityId }: CityFormProps) {
             placeholder="Enter city name"
             control={control}
           />
-          <FormSelect
+          {/* <FormSelect
             label="Destination"
             name="destinationId"
             control={control}
             options={destinations}
-            placeholder="Select destination"
-          />
+            placeholder="Select city"
+          /> */}
           <FormInput
             disabled
             name="imageUrl"

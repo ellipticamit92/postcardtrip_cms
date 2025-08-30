@@ -1,3 +1,4 @@
+import { getFieldOptionsNum } from "@/lib/helper";
 import { prisma } from "@/lib/prisma";
 
 export class InclusionService {
@@ -90,6 +91,22 @@ export class InclusionService {
       return await prisma.inclusion.delete({ where: { lid } });
     } catch (error) {
       throw new Error(`Failed to delete inclusion: ${error}`);
+    }
+  }
+
+  static async getNameId() {
+    try {
+      const inclusion = await prisma.inclusion.findMany({
+        select: { lid: true, text: true },
+        orderBy: { text: "asc" },
+      });
+
+      const inclusionData = getFieldOptionsNum(inclusion, "lid", "text");
+      return {
+        data: inclusionData,
+      };
+    } catch (error) {
+      throw new Error(`Failed to fetch tours name and id: ${error}`);
     }
   }
 }

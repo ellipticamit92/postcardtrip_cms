@@ -1,13 +1,19 @@
 import { Heading } from "@/components/atoms/Heading";
-import { PackageForm } from "@/components/organisms/PackageForm";
-import DestinationService from "@/services/destination.service";
+import { PackagePriceForm } from "@/components/organisms/PackagePriceForm";
+import HotelService from "@/services/hotel.service";
+import PackageService from "@/services/package.service";
 
 export default async function AddHotelPricePage() {
-  const destinationsData = await DestinationService.getNameId();
+  const hotelData = await HotelService.getNameId();
+  const packagesData = await PackageService.getNameId();
+
   return (
     <>
-      <Heading text="Create Package" />
-      <PackageForm destinations={destinationsData.data} />
+      <Heading text="Add Package Price" />
+      <PackagePriceForm
+        hotelData={hotelData.data}
+        packageData={packagesData.data}
+      />
     </>
   );
 }

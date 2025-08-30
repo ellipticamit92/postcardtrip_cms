@@ -26,6 +26,7 @@ import {
   DialogTrigger,
 } from "../ui/dialog";
 import { toIndianCurrency } from "@/lib/helper";
+import ShowData from "../molecules/ShowData";
 
 export const columns: ColumnDef<Package>[] = [
   {
@@ -79,6 +80,54 @@ export const columns: ColumnDef<Package>[] = [
       return (
         <div>
           {row.getValue("day")}D - {row.original.night}N
+        </div>
+      );
+    },
+  },
+  {
+    accessorKey: "inclusions",
+    header: "INC/EXC/HLG/Cities",
+    cell: ({ row }) => {
+      const name = row.getValue("name") as string;
+
+      return (
+        <div className="space-y-2">
+          <Dialog>
+            <DialogTrigger asChild>
+              <Button variant="outline" size="sm">
+                View Details
+              </Button>
+            </DialogTrigger>
+            <DialogContent className="max-w-4xl max-h-[80vh] overflow-y-auto">
+              <DialogHeader>
+                <DialogTitle>
+                  {name} - Inclusions/Exclusion/Highlights{" "}
+                </DialogTitle>
+              </DialogHeader>
+              <div className="flex flex-col gap-4">
+                <ShowData
+                  title="Inclusions"
+                  data={(row.original?.inclusions as string[]) ?? []}
+                  id="lid"
+                />
+                <ShowData
+                  title="Exclusions"
+                  data={(row.original?.exclusions as string[]) ?? []}
+                  id="eid"
+                />
+                <ShowData
+                  title="Highlights"
+                  data={(row.original?.highlights as string[]) ?? []}
+                  id="hlid"
+                />
+                <ShowData
+                  title="Cities"
+                  data={(row.original?.cities as string[]) ?? []}
+                  id="cid"
+                />
+              </div>
+            </DialogContent>
+          </Dialog>
         </div>
       );
     },
@@ -176,11 +225,6 @@ export const columns: ColumnDef<Package>[] = [
           </DropdownMenuTrigger>
           <DropdownMenuContent align="end">
             <DropdownMenuLabel>Actions</DropdownMenuLabel>
-            <DropdownMenuItem
-              onClick={() => navigator.clipboard.writeText(pid)}
-            >
-              Copy ID
-            </DropdownMenuItem>
             <DropdownMenuSeparator />
             <DropdownMenuItem>
               <Link

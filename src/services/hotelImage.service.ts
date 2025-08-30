@@ -64,11 +64,7 @@ export class HotelImageService {
           include: {
             hotel: {
               include: {
-                city: {
-                  include: {
-                    destination: true,
-                  },
-                },
+                city: true,
               },
             },
           },
@@ -102,11 +98,7 @@ export class HotelImageService {
         include: {
           hotel: {
             include: {
-              city: {
-                include: {
-                  destination: true,
-                },
-              },
+              city: true,
             },
           },
         },

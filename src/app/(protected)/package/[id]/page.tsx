@@ -1,6 +1,10 @@
 import { Heading } from "@/components/atoms/Heading";
 import { PackageForm } from "@/components/organisms/PackageForm";
+import CityService from "@/services/city.service";
 import DestinationService from "@/services/destination.service";
+import ExclusionService from "@/services/exclusion.service";
+import HighlightService from "@/services/highlight.service";
+import InclusionService from "@/services/inclusion.service";
 import PackageService from "@/services/package.service";
 import TourService from "@/services/tours.service";
 
@@ -14,7 +18,6 @@ export default async function EditPackagePage({
   const destinationsData = await DestinationService.getNameId();
   const packages = await PackageService.getById(id);
 
-  const tours = await TourService.getNameId();
   const name = packages?.name ?? "";
 
   const updatePackage = {
@@ -34,7 +37,26 @@ export default async function EditPackagePage({
     rating: packages?.rating ?? "1.0",
     tours:
       (packages as any)?.tours?.map((tour: { tid: number }) => tour.tid) ?? [],
+    cities:
+      (packages as any)?.cities?.map((city: { cid: number }) => city.cid) ?? [],
+    inclusions:
+      (packages as any)?.inclusions?.map(
+        (inclusion: { lid: number }) => inclusion.lid
+      ) ?? [],
+    exclusions:
+      (packages as any)?.exclusions?.map(
+        (exclusion: { eid: number }) => exclusion.eid
+      ) ?? [],
+    highlights:
+      (packages as any)?.highlights?.map(
+        (highlight: { hlid: number }) => highlight.hlid
+      ) ?? [],
   };
+  const toursOptions = await TourService.getNameId();
+  const cityOptions = await CityService.getNameId();
+  const hlOptions = await HighlightService.getNameId();
+  const inclusionOptions = await InclusionService.getNameId();
+  const exclusionOptions = await ExclusionService.getNameId();
 
   return (
     <>
@@ -43,6 +65,11 @@ export default async function EditPackagePage({
         initialData={updatePackage}
         PackageId={id}
         destinations={destinationsData.data}
+        toursOptions={toursOptions.data}
+        cityOptions={cityOptions?.data}
+        highlightOptions={hlOptions.data}
+        inclusionOptions={inclusionOptions.data}
+        exclusionOptions={exclusionOptions.data}
       />
     </>
   );

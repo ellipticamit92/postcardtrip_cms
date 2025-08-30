@@ -1,6 +1,9 @@
-export interface CityPayload {
-  name: string;
-  description: string;
+// src/lib/api/packagePrices.ts
+export interface PackagePricePayload {
+  basePrice: number;
+  originalPrice: number;
+  hotelId: number;
+  packageId: number;
 }
 
 export interface ApiResponse<T = unknown> {
@@ -18,20 +21,35 @@ export interface ApiResponse<T = unknown> {
   error?: string;
 }
 
-const BASE = "/api/auth/cities";
+const BASE = "/api/auth/package-prices";
 
-export const citiesApi = {
+export const packagePricesApi = {
   /* List with pagination & filters */
   getAll: async (params?: {
     page?: number;
     limit?: number;
+    destinationId?: number;
+    cityId?: number;
+    minPrice?: number;
+    maxPrice?: number;
+    minDuration?: number;
+    maxDuration?: number;
     name?: string;
-    sortBy?: "name" | "createdAt";
+    sortBy?: "name" | "basePrice" | "day" | "night" | "createdAt";
     sortOrder?: "asc" | "desc";
   }) => {
     const search = new URLSearchParams();
     if (params?.page) search.set("page", String(params.page));
     if (params?.limit) search.set("limit", String(params.limit));
+    if (params?.destinationId)
+      search.set("destinationId", String(params.destinationId));
+    if (params?.cityId) search.set("cityId", String(params.cityId));
+    if (params?.minPrice) search.set("minPrice", String(params.minPrice));
+    if (params?.maxPrice) search.set("maxPrice", String(params.maxPrice));
+    if (params?.minDuration)
+      search.set("minDuration", String(params.minDuration));
+    if (params?.maxDuration)
+      search.set("maxDuration", String(params.maxDuration));
     if (params?.name) search.set("name", params.name);
     if (params?.sortBy) search.set("sortBy", params.sortBy);
     if (params?.sortOrder) search.set("sortOrder", params.sortOrder);
@@ -40,20 +58,14 @@ export const citiesApi = {
     return response.json();
   },
 
-  /* Single city by id */
+  /* Single package by id */
   getById: async (id: number) => {
     const response = await fetch(`${BASE}/${id}`);
     return response.json();
   },
 
-  /* Cities by destination */
-  getByDestination: async (destinationId: number) => {
-    const response = await fetch(`${BASE}/destination/${destinationId}`);
-    return response.json();
-  },
-
   /* Create */
-  create: async (data: CityPayload) => {
+  create: async (data: PackagePricePayload) => {
     const response = await fetch(BASE, {
       method: "POST",
       headers: {
@@ -65,7 +77,7 @@ export const citiesApi = {
   },
 
   /* Update */
-  update: async (id: number, data: Partial<CityPayload>) => {
+  update: async (id: number, data: Partial<PackagePricePayload>) => {
     const response = await fetch(`${BASE}/${id}`, {
       method: "PUT",
       headers: {
@@ -84,15 +96,29 @@ export const citiesApi = {
     return response.json();
   },
 
-  /* Search cities by name */
-  search: async (name: string) => {
-    const response = await fetch(
-      `${BASE}/search?name=${encodeURIComponent(name)}`
-    );
+  /* Search with filters */
+  search: async (filters: {
+    destination?: string;
+    city?: string;
+    minPrice?: number;
+    maxPrice?: number;
+    minDuration?: number;
+    maxDuration?: number;
+    starRating?: number;
+    page?: number;
+    limit?: number;
+    tourType?: string;
+  }) => {
+    const search = new URLSearchParams();
+    Object.entries(filters).forEach(([key, value]) => {
+      if (value !== undefined) search.set(key, String(value));
+    });
+
+    const response = await fetch(`${BASE}/search?${search.toString()}`);
     return response.json();
   },
 
-  /* Get city by name */
+  /* Get package by name */
   getByName: async (name: string) => {
     const response = await fetch(`${BASE}/name/${encodeURIComponent(name)}`);
     return response.json();

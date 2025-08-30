@@ -1,22 +1,19 @@
-import { packagesApi } from "@/lib/api/packages";
+import { packagePricesApi } from "@/lib/api/packagePrices";
 import { showToast } from "@/lib/toast";
 import { useState, useEffect } from "react";
 import { toast } from "sonner";
 
-interface Package {
-  pid: number;
-  name: string;
-  destinationId: number;
-  description?: string;
+interface PackagePrice {
+  phid: number;
   basePrice: number;
-  day: number;
-  night: number;
-  imageUrl?: string;
+  originalPrice: number;
+  hotelId: number;
+  PackagePriceId: number;
   createdAt: string;
   updatedAt: string;
 }
 
-interface UsePackagesOptions {
+interface UsePackagePricesOptions {
   autoFetch?: boolean;
   initialPage?: number;
   initialLimit?: number;
@@ -31,17 +28,17 @@ interface PaginationInfo {
   hasPrev: boolean;
 }
 
-export const usePackages = (options: UsePackagesOptions = {}) => {
+export const usePackagePrice = (options: UsePackagePricesOptions = {}) => {
   const { autoFetch = false, initialPage = 1, initialLimit = 10 } = options;
 
-  const [packages, setPackages] = useState<Package[]>([]);
+  const [packagePrices, setPackagePrices] = useState<PackagePrice[]>([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [pagination, setPagination] = useState<PaginationInfo | null>(null);
   const [currentPage, setCurrentPage] = useState(initialPage);
 
   // Fetch packages with filters
-  const fetchPackages = async (params?: {
+  const fetchPackagePrices = async (params?: {
     page?: number;
     limit?: number;
     name?: string;
@@ -53,7 +50,7 @@ export const usePackages = (options: UsePackagesOptions = {}) => {
     setError(null);
 
     try {
-      const result = await packagesApi.getAll({
+      const result = await packagePricesApi.getAll({
         page: initialPage,
         limit: initialLimit,
         sortBy: "name",
@@ -62,13 +59,13 @@ export const usePackages = (options: UsePackagesOptions = {}) => {
       });
 
       if (result.success) {
-        setPackages(result.data);
+        setPackagePrices(result.data);
         setPagination(result.pagination);
         if (params?.page) {
           setCurrentPage(params.page);
         }
       } else {
-        setError(result.error || "Failed to fetch packages");
+        setError(result.error || "Failed to fetch PackagePrices");
       }
     } catch (err) {
       setError(err instanceof Error ? err.message : "An error occurred");
@@ -77,14 +74,14 @@ export const usePackages = (options: UsePackagesOptions = {}) => {
     }
   };
 
-  // Get single package by ID
-  const getPackage = async (id: number): Promise<Package | null> => {
+  // Get single PackagePrice by ID
+  const getPackagePrice = async (id: number): Promise<PackagePrice | null> => {
     try {
-      const result = await packagesApi.getById(id);
+      const result = await packagePricesApi.getById(id);
       if (result.success) {
-        return result.data as Package | null;
+        return result.data as PackagePrice | null;
       } else {
-        setError(result.error || "Failed to fetch package");
+        setError(result.error || "Failed to fetch PackagePrice");
         return null;
       }
     } catch (err) {
@@ -93,58 +90,38 @@ export const usePackages = (options: UsePackagesOptions = {}) => {
     }
   };
 
-  // Create new package
-  const createPackage = async (data: {
-    name: string;
-    destinationId: number;
-    description: string;
+  // Create new PackagePrice
+  const createPackagePrice = async (data: {
     basePrice: number;
-    day: number;
-    night: number;
-    imageUrl: string;
-    popular?: boolean;
-    tours?: number[];
-    overview?: string;
-    featured?: boolean;
-    rating?: string;
-    originalPrice?: number;
-    cities: number[];
-    highlights: number[];
-  }): Promise<{ success: boolean; data?: Package; error?: string }> => {
+    originalPrice: number;
+    hotelId: number;
+    packageId: number;
+  }): Promise<{ success: boolean; data?: PackagePrice; error?: string }> => {
     setLoading(true);
     setError(null);
 
-    const loadingToast = showToast.createLoading("package");
+    const loadingToast = showToast.createLoading("PackagePrice");
 
     try {
-      const nameResult = await packagesApi.getByName(data.name);
-
-      if (nameResult.success) {
-        const errorMsg = "Package name already exists";
-        toast.dismiss(loadingToast);
-        showToast.error(errorMsg);
-        return { success: false, error: errorMsg };
-      }
-
-      const result = await packagesApi.create(data);
+      const result = await packagePricesApi.create(data);
 
       if (result.success) {
-        // Refresh the list if we're showing packages
-        if (packages.length > 0 || autoFetch) {
-          await fetchPackages({ page: currentPage });
+        // Refresh the list if we're showing PackagePrices
+        if (packagePrices.length > 0 || autoFetch) {
+          await fetchPackagePrices({ page: currentPage });
         }
         toast.dismiss(loadingToast);
-        showToast.createSuccess("Packages");
+        showToast.createSuccess("PackagePrices");
         return { success: true, data: result.data };
       } else {
         toast.dismiss(loadingToast);
-        showToast.createError("Packages");
+        showToast.createError("PackagePrices");
         return { success: false, error: result.error };
       }
     } catch (err) {
       const errorMsg = err instanceof Error ? err.message : "An error occurred";
       toast.dismiss(loadingToast);
-      showToast.createError("package", errorMsg);
+      showToast.createError("PackagePrice", errorMsg);
       setError(errorMsg);
       return { success: false, error: errorMsg };
     } finally {
@@ -152,80 +129,67 @@ export const usePackages = (options: UsePackagesOptions = {}) => {
     }
   };
 
-  // Update package
-  const updatePackage = async (
+  // Update PackagePrice
+  const updatePackagePrice = async (
     id: number,
     data: {
-      name?: string;
-      destinationId?: number;
-      description?: string;
-      price?: number;
-      duration?: number;
-      imageUrl?: string;
-      popular?: boolean;
-      day?: number;
-      night?: number;
-      basePrice?: number;
-      originalPrice?: number;
-      overview?: string;
-      featured?: boolean;
-      rating?: string;
-      tours?: number[];
-      cities?: number[];
-      highlights: number[];
-      inclusions: number[];
-      exclusions: number[];
+      basePrice: number;
+      originalPrice: number;
+      hotelId: number;
+      packageId: number;
     }
-  ): Promise<{ success: boolean; data?: Package; error?: string }> => {
+  ): Promise<{ success: boolean; data?: PackagePrice; error?: string }> => {
     setLoading(true);
     setError(null);
 
-    const loadingToast = showToast.updateLoading("package");
+    const loadingToast = showToast.updateLoading("PackagePrice");
 
     try {
-      const result = await packagesApi.update(id, data);
+      const result = await packagePricesApi.update(id, data);
 
       if (result.success) {
         // Update the local state
-        setPackages((prev) =>
-          prev.map((pkg) => (pkg.pid === id ? { ...pkg, ...result.data } : pkg))
+        setPackagePrices((prev) =>
+          prev.map((pkg) =>
+            pkg.phid === id ? { ...pkg, ...result.data } : pkg
+          )
         );
         toast.dismiss(loadingToast);
-        showToast.updateSuccess("Packages");
+        showToast.updateSuccess("PackagePrices");
         return { success: true, data: result.data };
       } else {
-        setError(result.error || "Failed to update package");
+        setError(result.error || "Failed to update PackagePrice");
         toast.dismiss(loadingToast);
-        showToast.updateError("Package", "Failed to update package");
+        showToast.updateError("PackagePrice", "Failed to update PackagePrice");
         return { success: false, error: result.error };
       }
     } catch (err) {
       const errorMsg = err instanceof Error ? err.message : "An error occurred";
       setError(errorMsg);
       toast.dismiss(loadingToast);
-      showToast.updateError("Package", errorMsg);
+      showToast.updateError("PackagePrice", errorMsg);
       return { success: false, error: errorMsg };
     } finally {
       setLoading(false);
     }
   };
 
-  // Delete package
-  const deletePackage = async (
+  // Delete PackagePrice
+  const deletePackagePrice = async (
     id: number
   ): Promise<{ success: boolean; error?: string }> => {
     setLoading(true);
     setError(null);
 
     try {
-      const result = await packagesApi.delete(id);
+      const result = await packagePricesApi.delete(id);
 
       if (result.success) {
         // Remove from local state
-        setPackages((prev) => prev.filter((pkg) => pkg.pid !== id));
+        setPackagePrices((prev) => prev.filter((pkg) => pkg.phid !== id));
         return { success: true };
       } else {
-        setError(result.error || "Failed to delete package");
+        setError(result.error || "Failed to delete PackagePrice");
         return { success: false, error: result.error };
       }
     } catch (err) {
@@ -237,9 +201,9 @@ export const usePackages = (options: UsePackagesOptions = {}) => {
     }
   };
 
-  // Search packages
-  const searchPackages = async (searchTerm: string) => {
-    await fetchPackages({
+  // Search PackagePrices
+  const searchPackagePrices = async (searchTerm: string) => {
+    await fetchPackagePrices({
       page: 1,
       name: searchTerm,
     });
@@ -247,35 +211,35 @@ export const usePackages = (options: UsePackagesOptions = {}) => {
 
   // Change page
   const changePage = async (page: number) => {
-    await fetchPackages({ page });
+    await fetchPackagePrices({ page });
   };
 
   // Initial fetch
   useEffect(() => {
     if (autoFetch) {
-      fetchPackages();
+      fetchPackagePrices();
     }
-  }, [autoFetch, fetchPackages]);
+  }, [autoFetch, fetchPackagePrices]);
 
   return {
     // State
-    packages,
+    packagePrices,
     loading,
     error,
     pagination,
     currentPage,
 
     // Actions
-    fetchPackages,
-    getPackage,
-    createPackage,
-    updatePackage,
-    deletePackage,
-    searchPackages,
+    fetchPackagePrices,
+    getPackagePrice,
+    createPackagePrice,
+    updatePackagePrice,
+    deletePackagePrice,
+    searchPackagePrices,
     changePage,
 
     // Utilities
     clearError: () => setError(null),
-    refresh: () => fetchPackages({ page: currentPage }),
+    refresh: () => fetchPackagePrices({ page: currentPage }),
   };
 };

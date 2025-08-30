@@ -4,7 +4,8 @@ export class PackageHotelPriceService {
   static async create(data: {
     packageId: number;
     hotelId: number;
-    price: number;
+    basePrice: number;
+    originalPrice: number;
   }) {
     return await prisma.packageHotelPrice.create({
       data,
@@ -79,76 +80,9 @@ export class PackageHotelPriceService {
     });
   }
 
-  static async getByPackageAndHotel(packageId: number, hotelId: number) {
-    return await prisma.packageHotelPrice.findUnique({
-      where: {
-        packageId_hotelId: {
-          packageId,
-          hotelId,
-        },
-      },
-      include: {
-        package: true,
-        hotel: true,
-      },
-    });
-  }
-
-  static async update(
-    phid: number,
-    data: {
-      price: number;
-    }
-  ) {
-    return await prisma.packageHotelPrice.update({
-      where: { phid },
-      data,
-    });
-  }
-
   static async delete(phid: number) {
     return await prisma.packageHotelPrice.delete({
       where: { phid },
-    });
-  }
-
-  static async deleteByPackageAndHotel(packageId: number, hotelId: number) {
-    return await prisma.packageHotelPrice.delete({
-      where: {
-        packageId_hotelId: {
-          packageId,
-          hotelId,
-        },
-      },
-    });
-  }
-
-  static async bulkCreate(data: {
-    packageId: number;
-    hotelPrices: { hotelId: number; price: number }[];
-  }) {
-    return await prisma.packageHotelPrice.createMany({
-      data: data.hotelPrices.map((hp) => ({
-        packageId: data.packageId,
-        hotelId: hp.hotelId,
-        price: hp.price,
-      })),
-    });
-  }
-
-  static async updatePriceByPackageAndHotel(
-    packageId: number,
-    hotelId: number,
-    price: number
-  ) {
-    return await prisma.packageHotelPrice.update({
-      where: {
-        packageId_hotelId: {
-          packageId,
-          hotelId,
-        },
-      },
-      data: { price },
     });
   }
 }

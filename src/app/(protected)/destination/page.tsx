@@ -1,6 +1,6 @@
 import { Heading } from "@/components/atoms/Heading";
+import DestinationTable from "@/components/organisms/DestinationTable";
 import { DestinationService } from "@/services/destination.service";
-import DestinationTable from "@/components/organisms/DeatinationTable";
 
 export default async function DestinationPage() {
   const destinationsData = await DestinationService.getAll();
