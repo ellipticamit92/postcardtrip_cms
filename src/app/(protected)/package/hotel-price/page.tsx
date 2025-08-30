@@ -1,15 +1,14 @@
 import { Heading } from "@/components/atoms/Heading";
-import PackageTable from "@/components/organisms/PackageTable";
-import PackageService from "@/services/package.service";
+import PackageHotelPriceService from "@/services/packageHotelPrice.service";
 
 export default async function HotelPricePage() {
-  const packageData = await PackageService.getAll();
-  const { data, pagination } = packageData;
+  const packagePriceData = await PackageHotelPriceService.getAll();
+  const { data, pagination } = packagePriceData;
 
   return (
     <>
       <Heading text="All Packages" />
-      <PackageTable data={data} pagination={pagination} />
+      {/* <PackagePriceTable data={[]} /> */}
     </>
   );
 }

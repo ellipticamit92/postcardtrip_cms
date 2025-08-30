@@ -120,7 +120,7 @@ export const columns: ColumnDef<City>[] = [
               </Link>
             </DropdownMenuItem>
             <DropdownMenuItem>
-              <DeleteData id={cid} model="city" />
+              <DeleteData id={cid} model="cities" />
             </DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>

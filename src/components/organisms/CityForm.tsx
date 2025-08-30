@@ -57,7 +57,7 @@ export function CityForm({ destinations, initialData, cityId }: CityFormProps) {
       }
 
       if (!isEditMode) {
-        //reset();
+        reset();
       }
     } catch (err: any) {
       console.error("Error submitting city", err);

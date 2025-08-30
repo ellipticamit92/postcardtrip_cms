@@ -172,15 +172,7 @@ export class PackageService {
                 name: true,
               },
             },
-            hotelPrices: {
-              include: {
-                hotel: {
-                  include: {
-                    images: true,
-                  },
-                },
-              },
-            },
+            hotelPrices: true,
           },
           orderBy: {
             [sortBy]: sortOrder,

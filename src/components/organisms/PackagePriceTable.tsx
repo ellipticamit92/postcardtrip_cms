@@ -1,7 +1,7 @@
 "use client";
 
 import { format } from "date-fns";
-import { Package, PackageHotelPrice, PaginationProps } from "@/types/type";
+import { Package, PaginationProps } from "@/types/type";
 import { ColumnDef } from "@tanstack/react-table";
 import { Checkbox } from "../ui/checkbox";
 import { ArrowUpDown, MoreHorizontal } from "lucide-react";
@@ -249,12 +249,12 @@ interface PackageTableProps {
   pagination: PaginationProps;
 }
 
-const PackageTable: FC<PackageTableProps> = ({ data, pagination }) => {
+const PackagePriceTable: FC<PackageTableProps> = ({ data, pagination }) => {
   return (
     <div className="w-full">
       <CommonTable
         data={data}
-        placeholder="Filter by Package Price"
+        placeholder="Filter by Package Name"
         columnName="name"
         columns={columns}
         pagination={pagination}
@@ -263,4 +263,4 @@ const PackageTable: FC<PackageTableProps> = ({ data, pagination }) => {
   );
 };
 
-export default PackageTable;
+export default PackagePriceTable;
