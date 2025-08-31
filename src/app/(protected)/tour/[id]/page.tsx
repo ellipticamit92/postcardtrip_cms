@@ -2,6 +2,8 @@ import { Heading } from "@/components/atoms/Heading";
 import { TourForm } from "@/components/organisms/TourForm";
 import TourService from "@/services/tours.service";
 
+export const dynamic = "force-dynamic";
+
 export default async function EditTourPage({
   params,
 }: {

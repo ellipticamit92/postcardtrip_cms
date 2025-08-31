@@ -8,6 +8,8 @@ import InclusionService from "@/services/inclusion.service";
 import PackageService from "@/services/package.service";
 import TourService from "@/services/tours.service";
 
+export const dynamic = "force-dynamic";
+
 export default async function EditPackagePage({
   params,
 }: {
