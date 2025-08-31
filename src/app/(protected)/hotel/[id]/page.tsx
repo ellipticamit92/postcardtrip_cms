@@ -2,6 +2,8 @@ import { Heading } from "@/components/atoms/Heading";
 import { DestinationForm } from "@/components/organisms/DestinationForm";
 import DestinationService from "@/services/destination.service";
 
+export const dynamic = "force-dynamic";
+
 export default async function EditHotelPage({
   params,
 }: {

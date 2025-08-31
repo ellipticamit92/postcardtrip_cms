@@ -2,6 +2,8 @@ import { Heading } from "@/components/atoms/Heading";
 import IEHTable from "@/components/organisms/IEHTable";
 import IEHService from "@/services/ieh.service";
 
+export const dynamic = "force-dynamic";
+
 export default async function ExclusionPage() {
   const exclusionData = await IEHService.getAll({ type: "exclusion" });
   const { data, pagination } = exclusionData;

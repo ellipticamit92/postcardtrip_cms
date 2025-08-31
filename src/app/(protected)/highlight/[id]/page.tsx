@@ -2,6 +2,8 @@ import { Heading } from "@/components/atoms/Heading";
 import { IEHForm } from "@/components/organisms/IEHForm";
 import IEHService from "@/services/ieh.service";
 
+export const dynamic = "force-dynamic";
+
 export default async function HighlightEditPage({
   params,
 }: {

@@ -2,6 +2,8 @@ import { Heading } from "@/components/atoms/Heading";
 import { CityForm } from "@/components/organisms/CityForm";
 import DestinationService from "@/services/destination.service";
 
+export const dynamic = "force-dynamic";
+
 export default async function AddCityPage() {
   const destinationsData = await DestinationService.getNameId();
   return (

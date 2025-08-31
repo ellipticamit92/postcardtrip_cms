@@ -2,6 +2,8 @@ import { Heading } from "@/components/atoms/Heading";
 import DestinationTable from "@/components/organisms/DestinationTable";
 import { DestinationService } from "@/services/destination.service";
 
+export const dynamic = "force-dynamic";
+
 export default async function DestinationPage() {
   const destinationsData = await DestinationService.getAll();
   const { data, pagination } = destinationsData;
