@@ -171,7 +171,27 @@ export class DestinationService {
           country: true,
           imageUrl: true,
           heroTitle: true,
-          packages: true,
+          packages: {
+            select: {
+              name: true,
+              featured: true,
+              popular: true,
+              rating: true,
+              day: true,
+              night: true,
+              imageUrl: true,
+              cities: {
+                select: {
+                  name: true,
+                },
+              },
+              highlights: {
+                select: {
+                  text: true,
+                },
+              },
+            },
+          },
         },
       });
     } catch (error) {
