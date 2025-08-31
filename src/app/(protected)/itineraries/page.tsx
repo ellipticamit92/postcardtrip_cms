@@ -6,8 +6,6 @@ export default async function ItinerariesPage() {
   const itineraryData = await ItineraryService.getAll();
   const { data, pagination } = itineraryData;
 
-  console.log("Data =- ", data);
-
   return (
     <>
       <Heading text="All Destinations" />

@@ -13,6 +13,7 @@ import { Loader2 } from "lucide-react";
 import { FormSelect } from "../atoms/FormSelect";
 import { FormRichText } from "../atoms/FormRichText";
 import { FormMultiSelect } from "../atoms/FormMultiSelect";
+import { toast } from "sonner";
 
 const daySchema = z.object({
   day: z.number().min(1, "Day number required"),
@@ -80,15 +81,9 @@ export default function ItinerariesForm({
         packageId: data.packageId,
         days: data.days,
       };
-
-      console.log("DEBUG submit data  = ", submitData);
-      console.log("DEBUG submit isEditMode  = ", isEditMode);
-      console.log("DEBUG itineraryId  = ", itineraryId);
-
       if (isEditMode && itineraryId) {
         //await updatePackage(PackageId, submitData);
       } else {
-        console.log("DEBUG submit data  = create ");
         await createItinerary(submitData);
       }
 
@@ -97,7 +92,7 @@ export default function ItinerariesForm({
       }
     } catch (err: any) {
       console.error("Error submitting Package", err);
-      //toast.error(err.message || "Error submitting Package");
+      toast.error(err.message || "Error submitting Package");
     }
 
     //reset();

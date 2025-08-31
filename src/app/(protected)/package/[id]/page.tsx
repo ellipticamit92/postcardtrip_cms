@@ -18,8 +18,6 @@ export default async function EditPackagePage({
   const destinationsData = await DestinationService.getNameId();
   const packages = await PackageService.getById(id);
 
-  console.log("DEBUG pacakge = ", packages);
-
   const name = packages?.name ?? "";
 
   const updatePackage = {

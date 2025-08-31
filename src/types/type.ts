@@ -146,12 +146,12 @@ export interface Package {
   destinationId: number;
   popular: boolean | null;
   featured: boolean | null;
-  threePrice: number;
-  fourPrice: number;
-  fivePrice: number;
+  threePrice: number | null;
+  fourPrice: number | null;
+  fivePrice: number | null;
   // Optional relations
   destination?: Partial<Destination>;
-  itineraries?: Itinerary[];
+  itineraries?: Partial<Itinerary>[];
   hotelPrices?: PackageHotelPrice[];
   tours?: Partial<Tours>[];
   imageUrl?: string | null;

@@ -347,7 +347,6 @@ export class PackageService {
     }
   ) {
     try {
-      console.log("DEBUG line 351 data  = ", data);
       return await prisma.package.update({
         where: { pid },
         data: {

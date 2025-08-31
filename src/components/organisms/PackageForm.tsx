@@ -120,8 +120,6 @@ export function PackageForm({
         exclusions: data.exclusions || [],
       };
 
-      console.log("DEBUG submit data  = ", submitData);
-
       if (isEditMode && PackageId) {
         await updatePackage(PackageId, submitData);
       } else {
@@ -136,8 +134,6 @@ export function PackageForm({
       toast.error(err.message || "Error submitting Package");
     }
   };
-
-  console.log("debug error ", form.formState.errors);
 
   return (
     <Form {...form}>
