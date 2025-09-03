@@ -46,7 +46,7 @@ export class CityService {
     try {
       const {
         page = 1,
-        limit = 10,
+        limit = 150,
         destinationId,
         name,
         sortBy = "createdAt",

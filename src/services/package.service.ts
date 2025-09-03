@@ -97,7 +97,7 @@ export class PackageService {
     try {
       const {
         page = 1,
-        limit = 10,
+        limit = 150,
         destinationId,
         minPrice,
         maxPrice,
@@ -549,6 +549,33 @@ export class PackageService {
       });
     } catch (error) {
       throw new Error(`Failed to fetch popular packages: ${error}`);
+    }
+  }
+
+  static async getAllWebPacakges(limit: number, page?: number) {
+    console.log("page = ", page);
+    try {
+      const packageCount = await prisma.package.count();
+      const packages = await prisma.package.findMany({
+        select: {
+          name: true,
+          description: true,
+          rating: true,
+          originalPrice: true,
+          basePrice: true,
+          imageUrl: true,
+        },
+        orderBy: {
+          updatedAt: "desc",
+        },
+        take: limit,
+      });
+      return {
+        data: packages,
+        count: packageCount,
+      };
+    } catch (error) {
+      throw new Error(`Failed to fetch destinations name and id: ${error}`);
     }
   }
 }

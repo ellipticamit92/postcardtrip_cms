@@ -132,7 +132,36 @@ export class TourService {
     try {
       const data = await prisma.tours.findMany({
         take: 4,
-        include: {
+        select: {
+          tid: true,
+          text: true,
+          basePrice: true,
+          description: true,
+          packages: true,
+        },
+        orderBy: { createdAt: "desc" },
+      });
+
+      const updatedData = data.map(({ packages, ...tours }) => ({
+        ...tours,
+        packagesCount: packages.length,
+      }));
+
+      return updatedData;
+    } catch (error) {
+      throw new Error(`Failed to fetch tours name and id: ${error}`);
+    }
+  }
+
+  static async getTourTabs() {
+    try {
+      const data = await prisma.tours.findMany({
+        take: 4,
+        select: {
+          tid: true,
+          text: true,
+          basePrice: true,
+          description: true,
           packages: true,
         },
         orderBy: { createdAt: "desc" },

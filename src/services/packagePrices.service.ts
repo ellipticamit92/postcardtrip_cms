@@ -46,7 +46,7 @@ export class PackagePricesService {
     try {
       const {
         page = 1,
-        limit = 10,
+        limit = 150,
         destinationId,
         minPrice,
         maxPrice,
@@ -185,7 +185,7 @@ export class PackagePricesService {
     limit?: number;
   }) {
     try {
-      const { page = 1, limit = 10, ...searchFilters } = filters;
+      const { page = 1, limit = 150, ...searchFilters } = filters;
 
       const skip = (page - 1) * limit;
       const where: any = {};

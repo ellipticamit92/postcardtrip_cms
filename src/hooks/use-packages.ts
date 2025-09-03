@@ -32,7 +32,7 @@ interface PaginationInfo {
 }
 
 export const usePackages = (options: UsePackagesOptions = {}) => {
-  const { autoFetch = false, initialPage = 1, initialLimit = 10 } = options;
+  const { autoFetch = false, initialPage = 1, initialLimit = 150 } = options;
 
   const [packages, setPackages] = useState<Package[]>([]);
   const [loading, setLoading] = useState(false);

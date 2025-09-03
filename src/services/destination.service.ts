@@ -180,6 +180,9 @@ export class DestinationService {
               day: true,
               night: true,
               imageUrl: true,
+              description: true,
+              basePrice: true,
+              originalPrice: true,
               cities: {
                 select: {
                   name: true,

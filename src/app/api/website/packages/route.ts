@@ -11,10 +11,17 @@ export async function GET(req: NextRequest) {
     if (authHeader !== API_KEY) {
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
+    const { searchParams } = new URL(req.url);
+    const page = Number(searchParams.get("page")) || 1;
+    const limit = Number(searchParams.get("limit")) || 10;
 
-    const result = await PackageService.getPopular();
+    const result = await PackageService.getAllWebPacakges(limit, page);
 
-    return NextResponse.json({ success: true, data: result });
+    return NextResponse.json({
+      success: true,
+      data: result?.data ?? [],
+      count: result?.count ?? 0,
+    });
   } catch (err) {
     return NextResponse.json(
       {
