@@ -2,6 +2,8 @@ import { Heading } from "@/components/atoms/Heading";
 import IEHTable from "@/components/organisms/IEHTable";
 import IEHService from "@/services/ieh.service";
 
+export const dynamic = "force-dynamic";
+
 export default async function InclusionPage() {
   const inclusionData = await IEHService.getAll({ type: "inclusion" });
   const { data, pagination } = inclusionData;
