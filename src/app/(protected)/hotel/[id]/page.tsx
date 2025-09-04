@@ -1,5 +1,4 @@
 import { Heading } from "@/components/atoms/Heading";
-import { DestinationForm } from "@/components/organisms/DestinationForm";
 import DestinationService from "@/services/destination.service";
 
 export const dynamic = "force-dynamic";
@@ -13,23 +12,10 @@ export default async function EditHotelPage({
   const id = Number(idString);
   const destination = await DestinationService.getById(id);
   const name = destination?.name ?? "";
-  const country = destination?.country ?? "";
-  const overview = destination?.overview ?? "";
-  const imageUrl = destination?.imageUrl ?? "";
-  const heading = destination?.heading ?? "";
-
-  const updatedDestination = {
-    name,
-    country,
-    overview,
-    imageUrl,
-    heading,
-  };
 
   return (
     <>
-      <Heading text="Edit Destination" subText={name} />
-      <DestinationForm initialData={updatedDestination} destinationId={id} />
+      <Heading text="Edit Hotel" subText={name} />
     </>
   );
 }

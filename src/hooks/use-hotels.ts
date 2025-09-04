@@ -53,7 +53,7 @@ interface PaginationInfo {
 }
 
 export const useHotels = (options: UseHotelsOptions = {}) => {
-  const { autoFetch = false, initialPage = 1, initialLimit = 10 } = options;
+  const { autoFetch = false, initialPage = 1, initialLimit = 150 } = options;
 
   const [hotels, setHotels] = useState<Hotel[]>([]);
   const [loading, setLoading] = useState(false);

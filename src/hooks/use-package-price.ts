@@ -29,7 +29,7 @@ interface PaginationInfo {
 }
 
 export const usePackagePrice = (options: UsePackagePricesOptions = {}) => {
-  const { autoFetch = false, initialPage = 1, initialLimit = 10 } = options;
+  const { autoFetch = false, initialPage = 1, initialLimit = 150 } = options;
 
   const [packagePrices, setPackagePrices] = useState<PackagePrice[]>([]);
   const [loading, setLoading] = useState(false);

@@ -31,7 +31,7 @@ interface PaginationInfo {
 }
 
 export const useDestinations = (options: UseDestinationsOptions = {}) => {
-  const { autoFetch = false, initialPage = 1, initialLimit = 10 } = options;
+  const { autoFetch = false, initialPage = 1, initialLimit = 150 } = options;
 
   const [destinations, setDestinations] = useState<Destination[]>([]);
   const [loading, setLoading] = useState(false);
