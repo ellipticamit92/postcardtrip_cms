@@ -1,12 +1,14 @@
+import { Heading } from "@/components/atoms/Heading";
 import PageHeader from "@/components/molecules/PageHeader";
 import Destinations from "@/components/organisms/destinations";
+import DestinationTable from "@/components/organisms/DestinationTable";
 import { DestinationService } from "@/services/destination.service";
 
 export const dynamic = "force-dynamic";
 
 export default async function DestinationPage() {
   const destinationsData = await DestinationService.getAll();
-  const { data } = destinationsData;
+  const { data, pagination } = destinationsData;
 
   return (
     <>
@@ -14,7 +16,7 @@ export default async function DestinationPage() {
         title="Destinations"
         description="Manage travel destinations and locations"
       />
-      <Destinations data={data ?? []} />
+      <DestinationTable data={data ?? []} pagination={pagination} />
     </>
   );
 }

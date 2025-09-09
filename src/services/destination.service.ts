@@ -183,6 +183,7 @@ export class DestinationService {
               description: true,
               basePrice: true,
               originalPrice: true,
+              text: true,
               cities: {
                 select: {
                   name: true,

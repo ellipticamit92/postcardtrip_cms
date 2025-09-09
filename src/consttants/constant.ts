@@ -15,6 +15,7 @@ import {
   Siren,
   ScanEye,
   EyeOff,
+  Home,
 } from "lucide-react";
 
 export const SIDEBAR_URLS = {
@@ -27,7 +28,7 @@ export const SIDEBAR_URLS = {
     {
       name: "Postcardtrip CMS",
       logo: GalleryVerticalEnd,
-      plan: "Enterprise",
+      plan: "Manage your travel content",
     },
     {
       name: "Admin ",
@@ -42,19 +43,24 @@ export const SIDEBAR_URLS = {
   ],
   navMain: [
     {
+      title: "Dashboard",
+      url: "/dashboard",
+      icon: Home,
+    },
+    {
       title: "Destination",
       url: "/destination",
       icon: MapPinHouse,
       isActive: true,
       items: [
         {
-          title: "View Destination",
+          title: "Card Format",
           url: "/destination",
           icon: Eye,
         },
         {
-          title: "View Destination API",
-          url: "/destination/view",
+          title: "Table Format",
+          url: "/destination/table",
           icon: EyeOff,
         },
         {

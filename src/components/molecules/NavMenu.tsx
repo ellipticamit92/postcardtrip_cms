@@ -47,6 +47,26 @@ export function NavMenu({
             pathname === item.url ||
             item.items?.some((subItem) => pathname.startsWith(subItem.url));
 
+          if (!item?.items) {
+            return (
+              <SidebarMenuItem key={item.title}>
+                <a href={item.url}>
+                  <SidebarMenuButton
+                    tooltip={item.title}
+                    className={
+                      pathname === item.url
+                        ? "font-semibold bg-primary text-primary-foreground shadow-elegant"
+                        : ""
+                    }
+                  >
+                    {item.icon && <item.icon />}
+                    <span>{item.title}</span>
+                  </SidebarMenuButton>
+                </a>
+              </SidebarMenuItem>
+            );
+          }
+
           return (
             <Collapsible
               key={item.title}
@@ -56,9 +76,17 @@ export function NavMenu({
             >
               <SidebarMenuItem>
                 <CollapsibleTrigger asChild>
-                  <SidebarMenuButton tooltip={item.title}>
+                  <SidebarMenuButton
+                    tooltip={item.title}
+                    className={
+                      pathname?.includes(item.url)
+                        ? "font-semibold bg-primary text-primary-foreground shadow-elegant"
+                        : ""
+                    }
+                  >
                     {item.icon && <item.icon />}
                     <span>{item.title}</span>
+
                     <ChevronRight className="ml-auto transition-transform duration-200 group-data-[state=open]/collapsible:rotate-90" />
                   </SidebarMenuButton>
                 </CollapsibleTrigger>
@@ -70,12 +98,13 @@ export function NavMenu({
                           <a
                             href={subItem.url}
                             className={
-                              pathname === subItem.url
-                                ? "text-primary font-semibold"
+                              pathname === subItem.url ||
+                              subItem.url?.includes("view")
+                                ? "font-bold"
                                 : ""
                             }
                           >
-                            {subItem.icon && <subItem.icon />}{" "}
+                            {subItem.icon && <subItem.icon />}
                             <span>{subItem.title}</span>
                           </a>
                         </SidebarMenuSubButton>

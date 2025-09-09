@@ -553,7 +553,6 @@ export class PackageService {
   }
 
   static async getAllWebPacakges(limit: number, page?: number) {
-    console.log("page = ", page);
     try {
       const packageCount = await prisma.package.count();
       const packages = await prisma.package.findMany({

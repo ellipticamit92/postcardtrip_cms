@@ -73,7 +73,6 @@ export default function ItinerariesForm({
   });
 
   const onSubmit = async (data: any) => {
-    console.log("DEBUG data  = ", data);
     try {
       const isEditMode = Boolean(itineraryId);
 

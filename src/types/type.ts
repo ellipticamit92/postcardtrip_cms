@@ -106,6 +106,7 @@ export interface Destination {
   heroTitle?: string | null;
   description?: string | null; // Rich text HTML content
   text?: string | null; // Rich text HTML content
+  rating?: string | null;
   updatedAt: Date;
   createdAt: Date;
   // Optional relations
