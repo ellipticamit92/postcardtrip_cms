@@ -1,35 +1,16 @@
 import { Heading } from "@/components/atoms/Heading";
-import IEHTable from "@/components/organisms/IEHTable";
-import IEHService from "@/services/ieh.service";
+import { HotelForm } from "@/components/organisms/HotelForm";
+import CityService from "@/services/city.service";
 
 export const dynamic = "force-dynamic";
 
-export default async function ExclusionPage() {
-  const exclusionData = await IEHService.getAll({ type: "exclusion" });
-  const { data, pagination } = exclusionData;
-  const updateData = data?.map((item) => {
-    if ("eid" in item) {
-      return {
-        id: item.eid,
-        text: item.text,
-        createdAt: item.createdAt,
-        updatedAt: item.updatedAt,
-        type: "exclusion",
-      };
-    }
-    return {
-      id: null,
-      text: item.text,
-      createdAt: item.createdAt,
-      updatedAt: item.updatedAt,
-      type: "exclusion",
-    };
-  });
+export default async function AddCityPage() {
+  const citits = await CityService.getNameId();
 
   return (
     <>
-      <Heading text="All Exclusion" />
-      {updateData && <IEHTable data={updateData} pagination={pagination} />}
+      <Heading href="/" text="Add New Hotel" />
+      <HotelForm cities={citits.data} />
     </>
   );
 }

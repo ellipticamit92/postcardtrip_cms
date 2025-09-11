@@ -21,7 +21,7 @@ export default async function EditHotelImagePage({
 
   return (
     <>
-      <Heading text="Edit Hotel Image" />
+      <Heading text="Edit Hotel Image" href="/" />
       <HotelImageForm
         hotels={hotelsData.data}
         hotelImageId={id}

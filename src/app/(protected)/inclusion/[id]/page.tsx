@@ -23,7 +23,7 @@ export default async function InclusionEditPage({
   };
   return (
     <>
-      <Heading text="Edit Inclusion" />
+      <Heading text="Edit Inclusion" href="/" />
       <IEHForm type="inclusion" initialData={updateData} id={inclusionId} />
     </>
   );

@@ -16,6 +16,8 @@ import {
   ScanEye,
   EyeOff,
   Home,
+  MapPinHouseIcon,
+  Package,
 } from "lucide-react";
 
 export const SIDEBAR_URLS = {
@@ -50,43 +52,53 @@ export const SIDEBAR_URLS = {
     {
       title: "Destination",
       url: "/destination",
-      icon: MapPinHouse,
-      isActive: true,
-      items: [
-        {
-          title: "Card Format",
-          url: "/destination",
-          icon: Eye,
-        },
-        {
-          title: "Table Format",
-          url: "/destination/table",
-          icon: EyeOff,
-        },
-        {
-          title: "Add Destination",
-          url: "/destination/add",
-          icon: Plus,
-        },
-      ],
+      icon: MapPinHouseIcon,
     },
     {
       title: "Packages",
-      url: "#",
-      icon: Blocks,
-      items: [
-        {
-          title: "View Packages",
-          url: "/package",
-          icon: Eye,
-        },
-        {
-          title: "Add Package",
-          url: "/package/add",
-          icon: Plus,
-        },
-      ],
+      url: "/package",
+      icon: Package,
     },
+    // {
+    //   title: "Destination",
+    //   url: "/destination",
+    //   icon: MapPinHouse,
+    //   isActive: true,
+    //   items: [
+    //     {
+    //       title: "Card Format",
+    //       url: "/destination",
+    //       icon: Eye,
+    //     },
+    //     {
+    //       title: "Table Format",
+    //       url: "/destination/table",
+    //       icon: EyeOff,
+    //     },
+    //     {
+    //       title: "Add Destination",
+    //       url: "/destination/add",
+    //       icon: Plus,
+    //     },
+    //   ],
+    // },
+    // {
+    //   title: "Package",
+    //   url: "#",
+    //   icon: Blocks,
+    //   items: [
+    //     {
+    //       title: "View Package",
+    //       url: "/package",
+    //       icon: Eye,
+    //     },
+    //     {
+    //       title: "Add Package",
+    //       url: "/package/add",
+    //       icon: Plus,
+    //     },
+    //   ],
+    // },
     {
       title: "Tour",
       url: "#",
@@ -105,12 +117,12 @@ export const SIDEBAR_URLS = {
       ],
     },
     {
-      title: "Hotels",
+      title: "Hotel",
       url: "#",
       icon: Hotel,
       items: [
         {
-          title: "View Hotels",
+          title: "View Hotel",
           url: "/hotel",
           icon: Eye,
         },

@@ -13,6 +13,8 @@ interface Props<T extends FieldValues> {
   control: Control<T>;
   label: string;
   placeholder?: string;
+  itemClass?: string;
+  labelClass?: string;
 }
 
 export function FormTextarea<T extends FieldValues>({
@@ -20,14 +22,16 @@ export function FormTextarea<T extends FieldValues>({
   control,
   label,
   placeholder = "",
+  itemClass = "",
+  labelClass = "",
 }: Props<T>) {
   return (
     <FormField
       control={control}
       name={name}
       render={({ field }) => (
-        <FormItem>
-          <FormLabel>{label}</FormLabel>
+        <FormItem className={itemClass}>
+          <FormLabel className={labelClass}>{label}</FormLabel>
           <FormControl>
             <Textarea {...field} placeholder={placeholder} />
           </FormControl>

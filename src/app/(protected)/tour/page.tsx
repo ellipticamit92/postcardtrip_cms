@@ -10,7 +10,7 @@ export default async function TourPage() {
 
   return (
     <>
-      <Heading text="All Tour" />
+      <Heading text="All Tour" href="/" />
       <TourTable data={data ?? []} pagination={pagination} />
     </>
   );

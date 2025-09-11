@@ -8,7 +8,7 @@ export default async function HotelPricePage() {
 
   return (
     <>
-      <Heading text="All Packages Prices" />
+      <Heading text="All Packages Prices" href="/" />
       <PackagePriceTable data={data} pagination={pagination} />
     </>
   );

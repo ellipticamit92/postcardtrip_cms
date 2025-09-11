@@ -9,7 +9,7 @@ export default async function AddHotelPricePage() {
 
   return (
     <>
-      <Heading text="Add Package Price" />
+      <Heading text="Add Package Price" href="/" />
       <PackagePriceForm
         hotelData={hotelData.data}
         packageData={packagesData.data}

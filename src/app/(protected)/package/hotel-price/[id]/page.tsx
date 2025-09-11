@@ -26,7 +26,7 @@ export default async function EditHotelPricePage({
 
   return (
     <>
-      <Heading text="Add Package Price" />
+      <Heading text="Add Package Price" href="/" />
       <PackagePriceForm
         initialData={updatePackagePrice}
         hotelData={hotelData.data}

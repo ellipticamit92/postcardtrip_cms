@@ -97,94 +97,98 @@ export function DestinationForm({
   };
 
   return (
-    <Form {...form}>
-      <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4 mb-10">
-        <div className="grid grid-cols-6 gap-4">
-          <div className="col-span-2">
-            <FormInput name="name" control={control} label="Name" />
-          </div>
-          <div className="col-span-2">
-            <FormInput name="heading" control={control} label="Heading" />
-          </div>
-          <div className="col-span-2">
+    <div className="bg-white p-4">
+      <h3 className="mb-3 font-semibold text-lg">Destination Details</h3>
+      <Form {...form}>
+        <form
+          onSubmit={form.handleSubmit(onSubmit)}
+          className="space-y-4 mb-10"
+        >
+          <div className="grid grid-cols-8 gap-4">
+            <div className="col-span-2">
+              <FormInput name="name" control={control} label="Name" />
+            </div>
+            <div className="col-span-3">
+              <FormInput name="heading" control={control} label="Heading" />
+            </div>
+            <div className="col-span-3">
+              <FormInput
+                name="heroTitle"
+                control={control}
+                label="Destination Hero Title"
+              />
+            </div>
+            <div className="col-span-2">
+              <FormSelect
+                name="country"
+                control={control}
+                label="Select Country"
+                placeholder="Choose your country"
+                options={COUNTRIES}
+              />
+            </div>
             <FormInput
-              name="heroTitle"
+              name="basePrice"
+              type="number"
               control={control}
-              label="Destination Hero Title"
+              label="Current Price"
             />
+            <FormInput
+              name="originalPrice"
+              type="number"
+              control={control}
+              label="Original Price"
+            />
+
+            <FormInput name="rating" control={control} label="Rating (0-5)" />
+            <FormCheckbox name="trending" control={control} label="Trending" />
+          </div>
+          <div className="grid grid-cols-6 gap-4">
+            <div className="col-span-3">
+              <FormTextarea
+                name="description"
+                control={control}
+                label="Description"
+              />
+            </div>
+            <div className="col-span-3">
+              <FormTextarea
+                name="text"
+                control={control}
+                label="Destination Card Text"
+              />
+            </div>
+
+            <div className="col-span-4">
+              <FormRichText
+                label="Overview"
+                name="overview"
+                placeholder="Describe the destination"
+                control={control}
+                height={260}
+              />
+            </div>
+            <div className="col-span-2">
+              <Controller
+                control={control}
+                name="imageUrl"
+                render={({ field }) => (
+                  <ImageUploader
+                    value={field.value}
+                    onChange={field.onChange}
+                    label="Upload Destination Image"
+                  />
+                )}
+              />
+            </div>
           </div>
 
-          <FormInput
-            name="basePrice"
-            type="number"
-            control={control}
-            label="Price"
-          />
-          <FormInput
-            name="originalPrice"
-            type="number"
-            control={control}
-            label="Original Price"
-          />
-          <FormInput name="rating" control={control} label="Rating" />
-          <FormSelect
-            name="country"
-            control={control}
-            label="Select Country"
-            placeholder="Choose your country"
-            options={COUNTRIES}
-          />
-          <FormInput
-            disabled
-            name="imageUrl"
-            control={control}
-            label="Image URL"
-          />
-          <FormCheckbox name="trending" control={control} label="Trending " />
-          <div className="col-span-3">
-            <FormTextarea
-              name="description"
-              control={control}
-              label="Description"
-            />
-          </div>
-          <div className="col-span-3">
-            <FormTextarea
-              name="text"
-              control={control}
-              label="Destination Card Text"
-            />
-          </div>
-
-          <div className="col-span-4">
-            <FormRichText
-              label="Overview"
-              name="overview"
-              placeholder="Describe the destination"
-              control={control}
-              height={260}
-            />
-          </div>
-          <div className="col-span-2">
-            <Controller
-              control={control}
-              name="imageUrl"
-              render={({ field }) => (
-                <ImageUploader
-                  value={field.value}
-                  onChange={field.onChange}
-                  label="Upload Destination Image"
-                />
-              )}
-            />
-          </div>
-        </div>
-
-        <Button type="submit" disabled={loading}>
-          {loading && <Loader2 className="animate-spin mr-2" />}
-          {initialData ? "Update" : "Add"} Destination
-        </Button>
-      </form>
-    </Form>
+          <Button variant="secondary" type="submit" disabled={loading}>
+            {loading && <Loader2 className="animate-spin mr-2" />}
+            {initialData ? "Update" : "Add"} Destination
+          </Button>
+        </form>
+      </Form>
+    </div>
   );
 }

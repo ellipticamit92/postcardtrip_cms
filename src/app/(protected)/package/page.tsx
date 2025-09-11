@@ -1,6 +1,9 @@
-import { Heading } from "@/components/atoms/Heading";
-import PackageTable from "@/components/organisms/PackageTable";
+import PageHeader from "@/components/molecules/PageHeader";
+import PackageGrid from "@/components/organisms/packages/PackageGrid";
+import PackageTable from "@/components/organisms/packages/PackageTable";
+import ViewLayout from "@/components/templates/ViewLayout";
 import PackageService from "@/services/package.service";
+import { Package } from "lucide-react";
 
 export const dynamic = "force-dynamic";
 
@@ -10,8 +13,20 @@ export default async function PacakgesPage() {
 
   return (
     <>
-      <Heading text="All Packages" />
-      <PackageTable data={data} pagination={pagination} />
+      <PageHeader
+        title="Packages"
+        description="Create and manage travel packages"
+        Icon={Package}
+        href="/package/add"
+      />
+      <ViewLayout
+        data={data ?? []}
+        pagination={pagination}
+        filterKey={"name"}
+        GridComponent={PackageGrid}
+        ListComponent={PackageGrid}
+        TableComponent={PackageTable}
+      />
     </>
   );
 }

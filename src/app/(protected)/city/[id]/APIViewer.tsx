@@ -1,6 +1,6 @@
+import { Heading } from "@/components/atoms/Heading";
+import { ScrollArea } from "@/components/ui/scroll-area";
 import { FC } from "react";
-import { ScrollArea } from "../ui/scroll-area";
-import { Heading } from "./Heading";
 
 interface APIViewerProps {
   data: any;
@@ -10,7 +10,7 @@ interface APIViewerProps {
 const APIViewer: FC<APIViewerProps> = ({ data, name }) => {
   return (
     <div>
-      <Heading text={`${name} API Viewer`} href="/" />
+      <Heading href="/" text={`${name} API Viewer`} />
       <ScrollArea className="h-160 w-full rounded-md border p-2">
         <pre className="text-sm whitespace-pre-wrap">
           {JSON.stringify(data, null, 2)}

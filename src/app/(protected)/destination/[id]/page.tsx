@@ -42,7 +42,8 @@ export default async function EditDestinationPage({
 
   return (
     <>
-      <Heading text="Edit Destination" subText={name} />
+      <Heading text="Edit Destination" subText={name} href="/destination" />
+
       <DestinationForm initialData={updatedDestination} destinationId={id} />
     </>
   );

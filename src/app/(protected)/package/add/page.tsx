@@ -17,7 +17,7 @@ export default async function AddDestinationPage() {
 
   return (
     <>
-      <Heading text="Create Package" />
+      <Heading text="Create Package" href="/package" />
       <PackageForm
         destinations={destinationsData.data}
         toursOptions={toursOptions.data}

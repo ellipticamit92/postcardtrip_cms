@@ -23,7 +23,7 @@ export default async function ExclusionEditPage({
   };
   return (
     <>
-      <Heading text="Edit Exclusion" />
+      <Heading text="Edit Exclusion" href="/" />
       <IEHForm type="exclusion" initialData={updateData} id={exclusionId} />
     </>
   );

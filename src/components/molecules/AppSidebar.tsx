@@ -20,7 +20,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
       <SidebarHeader>
         <AddUsers users={SIDEBAR_URLS.teams} />
       </SidebarHeader>
-      <SidebarContent>
+      <SidebarContent className="px-2 bg-white">
         <NavMenu items={SIDEBAR_URLS.navMain} />
       </SidebarContent>
       <SidebarRail />

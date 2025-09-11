@@ -28,7 +28,7 @@ export default async function InclusionPage() {
 
   return (
     <>
-      <Heading text="All Inclusion" />
+      <Heading text="All Inclusion" href="/" />
       {updateData && <IEHTable data={updateData} pagination={pagination} />}
     </>
   );

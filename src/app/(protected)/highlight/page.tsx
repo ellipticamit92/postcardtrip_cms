@@ -28,7 +28,7 @@ export default async function HighlightPage() {
 
   return (
     <>
-      <Heading text="All Highlight" />
+      <Heading text="All Highlight" href="/" />
       {updateData && <IEHTable data={updateData} pagination={pagination} />}
     </>
   );

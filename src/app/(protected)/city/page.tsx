@@ -9,7 +9,7 @@ export default async function CityPage() {
 
   return (
     <>
-      <Heading text="All Cities" />
+      <Heading text="All Cities" href="/" />
       <CityTable data={cityData?.data ?? []} />
     </>
   );

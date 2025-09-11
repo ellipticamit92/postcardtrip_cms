@@ -36,9 +36,20 @@ export function NavMenu({
 }) {
   const pathname = usePathname();
 
+  const getClasses = (url: string) => {
+    let classes =
+      "hover:bg-secondary hover:text-white p-3 py-5 text-sm rounded-none";
+    if (pathname?.includes(url)) {
+      classes += " bg-primary text-primary-foreground font-semibold";
+    }
+    return classes;
+  };
+
   return (
     <SidebarGroup>
-      <SidebarGroupLabel>Admin URL</SidebarGroupLabel>
+      <SidebarGroupLabel className="font-bold !p-0 text-md mb-1">
+        Menu
+      </SidebarGroupLabel>
       <SidebarMenu>
         {items.map((item) => {
           // Open if parent is active or pathname matches any child
@@ -53,13 +64,9 @@ export function NavMenu({
                 <a href={item.url}>
                   <SidebarMenuButton
                     tooltip={item.title}
-                    className={
-                      pathname === item.url
-                        ? "font-semibold bg-primary text-primary-foreground shadow-elegant"
-                        : ""
-                    }
+                    className={getClasses(item.url)}
                   >
-                    {item.icon && <item.icon />}
+                    {item.icon && <item.icon className="w-12 h-12" />}
                     <span>{item.title}</span>
                   </SidebarMenuButton>
                 </a>
@@ -78,11 +85,7 @@ export function NavMenu({
                 <CollapsibleTrigger asChild>
                   <SidebarMenuButton
                     tooltip={item.title}
-                    className={
-                      pathname?.includes(item.url)
-                        ? "font-semibold bg-primary text-primary-foreground shadow-elegant"
-                        : ""
-                    }
+                    className={getClasses(item.url)}
                   >
                     {item.icon && <item.icon />}
                     <span>{item.title}</span>

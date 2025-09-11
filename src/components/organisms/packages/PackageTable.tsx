@@ -1,11 +1,24 @@
 "use client";
 
-import { format } from "date-fns";
-import { Package, PackageHotelPrice, PaginationProps } from "@/types/type";
+import { Package, PaginationProps } from "@/types/type";
 import { ColumnDef } from "@tanstack/react-table";
-import { Checkbox } from "../ui/checkbox";
 import { ArrowUpDown, MoreHorizontal } from "lucide-react";
-import { Button } from "../ui/button";
+import { FC } from "react";
+import Link from "next/link";
+import { toIndianCurrency } from "@/lib/helper";
+import CommonTable from "@/components/molecules/CommonTable";
+import ShowData from "@/components/molecules/ShowData";
+import ShowPrice from "@/components/molecules/ShowPrices";
+import { Button } from "@/components/ui/button";
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog";
+import DeleteData from "../DeleteData";
+import { Checkbox } from "@/components/ui/checkbox";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -13,21 +26,8 @@ import {
   DropdownMenuLabel,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
-} from "../ui/dropdown-menu";
-import { FC } from "react";
-import CommonTable from "../molecules/CommonTable";
-import Link from "next/link";
-import DeleteData from "./DeleteData";
-import {
-  Dialog,
-  DialogContent,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
-} from "../ui/dialog";
-import { toIndianCurrency } from "@/lib/helper";
-import ShowData from "../molecules/ShowData";
-import ShowPrice from "../molecules/ShowPrices";
+} from "@/components/ui/dropdown-menu";
+import { format } from "date-fns";
 
 export const columns: ColumnDef<Package>[] = [
   {

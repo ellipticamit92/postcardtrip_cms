@@ -1,31 +1,32 @@
 "use client";
 
-import { Destination, PaginationProps } from "@/types/type";
+import { Itinerary, PaginationProps } from "@/types/type";
 import { ColumnDef } from "@tanstack/react-table";
-import { Checkbox } from "../ui/checkbox";
 import { ArrowUpDown, MoreHorizontal } from "lucide-react";
-import { Button } from "../ui/button";
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuLabel,
-  DropdownMenuSeparator,
-  DropdownMenuTrigger,
-} from "../ui/dropdown-menu";
 import { FC } from "react";
-import CommonTable from "../molecules/CommonTable";
 import Link from "next/link";
-import DeleteData from "./DeleteData";
+import { Checkbox } from "@/components/ui/checkbox";
+import { Button } from "@/components/ui/button";
 import {
   Dialog,
   DialogContent,
   DialogHeader,
   DialogTitle,
   DialogTrigger,
-} from "../ui/dialog";
+} from "@/components/ui/dialog";
+import CommonTable from "@/components/molecules/CommonTable";
+import ShowData from "@/components/molecules/ShowData";
+import {
+  DropdownMenu,
+  DropdownMenuTrigger,
+  DropdownMenuContent,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuItem,
+} from "@radix-ui/react-dropdown-menu";
+import DeleteData from "../DeleteData";
 
-export const columns: ColumnDef<Destination>[] = [
+export const columns: ColumnDef<Itinerary>[] = [
   {
     id: "select",
     header: ({ table }) => (
@@ -49,90 +50,62 @@ export const columns: ColumnDef<Destination>[] = [
     enableHiding: false,
   },
   {
-    accessorKey: "name",
+    accessorKey: "day",
     header: ({ column }) => (
       <Button
         variant="ghost"
         className="!p-0"
         onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
       >
-        Name <ArrowUpDown className="ml-2 h-4 w-4" />
+        Day <ArrowUpDown className="ml-2 h-4 w-4" />
       </Button>
     ),
   },
   {
-    accessorKey: "heading",
-    header: "Heading",
+    accessorKey: "title",
+    header: "Title",
     cell: ({ row }) => (
-      <div className="w-24 overflow-hidden">{row.getValue("heading")}</div>
+      <div className="w-24 overflow-hidden">{row.getValue("title")}</div>
     ),
     size: 50,
   },
   {
-    accessorKey: "country",
-    header: "Country",
+    accessorKey: "packageId",
+    header: "Package Name",
     cell: ({ row }) => (
-      <div className="w-16 overflow-hidden">{row.getValue("country")}</div>
-    ),
-    size: 20,
-  },
-  {
-    accessorKey: "basePrice",
-    header: "B Price",
-    cell: ({ row }) => <div>{row.getValue("basePrice")}</div>,
-  },
-  {
-    accessorKey: "originalPrice",
-    header: "O Price",
-    cell: ({ row }) => <div>{row.getValue("originalPrice")}</div>,
-  },
-  {
-    accessorKey: "rating",
-    header: "Rating",
-    cell: ({ row }) => <div>{row.getValue("rating")}</div>,
-  },
-  {
-    accessorKey: "imageUrl",
-    header: "imageUrl",
-    cell: ({ row }) => (
-      <div>
-        <a
-          className="text-blue-700 hover:underline"
-          href={row.getValue("imageUrl")}
-          target="_blank"
-        >
-          See Image
-        </a>
-      </div>
+      <div className="overflow-hidden">{row?.original?.package?.name}</div>
     ),
   },
   {
-    accessorKey: "trending",
-    header: "Trending",
-    cell: ({ row }) => <div>{row.getValue("trending")?.toString()}</div>,
-  },
-  {
-    accessorKey: "overview",
-    header: "Overview",
+    accessorKey: "highlights",
+    header: "Highlights / Cities",
     cell: ({ row }) => {
-      const overview = row.getValue("overview") as string;
-      const name = row.getValue("name") as string;
+      const day = row.getValue("day") as string;
+
       return (
-        <div className="space-y-2 w-6">
+        <div className="space-y-2">
           <Dialog>
             <DialogTrigger asChild>
               <Button variant="outline" size="sm">
-                View
+                View Details
               </Button>
             </DialogTrigger>
             <DialogContent className="max-w-4xl max-h-[80vh] overflow-y-auto">
               <DialogHeader>
-                <DialogTitle>{name} - Overview</DialogTitle>
+                <DialogTitle>Day {day} - Highligts / Cities</DialogTitle>
               </DialogHeader>
-              <div
-                className="prose prose-sm max-w-none"
-                dangerouslySetInnerHTML={{ __html: overview }}
-              />
+              <div className="flex flex-col gap-4">
+                <ShowData
+                  title="Highlights"
+                  data={(row?.original?.highlights as string[]) ?? []}
+                  id="hlid"
+                />
+                <ShowData
+                  title="Cities"
+                  data={(row?.original?.cities as string[]) ?? []}
+                  id="cid"
+                />
+              </div>
             </DialogContent>
           </Dialog>
         </div>
@@ -140,12 +113,11 @@ export const columns: ColumnDef<Destination>[] = [
     },
   },
   {
-    accessorKey: "description",
-    header: "Description",
+    accessorKey: "details",
+    header: "Details",
     cell: ({ row }) => {
-      const overview = row.getValue("description") as string;
-      const name = row.getValue("name") as string;
-
+      const details = row.getValue("details") as string;
+      const name = row.getValue("day") as string;
       return (
         <div className="space-y-2 w-6">
           <Dialog>
@@ -156,11 +128,11 @@ export const columns: ColumnDef<Destination>[] = [
             </DialogTrigger>
             <DialogContent className="max-w-4xl max-h-[80vh] overflow-y-auto">
               <DialogHeader>
-                <DialogTitle>{name} - Description</DialogTitle>
+                <DialogTitle>Day {name} - Overview</DialogTitle>
               </DialogHeader>
               <div
                 className="prose prose-sm max-w-none"
-                dangerouslySetInnerHTML={{ __html: overview }}
+                dangerouslySetInnerHTML={{ __html: details }}
               />
             </DialogContent>
           </Dialog>
@@ -180,8 +152,8 @@ export const columns: ColumnDef<Destination>[] = [
     id: "actions",
     enableHiding: false,
     cell: ({ row }) => {
-      const destination = row.original;
-      const did = String(destination.did);
+      const itineraries = row.original;
+      const itid = String(itineraries.itid);
       return (
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
@@ -196,13 +168,13 @@ export const columns: ColumnDef<Destination>[] = [
             <DropdownMenuItem>
               <Link
                 className="hover:text-blue-400 font-semibold"
-                href={`/destination/${did}`}
+                href={`/itineraries/${itid}`}
               >
                 Edit
               </Link>
             </DropdownMenuItem>
             <DropdownMenuItem>
-              <DeleteData id={did} model="destinations" />
+              <DeleteData id={itid} model="itineraries" />
             </DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>
@@ -212,17 +184,17 @@ export const columns: ColumnDef<Destination>[] = [
 ];
 
 interface DestinationTableProps {
-  data: Destination[];
+  data: Itinerary[];
   pagination: PaginationProps;
 }
 
-const DestinationTable: FC<DestinationTableProps> = ({ data, pagination }) => {
+const ItineraryTable: FC<DestinationTableProps> = ({ data, pagination }) => {
   return (
     <div className="w-full">
       <CommonTable
         data={data}
         placeholder="Filter by Destination Name"
-        columnName="name"
+        columnName="day"
         columns={columns}
         pagination={pagination}
       />
@@ -230,4 +202,4 @@ const DestinationTable: FC<DestinationTableProps> = ({ data, pagination }) => {
   );
 };
 
-export default DestinationTable;
+export default ItineraryTable;

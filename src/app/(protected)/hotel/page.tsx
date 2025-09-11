@@ -9,7 +9,7 @@ export default async function HotelPage() {
 
   return (
     <>
-      <Heading text="All Hotels" />
+      <Heading text="All Hotels" href="/" />
       <HotelTable data={hotelsData.data} />
     </>
   );

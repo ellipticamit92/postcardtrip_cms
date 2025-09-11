@@ -6,7 +6,7 @@ export const dynamic = "force-dynamic";
 export default async function ExclusionAddPage() {
   return (
     <>
-      <Heading text="Add Exclusion" />
+      <Heading text="Add Exclusion" href="/" />
       <IEHForm type="exclusion" />
     </>
   );

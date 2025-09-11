@@ -9,7 +9,7 @@ export default async function AddCityPage() {
 
   return (
     <>
-      <Heading text="Add New Hotel" />
+      <Heading text="Add New Hotel" href="/" />
       <HotelForm cities={citits.data} />
     </>
   );

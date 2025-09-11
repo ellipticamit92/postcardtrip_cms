@@ -15,7 +15,7 @@ export default async function EditHotelPage({
 
   return (
     <>
-      <Heading text="Edit Hotel" subText={name} />
+      <Heading text="Edit Hotel" subText={name} href="/" />
     </>
   );
 }

@@ -8,7 +8,7 @@ export default async function AddCityPage() {
   const destinationsData = await DestinationService.getNameId();
   return (
     <>
-      <Heading text="Add New City" />
+      <Heading text="Add New City" href="/" />
       <CityForm destinations={destinationsData?.data} />
     </>
   );

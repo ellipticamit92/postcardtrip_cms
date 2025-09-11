@@ -26,7 +26,7 @@ export default async function EditTourPage({
 
   return (
     <>
-      <Heading text="Edit Destination" subText={text} />
+      <Heading text="Edit Destination" subText={text} href="/" />
       <TourForm initialData={updatedDestination} tourId={id} />
     </>
   );

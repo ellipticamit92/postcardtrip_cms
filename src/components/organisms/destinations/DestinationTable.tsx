@@ -1,32 +1,31 @@
 "use client";
 
-import { Itinerary, PaginationProps } from "@/types/type";
+import { Destination, PaginationProps } from "@/types/type";
 import { ColumnDef } from "@tanstack/react-table";
-import { Checkbox } from "../ui/checkbox";
 import { ArrowUpDown, MoreHorizontal } from "lucide-react";
-import { Button } from "../ui/button";
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuLabel,
-  DropdownMenuSeparator,
-  DropdownMenuTrigger,
-} from "../ui/dropdown-menu";
 import { FC } from "react";
-import CommonTable from "../molecules/CommonTable";
+import CommonTable from "../../molecules/CommonTable";
 import Link from "next/link";
-import DeleteData from "./DeleteData";
+import DeleteData from "../DeleteData";
+import { Button } from "@/components/ui/button";
 import {
   Dialog,
   DialogContent,
   DialogHeader,
   DialogTitle,
   DialogTrigger,
-} from "../ui/dialog";
-import ShowData from "../molecules/ShowData";
+} from "@/components/ui/dialog";
+import { Checkbox } from "@radix-ui/react-checkbox";
+import {
+  DropdownMenu,
+  DropdownMenuTrigger,
+  DropdownMenuContent,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuItem,
+} from "@radix-ui/react-dropdown-menu";
 
-export const columns: ColumnDef<Itinerary>[] = [
+export const columns: ColumnDef<Destination>[] = [
   {
     id: "select",
     header: ({ table }) => (
@@ -50,74 +49,74 @@ export const columns: ColumnDef<Itinerary>[] = [
     enableHiding: false,
   },
   {
-    accessorKey: "day",
+    accessorKey: "name",
     header: ({ column }) => (
       <Button
         variant="ghost"
         className="!p-0"
         onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
       >
-        Day <ArrowUpDown className="ml-2 h-4 w-4" />
+        Name <ArrowUpDown className="ml-2 h-4 w-4" />
       </Button>
     ),
   },
   {
-    accessorKey: "title",
-    header: "Title",
+    accessorKey: "heading",
+    header: "Heading",
     cell: ({ row }) => (
-      <div className="w-24 overflow-hidden">{row.getValue("title")}</div>
+      <div className="w-24 overflow-hidden">{row.getValue("heading")}</div>
     ),
     size: 50,
   },
   {
-    accessorKey: "packageId",
-    header: "Package Name",
+    accessorKey: "country",
+    header: "Country",
     cell: ({ row }) => (
-      <div className="overflow-hidden">{row?.original?.package?.name}</div>
+      <div className="w-16 overflow-hidden">{row.getValue("country")}</div>
+    ),
+    size: 20,
+  },
+  {
+    accessorKey: "basePrice",
+    header: "B Price",
+    cell: ({ row }) => <div>{row.getValue("basePrice")}</div>,
+  },
+  {
+    accessorKey: "originalPrice",
+    header: "O Price",
+    cell: ({ row }) => <div>{row.getValue("originalPrice")}</div>,
+  },
+  {
+    accessorKey: "rating",
+    header: "Rating",
+    cell: ({ row }) => <div>{row.getValue("rating")}</div>,
+  },
+  {
+    accessorKey: "imageUrl",
+    header: "imageUrl",
+    cell: ({ row }) => (
+      <div>
+        <a
+          className="text-blue-700 hover:underline"
+          href={row.getValue("imageUrl")}
+          target="_blank"
+        >
+          See Image
+        </a>
+      </div>
     ),
   },
   {
-    accessorKey: "highlights",
-    header: "Highlights / Cities",
-    cell: ({ row }) => {
-      const day = row.getValue("day") as string;
-
-      return (
-        <div className="space-y-2">
-          <Dialog>
-            <DialogTrigger asChild>
-              <Button variant="outline" size="sm">
-                View Details
-              </Button>
-            </DialogTrigger>
-            <DialogContent className="max-w-4xl max-h-[80vh] overflow-y-auto">
-              <DialogHeader>
-                <DialogTitle>Day {day} - Highligts / Cities</DialogTitle>
-              </DialogHeader>
-              <div className="flex flex-col gap-4">
-                <ShowData
-                  title="Highlights"
-                  data={(row?.original?.highlights as string[]) ?? []}
-                  id="hlid"
-                />
-                <ShowData
-                  title="Cities"
-                  data={(row?.original?.cities as string[]) ?? []}
-                  id="cid"
-                />
-              </div>
-            </DialogContent>
-          </Dialog>
-        </div>
-      );
-    },
+    accessorKey: "trending",
+    header: "Trending",
+    cell: ({ row }) => <div>{row.getValue("trending")?.toString()}</div>,
   },
   {
-    accessorKey: "details",
-    header: "Details",
+    accessorKey: "overview",
+    header: "Overview",
     cell: ({ row }) => {
-      const details = row.getValue("details") as string;
-      const name = row.getValue("day") as string;
+      const overview = row.getValue("overview") as string;
+      const name = row.getValue("name") as string;
       return (
         <div className="space-y-2 w-6">
           <Dialog>
@@ -128,11 +127,40 @@ export const columns: ColumnDef<Itinerary>[] = [
             </DialogTrigger>
             <DialogContent className="max-w-4xl max-h-[80vh] overflow-y-auto">
               <DialogHeader>
-                <DialogTitle>Day {name} - Overview</DialogTitle>
+                <DialogTitle>{name} - Overview</DialogTitle>
               </DialogHeader>
               <div
                 className="prose prose-sm max-w-none"
-                dangerouslySetInnerHTML={{ __html: details }}
+                dangerouslySetInnerHTML={{ __html: overview }}
+              />
+            </DialogContent>
+          </Dialog>
+        </div>
+      );
+    },
+  },
+  {
+    accessorKey: "description",
+    header: "Description",
+    cell: ({ row }) => {
+      const overview = row.getValue("description") as string;
+      const name = row.getValue("name") as string;
+
+      return (
+        <div className="space-y-2 w-6">
+          <Dialog>
+            <DialogTrigger asChild>
+              <Button variant="outline" size="sm">
+                View
+              </Button>
+            </DialogTrigger>
+            <DialogContent className="max-w-4xl max-h-[80vh] overflow-y-auto">
+              <DialogHeader>
+                <DialogTitle>{name} - Description</DialogTitle>
+              </DialogHeader>
+              <div
+                className="prose prose-sm max-w-none"
+                dangerouslySetInnerHTML={{ __html: overview }}
               />
             </DialogContent>
           </Dialog>
@@ -152,8 +180,8 @@ export const columns: ColumnDef<Itinerary>[] = [
     id: "actions",
     enableHiding: false,
     cell: ({ row }) => {
-      const itineraries = row.original;
-      const itid = String(itineraries.itid);
+      const destination = row.original;
+      const did = String(destination.did);
       return (
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
@@ -168,13 +196,13 @@ export const columns: ColumnDef<Itinerary>[] = [
             <DropdownMenuItem>
               <Link
                 className="hover:text-blue-400 font-semibold"
-                href={`/itineraries/${itid}`}
+                href={`/destination/${did}`}
               >
                 Edit
               </Link>
             </DropdownMenuItem>
             <DropdownMenuItem>
-              <DeleteData id={itid} model="itineraries" />
+              <DeleteData id={did} model="destinations" />
             </DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>
@@ -184,17 +212,17 @@ export const columns: ColumnDef<Itinerary>[] = [
 ];
 
 interface DestinationTableProps {
-  data: Itinerary[];
+  data: Destination[];
   pagination: PaginationProps;
 }
 
-const ItineraryTable: FC<DestinationTableProps> = ({ data, pagination }) => {
+const DestinationTable: FC<DestinationTableProps> = ({ data, pagination }) => {
   return (
-    <div className="w-full">
+    <div className="w-full bg-white px-3">
       <CommonTable
         data={data}
         placeholder="Filter by Destination Name"
-        columnName="day"
+        columnName="name"
         columns={columns}
         pagination={pagination}
       />
@@ -202,4 +230,4 @@ const ItineraryTable: FC<DestinationTableProps> = ({ data, pagination }) => {
   );
 };
 
-export default ItineraryTable;
+export default DestinationTable;

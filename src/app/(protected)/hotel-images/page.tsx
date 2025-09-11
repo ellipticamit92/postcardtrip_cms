@@ -6,7 +6,7 @@ export default async function HotelImagePage() {
   const hotelImageData = await HotelImageService.getAll();
   return (
     <>
-      <Heading text="All Hotel Images" />
+      <Heading text="All Hotel Images" href="/" />
       <HotelImageTable data={hotelImageData.data} />
     </>
   );

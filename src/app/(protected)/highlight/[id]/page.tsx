@@ -23,7 +23,7 @@ export default async function HighlightEditPage({
   };
   return (
     <>
-      <Heading text="Edit highlight" />
+      <Heading text="Edit highlight" href="/" />
       <IEHForm type="highlight" initialData={updateData} id={highlightId} />
     </>
   );

@@ -6,7 +6,7 @@ export default async function AddHotelImagesPage() {
   const hotelsData = await HotelService.getNameId();
   return (
     <>
-      <Heading text="Add Hotel Image" />
+      <Heading text="Add Hotel Image" href="/" />
       <HotelImageForm hotels={hotelsData.data} />
     </>
   );
