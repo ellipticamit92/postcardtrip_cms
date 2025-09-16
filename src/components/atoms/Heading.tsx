@@ -7,9 +7,10 @@ export interface HeadingProps {
   text: string;
   subText?: string;
   href: string;
+  Icon?: React.ElementType;
 }
 
-export function Heading({ text, subText, href }: HeadingProps) {
+export function Heading({ text, subText, href, Icon }: HeadingProps) {
   return (
     <>
       <div className="flex items-center gap-4">
@@ -20,9 +21,9 @@ export function Heading({ text, subText, href }: HeadingProps) {
         </Link>
 
         <div className="flex items-center gap-3">
-          {/* <MapPin className="h-6 w-6 text-primary" /> */}
+          {Icon && <Icon className="h-4 w-4 text-primary" />}
           <div className="text-2xl font-bold flex gap-2 items-end">
-            <h2 className="text-xl font-semibold">{text}</h2>
+            <h2 className="text3-xl font-semibold">{text}</h2>
             {subText && <h5 className="text-sm"> - {subText}</h5>}
           </div>
         </div>

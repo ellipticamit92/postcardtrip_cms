@@ -1,10 +1,10 @@
 import React from "react";
 import { Button } from "../ui/button";
+import { useRouter, useSearchParams } from "next/navigation";
 
 interface PaginationProps {
   currentPage: number;
-  totalPages?: number;
-  onPageChange: (page: number) => void;
+  totalPages: number;
   hasNext?: boolean;
   hasPrev?: boolean;
   limit?: number;
@@ -13,26 +13,44 @@ interface PaginationProps {
 const Pagination: React.FC<PaginationProps> = ({
   currentPage,
   totalPages,
-  onPageChange,
   hasNext,
   hasPrev,
 }) => {
+  const router = useRouter();
+  const searchParams = useSearchParams();
+
+  const goToPage = (page: number) => {
+    const params = new URLSearchParams(searchParams.toString());
+    params.set("page", String(page));
+    router.push(`?${params.toString()}`);
+  };
+
   return (
-    <div className="flex items-center space-x-2">
+    <div className="flex items-center space-x-1">
       <Button
-        onClick={() => onPageChange(currentPage - 1)}
+        onClick={() => goToPage(currentPage - 1)}
         disabled={!hasPrev}
         variant="outline"
+        size="sm"
       >
         Previous
       </Button>
 
       <div>
-        Page {currentPage} of {totalPages}
+        {Array.from({ length: totalPages }, (_, i) => i + 1).map((page) => (
+          <Button
+            key={page}
+            onClick={() => goToPage(page)}
+            className={`${page === currentPage ? "underline font-bold" : ""}`}
+            variant="link"
+          >
+            {page}
+          </Button>
+        ))}
       </div>
 
       <Button
-        onClick={() => onPageChange(currentPage + 1)}
+        onClick={() => goToPage(currentPage + 1)}
         disabled={!hasNext}
         variant="outline"
       >

@@ -1,10 +1,13 @@
 "use client";
 
-import { City } from "@/types/type";
+import { format } from "date-fns";
+import { IEH, PaginationProps } from "@/types/type";
 import { ColumnDef } from "@tanstack/react-table";
-import { Checkbox } from "../ui/checkbox";
 import { ArrowUpDown, MoreHorizontal } from "lucide-react";
-import { Button } from "../ui/button";
+import { FC } from "react";
+import Link from "next/link";
+import { Checkbox } from "@/components/ui/checkbox";
+import { Button } from "@/components/ui/button";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -12,20 +15,11 @@ import {
   DropdownMenuLabel,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
-} from "../ui/dropdown-menu";
-import { FC } from "react";
-import CommonTable from "../molecules/CommonTable";
-import Link from "next/link";
-import DeleteData from "./DeleteData";
-import {
-  Dialog,
-  DialogContent,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
-} from "../ui/dialog";
+} from "@/components/ui/dropdown-menu";
+import CommonTable from "@/components/molecules/CommonTable";
+import DeleteData from "../DeleteData";
 
-export const columns: ColumnDef<City>[] = [
+export const columns: ColumnDef<IEH>[] = [
   {
     id: "select",
     header: ({ table }) => (
@@ -49,52 +43,33 @@ export const columns: ColumnDef<City>[] = [
     enableHiding: false,
   },
   {
-    accessorKey: "name",
+    accessorKey: "text",
     header: ({ column }) => (
       <Button
         variant="ghost"
         className="!p-0"
         onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
       >
-        City Name <ArrowUpDown className="ml-2 h-4 w-4" />
+        Name <ArrowUpDown className="ml-2 h-4 w-4" />
       </Button>
     ),
   },
   {
-    accessorKey: "description",
-    header: "City Description",
+    accessorKey: "createdAt",
+    header: "Created",
     cell: ({ row }) => {
-      const overview = row.getValue("description") as string;
-      const name = row.getValue("name") as string;
-
-      return (
-        <div className="space-y-2">
-          <Dialog>
-            <DialogTrigger asChild>
-              <Button variant="outline" size="sm">
-                View
-              </Button>
-            </DialogTrigger>
-            <DialogContent className="max-w-4xl max-h-[80vh] overflow-y-auto">
-              <DialogHeader>
-                <DialogTitle>{name} - Overview</DialogTitle>
-              </DialogHeader>
-              <div
-                className="prose prose-sm max-w-none"
-                dangerouslySetInnerHTML={{ __html: overview }}
-              />
-            </DialogContent>
-          </Dialog>
-        </div>
-      );
+      const value = row.getValue("createdAt");
+      return value ? format(new Date(value as any), "dd/MM/yyyy") : null;
     },
   },
   {
     id: "actions",
     enableHiding: false,
     cell: ({ row }) => {
-      const city = row.original;
-      const cid = String(city.cid);
+      const ieh = row.original;
+      const id = String(ieh.id).trim();
+      const deleteId = `${ieh.id}_${ieh?.type}`;
+      const url = `/${ieh?.type}/${id}`;
       return (
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
@@ -105,22 +80,19 @@ export const columns: ColumnDef<City>[] = [
           </DropdownMenuTrigger>
           <DropdownMenuContent align="end">
             <DropdownMenuLabel>Actions</DropdownMenuLabel>
-            <DropdownMenuItem
-              onClick={() => navigator.clipboard.writeText(cid)}
-            >
+            <DropdownMenuItem onClick={() => navigator.clipboard.writeText(id)}>
               Copy ID
             </DropdownMenuItem>
             <DropdownMenuSeparator />
             <DropdownMenuItem>
-              <Link
-                className="hover:text-blue-400 font-semibold"
-                href={`/city/${cid}`}
-              >
+              <Link className="hover:text-blue-400 font-semibold" href={url}>
                 Edit
               </Link>
             </DropdownMenuItem>
             <DropdownMenuItem>
-              <DeleteData id={cid} model="cities" />
+              {ieh?.type && (
+                <DeleteData id={deleteId} model={ieh.type} ieh={true} />
+              )}
             </DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>
@@ -129,24 +101,23 @@ export const columns: ColumnDef<City>[] = [
   },
 ];
 
-interface CityTableProps {
-  data: City[];
-  totalCount?: number;
-  totalPages?: number;
-  currentPage?: number;
+interface IEHTableProps {
+  data: IEH[];
+  pagination: PaginationProps;
 }
 
-const CityTable: FC<CityTableProps> = ({ data }) => {
+const IEHTable: FC<IEHTableProps> = ({ data, pagination }) => {
   return (
     <div className="w-full">
       <CommonTable
         data={data}
-        placeholder="Filter by City Name"
-        columnName="name"
+        placeholder="Filter by Text"
+        columnName="text"
         columns={columns}
+        pagination={pagination}
       />
     </div>
   );
 };
 
-export default CityTable;
+export default IEHTable;

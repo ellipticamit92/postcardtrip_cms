@@ -21,7 +21,7 @@ const PageHeader: FC<PageHeaderProps> = ({
     <div className="flex items-center justify-between">
       <div>
         <h1 className="text-3xl font-bold text-foreground flex items-center gap-3">
-          <Icon className="h-8 w-8 text-primary" />
+          <Icon className="h-7 w-7 text-primary" />
           {title}
         </h1>
         <p className="text-muted-foreground mt-1">{description}</p>

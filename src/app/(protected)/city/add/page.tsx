@@ -1,5 +1,5 @@
 import { Heading } from "@/components/atoms/Heading";
-import { CityForm } from "@/components/organisms/CityForm";
+import { CityForm } from "@/components/organisms/city/CityForm";
 import DestinationService from "@/services/destination.service";
 
 export const dynamic = "force-dynamic";

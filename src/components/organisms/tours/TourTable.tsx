@@ -3,9 +3,20 @@
 import { format } from "date-fns";
 import { PaginationProps, Tours } from "@/types/type";
 import { ColumnDef } from "@tanstack/react-table";
-import { Checkbox } from "../ui/checkbox";
 import { ArrowUpDown, MoreHorizontal } from "lucide-react";
-import { Button } from "../ui/button";
+import { FC } from "react";
+import Link from "next/link";
+import { Checkbox } from "@/components/ui/checkbox";
+import { Button } from "@/components/ui/button";
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog";
+import CommonTable from "@/components/molecules/CommonTable";
+import DeleteData from "../DeleteData";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -13,18 +24,7 @@ import {
   DropdownMenuLabel,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
-} from "../ui/dropdown-menu";
-import { FC } from "react";
-import CommonTable from "../molecules/CommonTable";
-import Link from "next/link";
-import DeleteData from "./DeleteData";
-import {
-  Dialog,
-  DialogContent,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
-} from "../ui/dialog";
+} from "@/components/ui/dropdown-menu";
 
 export const columns: ColumnDef<Tours>[] = [
   {

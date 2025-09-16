@@ -141,6 +141,7 @@ model Package {
   highlights    Highlight[]
   inclusions    Inclusion[]
   exclusions    Exclusion[]
+  reviews       Reviews[]
   updatedAt     DateTime  @updatedAt
   createdAt     DateTime  @default(now())
 }
@@ -205,4 +206,21 @@ model Tours {
   packages    Package[] 
   updatedAt   DateTime  @updatedAt
   createdAt   DateTime  @default(now())
+}
+
+model Reviews {
+  id        String   @id @default(cuid())
+  username  String   @db.VarChar(100)
+  places    String   @db.VarChar(255)
+  review    String   @db.Text
+  rating    Int      @default(1)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  // Relations
+  packageId String
+  package   Package @relation(fields: [packageId], references: [id], onDelete: Cascade)
+
+  destinationId String
+  destination   Destination  @relation(fields: [destinationId], references: [did])  
 }

@@ -5,11 +5,11 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Button } from "@/components/ui/button";
 import { toast } from "sonner";
-import { FormInput } from "../atoms/FormInput";
-import { Form } from "../ui/form";
 import { Loader2 } from "lucide-react";
 import { useIEH } from "@/hooks/use-ieh";
 import { IEHType } from "@/types/type";
+import { Form } from "@/components/ui/form";
+import { FormInput } from "@/components/atoms/FormInput";
 
 const scheama = z.object({
   text: z.string().min(2, "Text is required"),

@@ -4,16 +4,16 @@ import React from "react";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Button } from "@/components/ui/button";
-import { FormInput } from "../atoms/FormInput";
 import { useFieldArray, useForm } from "react-hook-form";
 import { Itinerary, Options } from "@/types/type";
-import { Form } from "../ui/form";
 import { useItineraries } from "@/hooks/use-itineraries";
-import { Loader2 } from "lucide-react";
-import { FormSelect } from "../atoms/FormSelect";
-import { FormRichText } from "../atoms/FormRichText";
-import { FormMultiSelect } from "../atoms/FormMultiSelect";
 import { toast } from "sonner";
+import { Form } from "@/components/ui/form";
+import { FormSelect } from "@/components/atoms/FormSelect";
+import { FormMultiSelect } from "@/components/atoms/FormMultiSelect";
+import { FormRichText } from "@/components/atoms/FormRichText";
+import { FormInput } from "@/components/atoms/FormInput";
+import { Loader2 } from "lucide-react";
 
 const daySchema = z.object({
   day: z.number().min(1, "Day number required"),

@@ -5,11 +5,11 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Button } from "@/components/ui/button";
 import { toast } from "sonner";
-import { FormInput } from "../atoms/FormInput";
-import { Form } from "../ui/form";
 import { Loader2 } from "lucide-react";
-import { FormTextarea } from "../atoms/FormTextarea";
 import { useTours } from "@/hooks/use-tours";
+import { Form } from "@/components/ui/form";
+import { FormInput } from "@/components/atoms/FormInput";
+import { FormTextarea } from "@/components/atoms/FormTextarea";
 
 const tourSchema = z.object({
   text: z.string().min(2, "Tour name is required"),

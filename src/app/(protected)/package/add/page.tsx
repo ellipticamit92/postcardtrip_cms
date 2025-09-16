@@ -1,5 +1,5 @@
 import { Heading } from "@/components/atoms/Heading";
-import { PackageForm } from "@/components/organisms/PackageForm";
+import { PackageForm } from "@/components/organisms/packages/PackageForm";
 import CityService from "@/services/city.service";
 import DestinationService from "@/services/destination.service";
 import ExclusionService from "@/services/exclusion.service";

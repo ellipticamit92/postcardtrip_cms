@@ -1,5 +1,5 @@
 import { Heading } from "@/components/atoms/Heading";
-import { DestinationForm } from "@/components/organisms/DestinationForm";
+import { DestinationForm } from "@/components/organisms/destinations/DestinationForm";
 import DestinationService from "@/services/destination.service";
 
 export const dynamic = "force-dynamic";
@@ -43,7 +43,6 @@ export default async function EditDestinationPage({
   return (
     <>
       <Heading text="Edit Destination" subText={name} href="/destination" />
-
       <DestinationForm initialData={updatedDestination} destinationId={id} />
     </>
   );

@@ -6,17 +6,17 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { Form } from "@/components/ui/form";
 import { FormInput } from "@/components/atoms/FormInput";
 import { Button } from "@/components/ui/button";
-import { FormSelect } from "../atoms/FormSelect";
 import { Loader2 } from "lucide-react";
-import { FormRichText } from "../atoms/FormRichText";
 import { toast } from "sonner";
-import ImageUploader from "../atoms/ImageUploader";
 import { usePackages } from "@/hooks/use-packages";
-import { FormCheckbox } from "../atoms/FormCheckbox";
-import { FormTextarea } from "../atoms/FormTextarea";
-import { FormMultiSelect } from "../atoms/FormMultiSelect";
-import { Options } from "@/types/type";
 import { numberOptions } from "@/lib/helper";
+import { FormCheckbox } from "@/components/atoms/FormCheckbox";
+import { FormMultiSelect } from "@/components/atoms/FormMultiSelect";
+import { FormRichText } from "@/components/atoms/FormRichText";
+import { FormSelect } from "@/components/atoms/FormSelect";
+import { FormTextarea } from "@/components/atoms/FormTextarea";
+import ImageUploader from "@/components/atoms/ImageUploader";
+import { Options } from "@/types/type";
 
 const schema = z.object({
   name: z.string().min(1),

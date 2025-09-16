@@ -218,7 +218,7 @@ interface DestinationTableProps {
 
 const DestinationTable: FC<DestinationTableProps> = ({ data, pagination }) => {
   return (
-    <div className="w-full bg-white px-3">
+    <div className="w-full">
       <CommonTable
         data={data}
         placeholder="Filter by Destination Name"

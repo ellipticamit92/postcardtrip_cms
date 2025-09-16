@@ -57,8 +57,10 @@ const CommonTable = ({
     },
   });
 
+  const handlePageChange = (page: number) => {};
+
   return (
-    <div className="w-full">
+    <div className="w-full bg-white p-4 py-0">
       <CommonTableSearch
         table={table}
         columnName={columnName}

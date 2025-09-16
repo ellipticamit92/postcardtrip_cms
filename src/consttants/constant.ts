@@ -18,6 +18,7 @@ import {
   Home,
   MapPinHouseIcon,
   Package,
+  PencilIcon,
 } from "lucide-react";
 
 export const SIDEBAR_URLS = {
@@ -58,6 +59,16 @@ export const SIDEBAR_URLS = {
       title: "Packages",
       url: "/package",
       icon: Package,
+    },
+    {
+      title: "Reviews",
+      url: "/reviews",
+      icon: PencilIcon,
+    },
+    {
+      title: "Cities",
+      url: "/city",
+      icon: Building,
     },
     // {
     //   title: "Destination",
@@ -150,23 +161,23 @@ export const SIDEBAR_URLS = {
         },
       ],
     },
-    {
-      title: "Cities",
-      url: "#",
-      icon: Building,
-      items: [
-        {
-          title: "View Cities",
-          url: "/city",
-          icon: Eye,
-        },
-        {
-          title: "Add City",
-          url: "/city/add",
-          icon: Plus,
-        },
-      ],
-    },
+    // {
+    //   title: "Cities",
+    //   url: "#",
+    //   icon: Building,
+    //   items: [
+    //     {
+    //       title: "View Cities",
+    //       url: "/city",
+    //       icon: Eye,
+    //     },
+    //     {
+    //       title: "Add City",
+    //       url: "/city/add",
+    //       icon: Plus,
+    //     },
+    //   ],
+    // },
     {
       title: "Itineraries",
       url: "#",

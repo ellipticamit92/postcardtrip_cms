@@ -5,12 +5,12 @@ import { Controller, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Button } from "@/components/ui/button";
 import { toast } from "sonner";
-import { FormInput } from "../atoms/FormInput";
-import { Form } from "../ui/form";
 import { Loader2 } from "lucide-react";
-import { FormRichText } from "../atoms/FormRichText";
 import { useCities } from "@/hooks/use-cities";
-import ImageUploader from "../atoms/ImageUploader";
+import { Form } from "@/components/ui/form";
+import { FormInput } from "@/components/atoms/FormInput";
+import { FormRichText } from "@/components/atoms/FormRichText";
+import ImageUploader from "@/components/atoms/ImageUploader";
 
 const citySchema = z.object({
   name: z.string().min(2, "City name is required"),

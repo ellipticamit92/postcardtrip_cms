@@ -20,6 +20,10 @@ export const CommonTableFooter: FC<CommonTableFooterProps> = ({
   hasNext,
   hasPrev,
 }) => {
+  const handlePageChange = (page: number) => {
+    console.log("page number");
+  };
+
   return (
     <div className="flex items-center justify-between space-x-2 py-4 w-full">
       <div className="text-muted-foreground flex-1 text-sm">
@@ -29,12 +33,12 @@ export const CommonTableFooter: FC<CommonTableFooterProps> = ({
       <Pagination
         totalPages={totalPages}
         currentPage={page ?? 1}
-        onPageChange={() => {}}
+        onPageChange={handlePageChange}
         hasNext={hasNext}
         hasPrev={hasPrev}
         limit={limit}
       />
-      <div className="space-x-2">
+      {/* <div className="space-x-2">
         <Button
           variant="outline"
           size="sm"
@@ -51,7 +55,7 @@ export const CommonTableFooter: FC<CommonTableFooterProps> = ({
         >
           Next
         </Button>
-      </div>
+      </div> */}
     </div>
   );
 };

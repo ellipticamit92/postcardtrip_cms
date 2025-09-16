@@ -1,5 +1,5 @@
 import { Heading } from "@/components/atoms/Heading";
-import IEHTable from "@/components/organisms/IEHTable";
+import IEHTable from "@/components/organisms/IEH/IEHTable";
 import IEHService from "@/services/ieh.service";
 
 export const dynamic = "force-dynamic";
@@ -28,7 +28,7 @@ export default async function HighlightPage() {
 
   return (
     <>
-      <Heading text="All Highlight" href="/" />
+      <Heading text="All Highlight" href="/highlight" />
       {updateData && <IEHTable data={updateData} pagination={pagination} />}
     </>
   );
