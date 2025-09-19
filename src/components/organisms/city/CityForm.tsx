@@ -11,6 +11,7 @@ import { Form } from "@/components/ui/form";
 import { FormInput } from "@/components/atoms/FormInput";
 import { FormRichText } from "@/components/atoms/FormRichText";
 import ImageUploader from "@/components/atoms/ImageUploader";
+import MyForm from "../MyForm";
 
 const citySchema = z.object({
   name: z.string().min(2, "City name is required"),
@@ -66,55 +67,55 @@ export function CityForm({ destinations, initialData, cityId }: CityFormProps) {
   };
 
   return (
-    <Form {...form}>
-      <form onSubmit={handleSubmit(onSubmit)} className="space-y-4 mt-4">
-        <div className="grid grid-cols-3 gap-4 mb-6">
-          <FormInput
-            label="City Name"
-            name="name"
-            placeholder="Enter city name"
-            control={control}
-          />
-          {/* <FormSelect
+    <MyForm>
+      <Form {...form}>
+        <form onSubmit={handleSubmit(onSubmit)} className="space-y-4 mt-4">
+          <div className="grid grid-cols-3 gap-4 mb-6">
+            <div className="col-span-3">
+              <FormInput
+                label="City Name"
+                name="name"
+                placeholder="Enter city name"
+                control={control}
+              />
+            </div>
+
+            {/* <FormSelect
             label="Destination"
             name="destinationId"
             control={control}
             options={destinations}
             placeholder="Select city"
           /> */}
-          <FormInput
-            disabled
-            name="imageUrl"
-            control={control}
-            label="Image URL"
-          />
-          <div className="col-span-2">
-            <FormRichText
-              label="City Description"
-              name="description"
-              placeholder="Describe the city"
+
+            <div className="col-span-2">
+              <FormRichText
+                label="City Description"
+                name="description"
+                placeholder="Describe the city"
+                control={control}
+                height={260}
+              />
+            </div>
+            <Controller
               control={control}
-              height={260}
+              name="imageUrl"
+              render={({ field }) => (
+                <ImageUploader
+                  value={field.value}
+                  onChange={field.onChange}
+                  label="Upload City Image"
+                />
+              )}
             />
           </div>
-          <Controller
-            control={control}
-            name="imageUrl"
-            render={({ field }) => (
-              <ImageUploader
-                value={field.value}
-                onChange={field.onChange}
-                label="Upload City Image"
-              />
-            )}
-          />
-        </div>
 
-        <Button type="submit" disabled={loading}>
-          {loading && <Loader2 className="animate-spin mr-2" />}
-          {initialData ? "Update" : "Add"} City
-        </Button>
-      </form>
-    </Form>
+          <Button type="submit" disabled={loading}>
+            {loading && <Loader2 className="animate-spin mr-2" />}
+            {initialData ? "Update" : "Add"} City
+          </Button>
+        </form>
+      </Form>
+    </MyForm>
   );
 }

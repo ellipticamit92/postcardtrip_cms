@@ -4,6 +4,8 @@ import HotelService from "@/services/hotel.service";
 import PackageService from "@/services/package.service";
 import PackagePricesService from "@/services/packagePrices.service";
 
+export const dynamic = "force-dynamic";
+
 export default async function EditHotelPricePage({
   params,
 }: {

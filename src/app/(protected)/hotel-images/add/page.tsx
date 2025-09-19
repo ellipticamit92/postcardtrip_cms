@@ -2,6 +2,8 @@ import { Heading } from "@/components/atoms/Heading";
 import { HotelImageForm } from "@/components/organisms/HotelImageForm";
 import HotelService from "@/services/hotel.service";
 
+export const dynamic = "force-dynamic";
+
 export default async function AddHotelImagesPage() {
   const hotelsData = await HotelService.getNameId();
   return (

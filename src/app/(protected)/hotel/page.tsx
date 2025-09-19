@@ -1,6 +1,7 @@
-import { Heading } from "@/components/atoms/Heading";
-import HotelTable from "@/components/organisms/HotelTable";
+import HotelTable from "@/components/organisms/hotel/HotelTable";
+import PageHeader from "@/components/organisms/PageHeader";
 import HotelService from "@/services/hotel.service";
+import { Hotel } from "lucide-react";
 
 export const dynamic = "force-dynamic";
 
@@ -9,7 +10,12 @@ export default async function HotelPage() {
 
   return (
     <>
-      <Heading text="All Hotels" href="/" />
+      <PageHeader
+        title="Hotel"
+        description="Manage hotel listings and accommodations"
+        Icon={Hotel}
+        href="/hotel/add"
+      />
       <HotelTable data={hotelsData.data} />
     </>
   );

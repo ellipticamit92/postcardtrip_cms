@@ -3,6 +3,8 @@ import { HotelImageForm } from "@/components/organisms/HotelImageForm";
 import HotelService from "@/services/hotel.service";
 import HotelImageService from "@/services/hotelImage.service";
 
+export const dynamic = "force-dynamic";
+
 export default async function EditHotelImagePage({
   params,
 }: {

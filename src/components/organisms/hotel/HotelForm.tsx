@@ -5,13 +5,14 @@ import { Controller, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Button } from "@/components/ui/button";
 import { toast } from "sonner";
-import { FormInput } from "../atoms/FormInput";
-import { FormSelect } from "../atoms/FormSelect";
-import { Form } from "../ui/form";
 import { Loader2 } from "lucide-react";
-import { FormRichText } from "../atoms/FormRichText";
 import { useHotels } from "@/hooks/use-hotels";
-import { StarRating } from "../atoms/StarRating";
+import { Form } from "@/components/ui/form";
+import { FormInput } from "@/components/atoms/FormInput";
+import { FormSelect } from "@/components/atoms/FormSelect";
+import { FormRichText } from "@/components/atoms/FormRichText";
+import { StarRating } from "@/components/atoms/StarRating";
+import MyForm from "../MyForm";
 
 const hotelSchema = z.object({
   name: z.string().min(2, "Hotel name is required"),
@@ -71,47 +72,49 @@ export function HotelForm({ cities, initialData, hotelId }: HotelFormProps) {
   };
 
   return (
-    <Form {...form}>
-      <form onSubmit={handleSubmit(onSubmit)} className="space-y-4 mt-4">
-        <div className="grid grid-cols-3 gap-4 mb-6">
-          <FormInput
-            label="Hotel Name"
-            name="name"
-            placeholder="Enter hotel name"
-            control={control}
-          />
-          <FormSelect
-            label="City"
-            name="cityId"
-            control={control}
-            options={cities}
-            placeholder="Select City"
-          />
-          <Controller
-            name="starRating"
-            control={control}
-            render={({ field }) => (
-              <StarRating
-                value={field.value}
-                onChange={(val) => field.onChange(val)}
-                label="Hotel Star Rating"
-              />
-            )}
-          />
-        </div>
+    <MyForm>
+      <Form {...form}>
+        <form onSubmit={handleSubmit(onSubmit)} className="space-y-4 mt-4">
+          <div className="grid grid-cols-3 gap-4 mb-6">
+            <FormInput
+              label="Hotel Name"
+              name="name"
+              placeholder="Enter hotel name"
+              control={control}
+            />
+            <FormSelect
+              label="City"
+              name="cityId"
+              control={control}
+              options={cities}
+              placeholder="Select City"
+            />
+            <Controller
+              name="starRating"
+              control={control}
+              render={({ field }) => (
+                <StarRating
+                  value={field.value}
+                  onChange={(val) => field.onChange(val)}
+                  label="Hotel Star Rating"
+                />
+              )}
+            />
+          </div>
 
-        <FormRichText
-          label="Hotel Description"
-          name="description"
-          placeholder="Describe hotel details"
-          control={control}
-        />
+          <FormRichText
+            label="Hotel Description"
+            name="description"
+            placeholder="Describe hotel details"
+            control={control}
+          />
 
-        <Button type="submit" disabled={loading}>
-          {loading && <Loader2 className="animate-spin mr-2" />}
-          {initialData ? "Update" : "Add"} Hotel
-        </Button>
-      </form>
-    </Form>
+          <Button type="submit" disabled={loading}>
+            {loading && <Loader2 className="animate-spin mr-2" />}
+            {initialData ? "Update" : "Add"} Hotel
+          </Button>
+        </form>
+      </Form>
+    </MyForm>
   );
 }

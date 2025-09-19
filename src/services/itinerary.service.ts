@@ -64,7 +64,7 @@ export class ItineraryService {
     try {
       const {
         page = 1,
-        limit = 150,
+        limit = 10,
         packageId,
         day,
         title,
@@ -222,6 +222,150 @@ export class ItineraryService {
       });
     } catch (error) {
       throw new Error(`Failed to search itineraries by title: ${error}`);
+    }
+  }
+
+  /**
+   * Get itineraries grouped by package
+   */
+  static async getGroupedByPackage(
+    options: {
+      packageIds?: number[];
+      includePackage?: boolean;
+    } = {}
+  ) {
+    try {
+      const { packageIds, includePackage = true } = options;
+
+      const where: any = {};
+      if (packageIds?.length) {
+        where.packageId = { in: packageIds };
+      }
+
+      const itineraries = await prisma.itinerary.findMany({
+        where,
+        orderBy: { day: "asc" },
+        include: {
+          package: includePackage
+            ? {
+                select: {
+                  pid: true,
+                  name: true,
+                  destination: {
+                    select: {
+                      name: true,
+                    },
+                  },
+                },
+              }
+            : false,
+        },
+      });
+
+      // Group itineraries by packageId
+      const grouped = itineraries.reduce<Record<number, typeof itineraries>>(
+        (acc, itinerary) => {
+          const key = itinerary.packageId;
+          if (!acc[key]) acc[key] = [];
+          acc[key].push(itinerary);
+          return acc;
+        },
+        {}
+      );
+
+      return grouped;
+    } catch (error) {
+      throw new Error(`Failed to fetch grouped itineraries: ${error}`);
+    }
+  }
+
+  /**
+   * Get all itineraries grouped by their package
+   */
+  static async getGroupedItineraryPackage(
+    options: {
+      page?: number;
+      limit?: number;
+      packageId?: number;
+      day?: number;
+      title?: string;
+      sortBy?: "day" | "title" | "createdAt";
+      sortOrder?: "asc" | "desc";
+    } = {}
+  ) {
+    try {
+      const {
+        page = 1,
+        limit = 10,
+        packageId,
+        day,
+        title,
+        sortBy = "day",
+        sortOrder = "asc",
+      } = options;
+
+      // Filters
+      const where: any = {};
+      if (packageId) where.packageId = packageId;
+      if (day) where.day = day;
+      if (title) where.title = { contains: title, mode: "insensitive" };
+
+      // Count total itineraries for pagination
+      const total = await prisma.itinerary.count({ where });
+
+      // Fetch paginated itineraries
+      const itineraries = await prisma.itinerary.findMany({
+        where,
+        orderBy: { [sortBy]: sortOrder },
+        skip: (page - 1) * limit,
+        take: limit,
+        include: {
+          package: {
+            select: {
+              pid: true,
+              name: true,
+              destination: true,
+            },
+          },
+        },
+      });
+
+      // Group itineraries by packageId
+      const grouped = itineraries.reduce<
+        Record<
+          number,
+          {
+            package: (typeof itineraries)[number]["package"];
+            itineraries: typeof itineraries;
+          }
+        >
+      >((acc, itinerary) => {
+        const pkgId = itinerary.packageId;
+
+        if (!acc[pkgId]) {
+          acc[pkgId] = {
+            package: itinerary.package,
+            itineraries: [],
+          };
+        }
+
+        acc[pkgId].itineraries.push(itinerary);
+        return acc;
+      }, {});
+
+      return {
+        data: grouped,
+        pagination: {
+          page,
+          limit,
+          total,
+          totalPages: Math.ceil(total / limit),
+          hasNext: page * limit < total,
+          hasPrev: page > 1,
+        },
+      };
+    } catch (error) {
+      throw new Error(`Failed to fetch grouped itineraries: ${error}`);
     }
   }
 }

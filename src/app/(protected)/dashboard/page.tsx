@@ -9,8 +9,8 @@ import {
   TrendingUp,
   Star,
 } from "lucide-react";
+import Link from "next/link";
 import React from "react";
-//import { getTodayDetails } from "@/lib/helper";
 
 const stats = [
   { title: "Destinations", count: 24, icon: MapPin, change: "+12%" },
@@ -120,50 +120,50 @@ export default function DashboardPage() {
                 className="w-full justify-start"
                 asChild
               >
-                <a href="/destinations">
+                <Link href="/destination/add">
                   <MapPin className="h-4 w-4" />
                   Add Destination
-                </a>
+                </Link>
               </Button>
               <Button
                 variant="outline"
                 className="w-full justify-start"
                 asChild
               >
-                <a href="/packages">
+                <Link href="/package/add">
                   <Package className="h-4 w-4" />
                   Create Package
-                </a>
+                </Link>
               </Button>
               <Button
                 variant="outline"
                 className="w-full justify-start"
                 asChild
               >
-                <a href="/itineraries">
+                <Link href="/itineraries/add">
                   <MapPin className="h-4 w-4" />
                   Build Itinerary
-                </a>
+                </Link>
               </Button>
               <Button
                 variant="outline"
                 className="w-full justify-start"
                 asChild
               >
-                <a href="/tours">
+                <Link href="/tour/add">
                   <Compass className="h-4 w-4" />
                   Setup Tour
-                </a>
+                </Link>
               </Button>
               <Button
                 variant="outline"
                 className="w-full justify-start"
                 asChild
               >
-                <a href="/hotels">
+                <Link href="/hotel/add">
                   <Building2 className="h-4 w-4" />
                   Add Hotel
-                </a>
+                </Link>
               </Button>
             </CardContent>
           </Card>

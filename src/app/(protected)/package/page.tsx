@@ -1,6 +1,6 @@
-import PageHeader from "@/components/molecules/PageHeader";
 import PackageGrid from "@/components/organisms/packages/PackageGrid";
 import PackageTable from "@/components/organisms/packages/PackageTable";
+import PageHeader from "@/components/organisms/PageHeader";
 import ViewLayout from "@/components/templates/ViewLayout";
 import PackageService from "@/services/package.service";
 import { Package } from "lucide-react";

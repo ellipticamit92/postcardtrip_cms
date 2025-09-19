@@ -39,7 +39,9 @@ const CityCard: FC<CityCardProps> = ({ data, pagination }) => {
                 <div className="flex-1">
                   <CardTitle className="text-xl mb-2">{city.name}</CardTitle>
                   <div className="flex items-center gap-2 mt-3">
-                    <Badge className={getStatusColor("active")}>"active"</Badge>
+                    <Badge className={getStatusColor("active")}>
+                      {'"active"'}
+                    </Badge>
                   </div>
                 </div>
                 <div className="flex gap-1">

@@ -1,5 +1,5 @@
 import { Heading } from "@/components/atoms/Heading";
-import ItinerariesForm from "@/components/organisms/ItinerariesForm";
+import ItinerariesForm from "@/components/organisms/itineraries/ItinerariesForm";
 import CityService from "@/services/city.service";
 import HighlightService from "@/services/highlight.service";
 import PackageService from "@/services/package.service";

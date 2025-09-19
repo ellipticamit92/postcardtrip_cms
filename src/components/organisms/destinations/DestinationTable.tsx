@@ -15,7 +15,6 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
-import { Checkbox } from "@radix-ui/react-checkbox";
 import {
   DropdownMenu,
   DropdownMenuTrigger,
@@ -23,7 +22,8 @@ import {
   DropdownMenuLabel,
   DropdownMenuSeparator,
   DropdownMenuItem,
-} from "@radix-ui/react-dropdown-menu";
+} from "@/components/ui/dropdown-menu";
+import { Checkbox } from "@/components/ui/checkbox";
 
 export const columns: ColumnDef<Destination>[] = [
   {
@@ -66,7 +66,6 @@ export const columns: ColumnDef<Destination>[] = [
     cell: ({ row }) => (
       <div className="w-24 overflow-hidden">{row.getValue("heading")}</div>
     ),
-    size: 50,
   },
   {
     accessorKey: "country",
@@ -74,7 +73,6 @@ export const columns: ColumnDef<Destination>[] = [
     cell: ({ row }) => (
       <div className="w-16 overflow-hidden">{row.getValue("country")}</div>
     ),
-    size: 20,
   },
   {
     accessorKey: "basePrice",
@@ -92,21 +90,6 @@ export const columns: ColumnDef<Destination>[] = [
     cell: ({ row }) => <div>{row.getValue("rating")}</div>,
   },
   {
-    accessorKey: "imageUrl",
-    header: "imageUrl",
-    cell: ({ row }) => (
-      <div>
-        <a
-          className="text-blue-700 hover:underline"
-          href={row.getValue("imageUrl")}
-          target="_blank"
-        >
-          See Image
-        </a>
-      </div>
-    ),
-  },
-  {
     accessorKey: "trending",
     header: "Trending",
     cell: ({ row }) => <div>{row.getValue("trending")?.toString()}</div>,
@@ -118,24 +101,22 @@ export const columns: ColumnDef<Destination>[] = [
       const overview = row.getValue("overview") as string;
       const name = row.getValue("name") as string;
       return (
-        <div className="space-y-2 w-6">
-          <Dialog>
-            <DialogTrigger asChild>
-              <Button variant="outline" size="sm">
-                View
-              </Button>
-            </DialogTrigger>
-            <DialogContent className="max-w-4xl max-h-[80vh] overflow-y-auto">
-              <DialogHeader>
-                <DialogTitle>{name} - Overview</DialogTitle>
-              </DialogHeader>
-              <div
-                className="prose prose-sm max-w-none"
-                dangerouslySetInnerHTML={{ __html: overview }}
-              />
-            </DialogContent>
-          </Dialog>
-        </div>
+        <Dialog>
+          <DialogTrigger asChild>
+            <Button variant="outline" size="xs">
+              View
+            </Button>
+          </DialogTrigger>
+          <DialogContent className="max-w-4xl max-h-[80vh] overflow-y-auto">
+            <DialogHeader>
+              <DialogTitle>{name} - Overview</DialogTitle>
+            </DialogHeader>
+            <div
+              className="prose prose-sm max-w-none"
+              dangerouslySetInnerHTML={{ __html: overview }}
+            />
+          </DialogContent>
+        </Dialog>
       );
     },
   },
@@ -143,39 +124,25 @@ export const columns: ColumnDef<Destination>[] = [
     accessorKey: "description",
     header: "Description",
     cell: ({ row }) => {
-      const overview = row.getValue("description") as string;
+      const desc = row.getValue("description") as string;
       const name = row.getValue("name") as string;
-
       return (
-        <div className="space-y-2 w-6">
-          <Dialog>
-            <DialogTrigger asChild>
-              <Button variant="outline" size="sm">
-                View
-              </Button>
-            </DialogTrigger>
-            <DialogContent className="max-w-4xl max-h-[80vh] overflow-y-auto">
-              <DialogHeader>
-                <DialogTitle>{name} - Description</DialogTitle>
-              </DialogHeader>
-              <div
-                className="prose prose-sm max-w-none"
-                dangerouslySetInnerHTML={{ __html: overview }}
-              />
-            </DialogContent>
-          </Dialog>
-        </div>
+        <Dialog>
+          <DialogTrigger asChild>
+            <Button variant="outline" size="xs">
+              View
+            </Button>
+          </DialogTrigger>
+          <DialogContent className="max-w-4xl max-h-[80vh] overflow-y-auto">
+            <DialogHeader>
+              <DialogTitle>{name} - Description</DialogTitle>
+            </DialogHeader>
+            <div className="prose prose-sm max-w-none">{desc}</div>
+          </DialogContent>
+        </Dialog>
       );
     },
   },
-  // {
-  //   accessorKey: "createdAt",
-  //   header: "Created",
-  //   cell: ({ row }) => {
-  //     const value = row.getValue("createdAt");
-  //     return value ? format(new Date(value as any), "dd/MM/yyyy") : null;
-  //   },
-  // },
   {
     id: "actions",
     enableHiding: false,
@@ -190,12 +157,12 @@ export const columns: ColumnDef<Destination>[] = [
               <MoreHorizontal />
             </Button>
           </DropdownMenuTrigger>
-          <DropdownMenuContent align="end">
+          <DropdownMenuContent align="end" className="w-40">
             <DropdownMenuLabel>Actions</DropdownMenuLabel>
             <DropdownMenuSeparator />
             <DropdownMenuItem>
               <Link
-                className="hover:text-blue-400 font-semibold"
+                className="hover:text-blue-400 font-semibold w-full block"
                 href={`/destination/${did}`}
               >
                 Edit

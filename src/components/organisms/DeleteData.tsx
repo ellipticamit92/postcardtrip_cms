@@ -1,14 +1,17 @@
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
+import { Button } from "../ui/button";
 
 const DeleteData = ({
   model,
   id,
   ieh,
+  isButton,
 }: {
   model: string;
   id: string;
   ieh?: boolean;
+  isButton?: boolean;
 }) => {
   const router = useRouter();
 
@@ -44,6 +47,18 @@ const DeleteData = ({
     }
   };
 
+  if (isButton) {
+    return (
+      <Button
+        variant="destructive"
+        size="xs"
+        onClick={handleDelete}
+        className="text-white"
+      >
+        Delete
+      </Button>
+    );
+  }
   return (
     <span
       className="cursor-pointer font-semibold hover:text-red-500"

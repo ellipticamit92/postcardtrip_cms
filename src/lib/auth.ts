@@ -12,7 +12,7 @@ export const authOptions: AuthOptions = {
         email: { label: "Email", type: "text" },
         password: { label: "Password", type: "password" },
       },
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+       
       async authorize(credentials: any) {
         const user = await prisma.user.findUnique({
           where: { email: credentials?.email },
@@ -43,7 +43,7 @@ export const authOptions: AuthOptions = {
     signIn: "/login",
   },
   callbacks: {
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+     
     async session({ session, token }: { session: any; token: any }) {
       if (token?.sub && session.user) {
         session.user.id = token.sub as string;

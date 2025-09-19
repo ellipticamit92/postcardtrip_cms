@@ -3,6 +3,8 @@ import { PackagePriceForm } from "@/components/organisms/PackagePriceForm";
 import HotelService from "@/services/hotel.service";
 import PackageService from "@/services/package.service";
 
+export const dynamic = "force-dynamic";
+
 export default async function AddHotelPricePage() {
   const hotelData = await HotelService.getNameId();
   const packagesData = await PackageService.getNameId();

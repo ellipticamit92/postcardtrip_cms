@@ -1,15 +1,15 @@
-import PageHeader from "@/components/molecules/PageHeader";
-import DestinationGrid from "@/components/organisms/destinations/DestinationGrid";
-import DestinationTable from "@/components/organisms/destinations/DestinationTable";
+import PageHeader from "@/components/organisms/PageHeader";
+import ReviewsTable from "@/components/organisms/reviews/ReviewsTable";
 import ViewLayout from "@/components/templates/ViewLayout";
-import DestinationService from "@/services/destination.service";
+import ReviewService from "@/services/reviews.service";
 import { PencilIcon } from "lucide-react";
 
 export const dynamic = "force-dynamic";
 
 const ReviewsPage = async () => {
-  const destinationsData = await DestinationService.getAll();
-  const { data, pagination } = destinationsData;
+  const reviewData = await ReviewService.getAll();
+  const { data, pagination } = reviewData;
+
   return (
     <>
       <PageHeader
@@ -21,10 +21,10 @@ const ReviewsPage = async () => {
       <ViewLayout
         data={data ?? []}
         pagination={pagination}
-        filterKey={"name"}
-        GridComponent={DestinationGrid}
-        ListComponent={DestinationGrid}
-        TableComponent={DestinationTable}
+        filterKey={"username"}
+        GridComponent={ReviewsTable}
+        ListComponent={ReviewsTable}
+        TableComponent={ReviewsTable}
       />
     </>
   );

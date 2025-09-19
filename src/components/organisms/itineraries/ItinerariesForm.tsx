@@ -46,9 +46,6 @@ interface ItinerariesFormProps {
 }
 
 export default function ItinerariesForm({
-  initialDays = [
-    { day: 1, title: "", details: "", highlights: [], places: [] },
-  ],
   itineraryId,
   initialData,
   packages,
@@ -87,14 +84,12 @@ export default function ItinerariesForm({
       }
 
       if (!isEditMode) {
-        //reset();
+        reset();
       }
     } catch (err: any) {
       console.error("Error submitting Package", err);
       toast.error(err.message || "Error submitting Package");
     }
-
-    //reset();
   };
 
   // Demo of using your entire atomic inputs for composition
@@ -111,11 +106,11 @@ export default function ItinerariesForm({
           />
         </div>
 
-        <div className="space-y-3">
+        <div className="space-y-3 bg-white">
           {fields.map((field, i) => (
             <div
               key={field.id}
-              className="grid grid-cols-3 gap-4 mb-4 p-2 border-dashed border-3 relative"
+              className="grid grid-cols-3 gap-4 mb-4 p-3 py-4 border-dashed border-3 relative"
             >
               <FormInput
                 control={control}

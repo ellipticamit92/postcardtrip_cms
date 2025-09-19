@@ -1,9 +1,8 @@
 "use client";
 import Image from "next/image";
 import Link from "next/link";
-import { Destination, Package, PaginationProps } from "@/types/type";
+import { Package, PaginationProps } from "@/types/type";
 import { FC } from "react";
-import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
 import {
@@ -24,35 +23,22 @@ interface PackageGridProps {
 const PackageGrid: FC<PackageGridProps> = ({ data, pagination }) => {
   return (
     <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
-      pacakges grid
-      {/* {data.map((destination) => (
+      {data.map((pkg: Package) => (
         <Card
-          key={destination.did}
+          key={pkg.pid}
           className="group hover:shadow-elegant transition-all duration-300 overflow-hidden py-0 gap-3 pb-4"
         >
           <div className="relative overflow-hidden group">
-            {destination?.imageUrl && (
+            {pkg?.imageUrl && (
               <div className="w-full h-64 group-hover:scale-110 transition-transform duration-500">
                 <Image
-                  src={destination?.imageUrl ?? ""}
-                  alt={destination.name}
+                  src={pkg?.imageUrl ?? ""}
+                  alt={pkg.name}
                   fill
                   className="object-cover"
                 />
-            
+
                 <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/20 to-transparent" />
-              </div>
-            )}
-
-            <div className="absolute top-4 left-4 z-10">
-              <Badge className="bg-pink-500 text-white">
-                {destination?.packages?.length} Pacakges
-              </Badge>
-            </div>
-
-            {destination?.trending && (
-              <div className="absolute bottom-4 right-4 z-10">
-                <Badge className="bg-cyan-500 text-white">Trending</Badge>
               </div>
             )}
 
@@ -60,7 +46,7 @@ const PackageGrid: FC<PackageGridProps> = ({ data, pagination }) => {
               <div className="flex items-center gap-1 bg-white/20 backdrop-blur-sm rounded-full px-2 py-1">
                 <Star className="h-3 w-3 fill-yellow-400 text-yellow-400" />
                 <span className="text-xs text-white font-medium">
-                  {destination?.rating}
+                  {/* {pkg?.rating} */}
                 </span>
               </div>
             </div>
@@ -70,18 +56,16 @@ const PackageGrid: FC<PackageGridProps> = ({ data, pagination }) => {
             <CardTitle className="flex items-center justify-between">
               <div className="flex flex-col gap-1">
                 <span className="text-lg">
-                  {destination.name}
+                  {pkg.name}
                   <span className="text-sm font-light italic">
-                    , {destination?.country}
+                    , {pkg?.destination?.country}
                   </span>
                 </span>
-                <span className="text-sm font-light italic">
-                  {destination.heading}
-                </span>
+                <span className="text-sm font-light italic">{pkg.name}</span>
               </div>
 
               <div className="flex gap-1 ">
-                <Link href={`/destination/${destination.did}`}>
+                <Link href={`/destination/${pkg.pid}`}>
                   <Button variant="ghost" size="icon" className="h-8 w-8">
                     <Edit className="h-4 w-4" />
                   </Button>
@@ -108,12 +92,12 @@ const PackageGrid: FC<PackageGridProps> = ({ data, pagination }) => {
                 </DialogTrigger>
                 <DialogContent className="max-w-4xl max-h-[80vh] overflow-y-auto">
                   <DialogHeader>
-                    <DialogTitle>{destination?.name} - Description</DialogTitle>
+                    <DialogTitle>{pkg?.name} - Description</DialogTitle>
                   </DialogHeader>
                   <div
                     className="prose prose-sm max-w-none"
                     dangerouslySetInnerHTML={{
-                      __html: destination?.overview ?? "",
+                      __html: pkg?.overview ?? "",
                     }}
                   />
                 </DialogContent>
@@ -134,27 +118,27 @@ const PackageGrid: FC<PackageGridProps> = ({ data, pagination }) => {
                   <div
                     className="prose prose-sm max-w-none"
                     dangerouslySetInnerHTML={{
-                      __html: destination?.overview ?? "",
+                      __html: pkg?.overview ?? "",
                     }}
                   />
                 </DialogContent>
               </Dialog>
               <div className="flex items-center gap-2">
-                {destination?.basePrice && (
+                {pkg?.basePrice && (
                   <span className="text-2xl font-bold text-ocean">
-                    {toIndianCurrency(destination.basePrice)}
+                    {toIndianCurrency(pkg.basePrice)}
                   </span>
                 )}
-                {destination?.originalPrice && (
+                {pkg?.originalPrice && (
                   <span className="text-sm text-muted-foreground line-through">
-                    {toIndianCurrency(destination.originalPrice)}
+                    {toIndianCurrency(pkg.originalPrice)}
                   </span>
                 )}
               </div>
             </div>
           </CardContent>
         </Card>
-      ))} */}
+      ))}
     </div>
   );
 };

@@ -95,7 +95,7 @@ export const columns: ColumnDef<Package>[] = [
         <div className="space-y-2">
           <Dialog>
             <DialogTrigger asChild>
-              <Button variant="outline" size="sm">
+              <Button variant="default" size="xs">
                 View Details
               </Button>
             </DialogTrigger>
@@ -143,7 +143,7 @@ export const columns: ColumnDef<Package>[] = [
         <div className="space-y-2">
           <Dialog>
             <DialogTrigger asChild>
-              <Button variant="outline" size="sm">
+              <Button variant="accent" size="xs">
                 View Prices
               </Button>
             </DialogTrigger>
@@ -218,7 +218,7 @@ export const columns: ColumnDef<Package>[] = [
         <div className="space-y-2">
           <Dialog>
             <DialogTrigger asChild>
-              <Button variant="outline" size="sm">
+              <Button variant="outline" size="xs">
                 View
               </Button>
             </DialogTrigger>

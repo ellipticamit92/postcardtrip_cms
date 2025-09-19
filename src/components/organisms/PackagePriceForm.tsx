@@ -1,6 +1,6 @@
 "use client";
 
-import { Controller, Resolver, useForm } from "react-hook-form";
+import { Resolver, useForm } from "react-hook-form";
 import z from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Form } from "@/components/ui/form";
@@ -8,14 +8,8 @@ import { FormInput } from "@/components/atoms/FormInput";
 import { Button } from "@/components/ui/button";
 import { FormSelect } from "../atoms/FormSelect";
 import { Loader2 } from "lucide-react";
-import { FormRichText } from "../atoms/FormRichText";
 import { toast } from "sonner";
-import ImageUploader from "../atoms/ImageUploader";
-import { usePackages } from "@/hooks/use-packages";
-import { FormCheckbox } from "../atoms/FormCheckbox";
-import { FormTextarea } from "../atoms/FormTextarea";
-import { FormMultiSelect } from "../atoms/FormMultiSelect";
-import { Options, OptionsNum } from "@/types/type";
+import { Options } from "@/types/type";
 import { usePackagePrice } from "@/hooks/use-package-price";
 
 const schema = z.object({

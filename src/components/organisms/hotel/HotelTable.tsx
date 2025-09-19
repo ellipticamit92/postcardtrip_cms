@@ -2,9 +2,18 @@
 
 import { Hotel } from "@/types/type";
 import { ColumnDef } from "@tanstack/react-table";
-import { Checkbox } from "../ui/checkbox";
 import { ArrowUpDown, MoreHorizontal } from "lucide-react";
-import { Button } from "../ui/button";
+import { FC } from "react";
+import Link from "next/link";
+import { Checkbox } from "@/components/ui/checkbox";
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog";
+import { Button } from "@/components/ui/button";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -12,19 +21,9 @@ import {
   DropdownMenuLabel,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
-} from "../ui/dropdown-menu";
-import { FC } from "react";
-import CommonTable from "../molecules/CommonTable";
-import Link from "next/link";
-import DeleteData from "./DeleteData";
-import {
-  Dialog,
-  DialogContent,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
-} from "../ui/dialog";
-import { getFIleName } from "@/lib/utils";
+} from "@/components/ui/dropdown-menu";
+import CommonTable from "@/components/molecules/CommonTable";
+import DeleteData from "../DeleteData";
 
 export const columns: ColumnDef<Hotel>[] = [
   {
@@ -88,11 +87,10 @@ export const columns: ColumnDef<Hotel>[] = [
 
       return (
         <div className="space-y-2">
-          <p className="text-sm text-gray-600 line-clamp-2">{previewText}...</p>
           <Dialog>
             <DialogTrigger asChild>
-              <Button variant="outline" size="sm">
-                View Full Content
+              <Button variant="outline" size="xs">
+                View
               </Button>
             </DialogTrigger>
             <DialogContent className="max-w-4xl max-h-[80vh] overflow-y-auto">
@@ -109,33 +107,33 @@ export const columns: ColumnDef<Hotel>[] = [
       );
     },
   },
-  {
-    id: "iamges",
-    header: "Hotel Images",
-    cell: ({ row }) => {
-      const hotel = row.original;
-      const data = hotel?.images;
-      return (
-        <div className="flex flex-col">
-          {data?.map((item, index) => {
-            const fileName = getFIleName(item.url);
-            return (
-              <a
-                key={item.hiid}
-                href={item.url}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="text-blue-700 hover:underline"
-              >
-                {fileName}
-                {index < data.length - 1 && ", "}
-              </a>
-            );
-          })}
-        </div>
-      );
-    },
-  },
+  // {
+  //   id: "iamges",
+  //   header: "Hotel Images",
+  //   cell: ({ row }) => {
+  //     const hotel = row.original;
+  //     const data = hotel?.images;
+  //     return (
+  //       <div className="flex flex-col">
+  //         {data?.map((item, index) => {
+  //           const fileName = getFIleName(item.url);
+  //           return (
+  //             <a
+  //               key={item.hiid}
+  //               href={item.url}
+  //               target="_blank"
+  //               rel="noopener noreferrer"
+  //               className="text-blue-700 hover:underline"
+  //             >
+  //               {fileName}
+  //               {index < data.length - 1 && ", "}
+  //             </a>
+  //           );
+  //         })}
+  //       </div>
+  //     );
+  //   },
+  // },
   {
     id: "actions",
     enableHiding: false,
@@ -152,11 +150,6 @@ export const columns: ColumnDef<Hotel>[] = [
           </DropdownMenuTrigger>
           <DropdownMenuContent align="end">
             <DropdownMenuLabel>Actions</DropdownMenuLabel>
-            <DropdownMenuItem
-              onClick={() => navigator.clipboard.writeText(hid)}
-            >
-              Copy ID
-            </DropdownMenuItem>
             <DropdownMenuSeparator />
             <DropdownMenuItem>
               <Link

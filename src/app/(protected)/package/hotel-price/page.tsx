@@ -2,6 +2,8 @@ import { Heading } from "@/components/atoms/Heading";
 import PackagePriceTable from "@/components/organisms/PackagePriceTable";
 import PackagePricesService from "@/services/packagePrices.service";
 
+export const dynamic = "force-dynamic";
+
 export default async function HotelPricePage() {
   const packagePriceData = await PackagePricesService.getAll();
   const { data, pagination } = packagePriceData;

@@ -1,6 +1,7 @@
 import { Heading } from "@/components/atoms/Heading";
-import { TourForm } from "@/components/organisms/TourForm";
+import { TourForm } from "@/components/organisms/tours/TourForm";
 import TourService from "@/services/tours.service";
+import { Compass } from "lucide-react";
 
 export const dynamic = "force-dynamic";
 
@@ -17,7 +18,7 @@ export default async function EditTourPage({
   const icon = tour?.icon ?? "";
   const basePrice = tour?.basePrice?.toString() ?? "0";
 
-  const updatedDestination = {
+  const updateTour = {
     text,
     description,
     icon,
@@ -26,8 +27,8 @@ export default async function EditTourPage({
 
   return (
     <>
-      <Heading text="Edit Destination" subText={text} href="/" />
-      <TourForm initialData={updatedDestination} tourId={id} />
+      <Heading text="Edit Tour" subText={text} href="/tour" Icon={Compass} />
+      <TourForm initialData={updateTour} tourId={id} />
     </>
   );
 }

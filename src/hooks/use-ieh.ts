@@ -21,12 +21,12 @@ interface UseIEHOptions {
 // }
 
 export const useIEH = (options: UseIEHOptions) => {
-  // const {
-  //   // autoFetch = false,
-  //   // initialPage = 1,
-  //   // initialLimit = 10,
-  //   // type,
-  // } = options;
+  const {
+    // autoFetch = false,
+    // initialPage = 1,
+    // initialLimit = 10,
+    // type,
+  } = options;
 
   // const [ieh, setIEH] = useState<IEH[]>([]);
   const [loading, setLoading] = useState(false);

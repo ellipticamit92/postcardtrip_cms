@@ -1,5 +1,5 @@
 import { Heading } from "@/components/atoms/Heading";
-import { IEHForm } from "@/components/organisms/IEHForm";
+import { IEHForm } from "@/components/organisms/IEH/IEHForm";
 import IEHService from "@/services/ieh.service";
 
 export const dynamic = "force-dynamic";
@@ -23,7 +23,7 @@ export default async function InclusionEditPage({
   };
   return (
     <>
-      <Heading text="Edit Inclusion" href="/" />
+      <Heading text="Edit Inclusion" href="/inclusion" />
       <IEHForm type="inclusion" initialData={updateData} id={inclusionId} />
     </>
   );

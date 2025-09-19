@@ -1,6 +1,7 @@
-import { Heading } from "@/components/atoms/Heading";
-import TourTable from "@/components/organisms/TourTable";
+import PageHeader from "@/components/organisms/PageHeader";
+import TourTable from "@/components/organisms/tours/TourTable";
 import TourService from "@/services/tours.service";
+import { Compass } from "lucide-react";
 
 export const dynamic = "force-dynamic";
 
@@ -10,7 +11,12 @@ export default async function TourPage() {
 
   return (
     <>
-      <Heading text="All Tour" href="/" />
+      <PageHeader
+        title="Tours"
+        description="Manage guided tours and experiences"
+        Icon={Compass}
+        href="/tour/add"
+      />
       <TourTable data={data ?? []} pagination={pagination} />
     </>
   );

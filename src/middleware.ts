@@ -38,5 +38,6 @@ export const config = {
     "/destination/add",
     "/api/auth/destination",
     "/api/destination/:path*",
+    "/api/auth/reviews",
   ],
 };

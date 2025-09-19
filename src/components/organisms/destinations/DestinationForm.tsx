@@ -15,6 +15,7 @@ import { FormTextarea } from "@/components/atoms/FormTextarea";
 import { FormRichText } from "@/components/atoms/FormRichText";
 import ImageUploader from "@/components/atoms/ImageUploader";
 import { FormSelect } from "@/components/atoms/FormSelect";
+import MyForm from "../MyForm";
 
 const schema = z.object({
   name: z.string().min(1),
@@ -97,8 +98,7 @@ export function DestinationForm({
   };
 
   return (
-    <div className="bg-white p-4">
-      <h3 className="mb-3 font-semibold text-lg">Destination Details</h3>
+    <MyForm title="Destination Details">
       <Form {...form}>
         <form
           onSubmit={form.handleSubmit(onSubmit)}
@@ -189,6 +189,6 @@ export function DestinationForm({
           </Button>
         </form>
       </Form>
-    </div>
+    </MyForm>
   );
 }

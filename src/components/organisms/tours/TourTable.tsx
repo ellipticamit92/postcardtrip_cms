@@ -83,7 +83,7 @@ export const columns: ColumnDef<Tours>[] = [
         <div className="space-y-2">
           <Dialog>
             <DialogTrigger asChild>
-              <Button variant="outline" size="sm">
+              <Button variant="outline" size="xs">
                 View
               </Button>
             </DialogTrigger>
@@ -125,11 +125,6 @@ export const columns: ColumnDef<Tours>[] = [
           </DropdownMenuTrigger>
           <DropdownMenuContent align="end">
             <DropdownMenuLabel>Actions</DropdownMenuLabel>
-            <DropdownMenuItem
-              onClick={() => navigator.clipboard.writeText(tid)}
-            >
-              Copy ID
-            </DropdownMenuItem>
             <DropdownMenuSeparator />
             <DropdownMenuItem>
               <Link

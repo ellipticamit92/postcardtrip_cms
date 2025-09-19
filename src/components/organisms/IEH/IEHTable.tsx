@@ -3,21 +3,13 @@
 import { format } from "date-fns";
 import { IEH, PaginationProps } from "@/types/type";
 import { ColumnDef } from "@tanstack/react-table";
-import { ArrowUpDown, MoreHorizontal } from "lucide-react";
+import { ArrowUpDown } from "lucide-react";
 import { FC } from "react";
-import Link from "next/link";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Button } from "@/components/ui/button";
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuLabel,
-  DropdownMenuSeparator,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
 import CommonTable from "@/components/molecules/CommonTable";
 import DeleteData from "../DeleteData";
+import IEHModal from "./IEFModal";
 
 export const columns: ColumnDef<IEH>[] = [
   {
@@ -55,6 +47,32 @@ export const columns: ColumnDef<IEH>[] = [
     ),
   },
   {
+    accessorKey: "type",
+    cell: ({ row }) => {
+      const title = row.original?.type ?? "";
+      const updateData = {
+        text: row.original?.text ?? "",
+      };
+      const ieh = row.original;
+      const id = String(ieh.id).trim();
+      const deleteId = `${ieh.id}_${ieh?.type}`;
+      return (
+        <div className="flex gap-2">
+          <IEHModal
+            isEdit={true}
+            title={title}
+            isTable={true}
+            data={updateData}
+            id={row.original.id ?? 0}
+          />
+          {ieh?.type && (
+            <DeleteData id={deleteId} model={ieh.type} ieh={true} isButton />
+          )}
+        </div>
+      );
+    },
+  },
+  {
     accessorKey: "createdAt",
     header: "Created",
     cell: ({ row }) => {
@@ -62,43 +80,35 @@ export const columns: ColumnDef<IEH>[] = [
       return value ? format(new Date(value as any), "dd/MM/yyyy") : null;
     },
   },
-  {
-    id: "actions",
-    enableHiding: false,
-    cell: ({ row }) => {
-      const ieh = row.original;
-      const id = String(ieh.id).trim();
-      const deleteId = `${ieh.id}_${ieh?.type}`;
-      const url = `/${ieh?.type}/${id}`;
-      return (
-        <DropdownMenu>
-          <DropdownMenuTrigger asChild>
-            <Button variant="ghost" className="h-8 w-8 p-0">
-              <span className="sr-only">Open menu</span>
-              <MoreHorizontal />
-            </Button>
-          </DropdownMenuTrigger>
-          <DropdownMenuContent align="end">
-            <DropdownMenuLabel>Actions</DropdownMenuLabel>
-            <DropdownMenuItem onClick={() => navigator.clipboard.writeText(id)}>
-              Copy ID
-            </DropdownMenuItem>
-            <DropdownMenuSeparator />
-            <DropdownMenuItem>
-              <Link className="hover:text-blue-400 font-semibold" href={url}>
-                Edit
-              </Link>
-            </DropdownMenuItem>
-            <DropdownMenuItem>
-              {ieh?.type && (
-                <DeleteData id={deleteId} model={ieh.type} ieh={true} />
-              )}
-            </DropdownMenuItem>
-          </DropdownMenuContent>
-        </DropdownMenu>
-      );
-    },
-  },
+  // {
+  //   id: "actions",
+  //   enableHiding: false,
+  //   cell: ({ row }) => {
+  //     const ieh = row.original;
+  //     const id = String(ieh.id).trim();
+  //     const deleteId = `${ieh.id}_${ieh?.type}`;
+  //     const url = `/${ieh?.type}/${id}`;
+  //     return (
+  //       <DropdownMenu>
+  //         <DropdownMenuTrigger asChild>
+  //           <Button variant="ghost" className="h-8 w-8 p-0">
+  //             <span className="sr-only">Open menu</span>
+  //             <MoreHorizontal />
+  //           </Button>
+  //         </DropdownMenuTrigger>
+  //         <DropdownMenuContent align="end">
+  //           <DropdownMenuLabel>Actions</DropdownMenuLabel>
+  //           <DropdownMenuSeparator />
+  //           <DropdownMenuItem>
+  //             {ieh?.type && (
+  //               <DeleteData id={deleteId} model={ieh.type} ieh={true} />
+  //             )}
+  //           </DropdownMenuItem>
+  //         </DropdownMenuContent>
+  //       </DropdownMenu>
+  //     );
+  //   },
+  // },
 ];
 
 interface IEHTableProps {

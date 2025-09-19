@@ -1,10 +1,12 @@
 "use client";
 
-import { City, PaginationProps } from "@/types/type";
+import { format } from "date-fns";
+import { Review, PaginationProps } from "@/types/type";
 import { ColumnDef } from "@tanstack/react-table";
 import { ArrowUpDown, MoreHorizontal } from "lucide-react";
 import { FC } from "react";
 import Link from "next/link";
+import { Checkbox } from "@/components/ui/checkbox";
 import { Button } from "@/components/ui/button";
 import {
   Dialog,
@@ -14,9 +16,7 @@ import {
   DialogTrigger,
 } from "@/components/ui/dialog";
 import CommonTable from "@/components/molecules/CommonTable";
-
 import DeleteData from "../DeleteData";
-import { Checkbox } from "@/components/ui/checkbox";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -26,7 +26,7 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 
-export const columns: ColumnDef<City>[] = [
+export const columns: ColumnDef<Review>[] = [
   {
     id: "select",
     header: ({ table }) => (
@@ -50,24 +50,28 @@ export const columns: ColumnDef<City>[] = [
     enableHiding: false,
   },
   {
-    accessorKey: "name",
+    accessorKey: "username",
     header: ({ column }) => (
       <Button
         variant="ghost"
         className="!p-0"
         onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
       >
-        City Name <ArrowUpDown className="ml-2 h-4 w-4" />
+        Username <ArrowUpDown className="ml-2 h-4 w-4" />
       </Button>
     ),
   },
   {
-    accessorKey: "description",
-    header: "City Description",
+    accessorKey: "places",
+    header: "Places Visited",
+    cell: ({ row }) => <div>{row.getValue("places")}</div>,
+  },
+  {
+    accessorKey: "review",
+    header: "Review",
     cell: ({ row }) => {
-      const overview = row.getValue("description") as string;
-      const name = row.getValue("name") as string;
-
+      const reviewText = row.getValue("review") as string;
+      const username = row.getValue("username") as string;
       return (
         <div className="space-y-2">
           <Dialog>
@@ -78,12 +82,9 @@ export const columns: ColumnDef<City>[] = [
             </DialogTrigger>
             <DialogContent className="max-w-4xl max-h-[80vh] overflow-y-auto">
               <DialogHeader>
-                <DialogTitle>{name} - Overview</DialogTitle>
+                <DialogTitle>{username} - Review</DialogTitle>
               </DialogHeader>
-              <div
-                className="prose prose-sm max-w-none"
-                dangerouslySetInnerHTML={{ __html: overview }}
-              />
+              <div className="prose prose-sm max-w-none">{reviewText}</div>
             </DialogContent>
           </Dialog>
         </div>
@@ -91,11 +92,35 @@ export const columns: ColumnDef<City>[] = [
     },
   },
   {
+    accessorKey: "rating",
+    header: "Rating",
+    cell: ({ row }) => <div>{row.getValue("rating")}</div>,
+  },
+  {
+    accessorKey: "package",
+    header: "Package",
+    cell: ({ row }) => <div>{row.original.package?.name}</div>,
+  },
+  {
+    accessorKey: "destination",
+    header: "Destination",
+    cell: ({ row }) => <div>{row.original.destination?.name}</div>,
+  },
+  {
+    accessorKey: "createdAt",
+    header: "Created",
+    cell: ({ row }) => {
+      const value = row.getValue("createdAt");
+      return value ? format(new Date(value as any), "dd/MM/yyyy") : null;
+    },
+  },
+  {
     id: "actions",
     enableHiding: false,
     cell: ({ row }) => {
-      const city = row.original;
-      const cid = String(city.cid);
+      const review = row.original;
+      const rid = String(review.id);
+
       return (
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
@@ -109,14 +134,14 @@ export const columns: ColumnDef<City>[] = [
             <DropdownMenuSeparator />
             <DropdownMenuItem>
               <Link
-                className="hover:text-blue-400 font-semibold"
-                href={`/city/${cid}`}
+                className="hover:text-blue-400 font-semibold w-full block"
+                href={`/review/${rid}`}
               >
                 Edit
               </Link>
             </DropdownMenuItem>
             <DropdownMenuItem>
-              <DeleteData id={cid} model="cities" />
+              <DeleteData id={rid} model="reviews" />
             </DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>
@@ -125,18 +150,18 @@ export const columns: ColumnDef<City>[] = [
   },
 ];
 
-interface CityTableProps {
-  data: City[];
-  pagination?: PaginationProps;
+interface ReviewsTableProps {
+  data: Review[];
+  pagination: PaginationProps;
 }
 
-const CityTable: FC<CityTableProps> = ({ data, pagination }) => {
+const ReviewsTable: FC<ReviewsTableProps> = ({ data, pagination }) => {
   return (
     <div className="w-full">
       <CommonTable
         data={data}
-        placeholder="Filter by City Name"
-        columnName="name"
+        placeholder="Filter by Username"
+        columnName="username"
         columns={columns}
         pagination={pagination}
       />
@@ -144,4 +169,4 @@ const CityTable: FC<CityTableProps> = ({ data, pagination }) => {
   );
 };
 
-export default CityTable;
+export default ReviewsTable;

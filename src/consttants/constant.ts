@@ -1,24 +1,21 @@
 import {
   Eye,
   Plus,
-  MapPinHouse,
-  Blocks,
   Hotel,
   AudioWaveform,
   BookOpen,
   Command,
   GalleryVerticalEnd,
-  Settings2,
   Building,
   SquaresIntersect,
   TriangleAlert,
   Siren,
   ScanEye,
-  EyeOff,
   Home,
   MapPinHouseIcon,
   Package,
   PencilIcon,
+  Compass,
 } from "lucide-react";
 
 export const SIDEBAR_URLS = {
@@ -61,14 +58,45 @@ export const SIDEBAR_URLS = {
       icon: Package,
     },
     {
-      title: "Reviews",
-      url: "/reviews",
-      icon: PencilIcon,
+      title: "Tours",
+      url: "/tour",
+      icon: Compass,
     },
+
     {
       title: "Cities",
       url: "/city",
       icon: Building,
+    },
+    {
+      title: "Highlights",
+      url: "/highlight",
+      icon: Siren,
+    },
+    {
+      title: "Inclusions",
+      url: "/inclusion",
+      icon: SquaresIntersect,
+    },
+    {
+      title: "Exclusions",
+      url: "/exclusion",
+      icon: TriangleAlert,
+    },
+    {
+      title: "Hotel",
+      url: "/hotel",
+      icon: Hotel,
+    },
+    {
+      title: "Itineraries",
+      url: "/itineraries",
+      icon: BookOpen,
+    },
+    {
+      title: "Reviews",
+      url: "/reviews",
+      icon: PencilIcon,
     },
     // {
     //   title: "Destination",
@@ -110,40 +138,40 @@ export const SIDEBAR_URLS = {
     //     },
     //   ],
     // },
-    {
-      title: "Tour",
-      url: "#",
-      icon: Building,
-      items: [
-        {
-          title: "View Tours",
-          url: "/tour",
-          icon: Eye,
-        },
-        {
-          title: "Add Tour",
-          url: "/tour/add",
-          icon: Plus,
-        },
-      ],
-    },
-    {
-      title: "Hotel",
-      url: "#",
-      icon: Hotel,
-      items: [
-        {
-          title: "View Hotel",
-          url: "/hotel",
-          icon: Eye,
-        },
-        {
-          title: "Add Hotel",
-          url: "/hotel/add",
-          icon: Plus,
-        },
-      ],
-    },
+    // {
+    //   title: "Tour",
+    //   url: "#",
+    //   icon: Building,
+    //   items: [
+    //     {
+    //       title: "View Tours",
+    //       url: "/tour",
+    //       icon: Eye,
+    //     },
+    //     {
+    //       title: "Add Tour",
+    //       url: "/tour/add",
+    //       icon: Plus,
+    //     },
+    //   ],
+    // },
+    // {
+    //   title: "Hotel",
+    //   url: "#",
+    //   icon: Hotel,
+    //   items: [
+    //     {
+    //       title: "View Hotel",
+    //       url: "/hotel",
+    //       icon: Eye,
+    //     },
+    //     {
+    //       title: "Add Hotel",
+    //       url: "/hotel/add",
+    //       icon: Plus,
+    //     },
+    //   ],
+    // },
     {
       title: "Hotel Image",
       url: "#",
@@ -178,86 +206,86 @@ export const SIDEBAR_URLS = {
     //     },
     //   ],
     // },
-    {
-      title: "Itineraries",
-      url: "#",
-      icon: BookOpen,
-      items: [
-        {
-          title: "View Itineraries",
-          url: "/itineraries",
-          icon: Eye,
-        },
-        {
-          title: "Add Itineraries",
-          url: "/itineraries/add",
-          icon: Plus,
-        },
-      ],
-    },
-    {
-      title: "Inclusion",
-      url: "#",
-      icon: SquaresIntersect,
-      items: [
-        {
-          title: "View Inclusion",
-          url: "/inclusion",
-          icon: Eye,
-        },
-        {
-          title: "Add Inclusion",
-          url: "/inclusion/add",
-          icon: Plus,
-        },
-      ],
-    },
-    {
-      title: "Exclusion",
-      url: "#",
-      icon: TriangleAlert,
-      items: [
-        {
-          title: "View Exclusion",
-          url: "/exclusion",
-          icon: Eye,
-        },
-        {
-          title: "Add Exclusion",
-          url: "/exclusion/add",
-          icon: Plus,
-        },
-      ],
-    },
-    {
-      title: "Highlights",
-      url: "#",
-      icon: Siren,
-      items: [
-        {
-          title: "View Highlights",
-          url: "/highlight",
-          icon: Eye,
-        },
-        {
-          title: "Add Highlights",
-          url: "/highlight/add",
-          icon: Plus,
-        },
-      ],
-    },
-    {
-      title: "Settings",
-      url: "#",
-      icon: Settings2,
-      items: [
-        {
-          title: "General",
-          url: "#",
-          icon: Eye,
-        },
-      ],
-    },
+    // {
+    //   title: "Itineraries",
+    //   url: "#",
+    //   icon: BookOpen,
+    //   items: [
+    //     {
+    //       title: "View Itineraries",
+    //       url: "/itineraries",
+    //       icon: Eye,
+    //     },
+    //     {
+    //       title: "Add Itineraries",
+    //       url: "/itineraries/add",
+    //       icon: Plus,
+    //     },
+    //   ],
+    // },
+    // {
+    //   title: "Inclusion",
+    //   url: "#",
+    //   icon: SquaresIntersect,
+    //   items: [
+    //     {
+    //       title: "View Inclusion",
+    //       url: "/inclusion",
+    //       icon: Eye,
+    //     },
+    //     {
+    //       title: "Add Inclusion",
+    //       url: "/inclusion/add",
+    //       icon: Plus,
+    //     },
+    //   ],
+    // },
+    // {
+    //   title: "Exclusion",
+    //   url: "#",
+    //   icon: TriangleAlert,
+    //   items: [
+    //     {
+    //       title: "View Exclusion",
+    //       url: "/exclusion",
+    //       icon: Eye,
+    //     },
+    //     {
+    //       title: "Add Exclusion",
+    //       url: "/exclusion/add",
+    //       icon: Plus,
+    //     },
+    //   ],
+    // },
+    // {
+    //   title: "Highlights",
+    //   url: "#",
+    //   icon: Siren,
+    //   items: [
+    //     {
+    //       title: "View Highlights",
+    //       url: "/highlight",
+    //       icon: Eye,
+    //     },
+    //     {
+    //       title: "Add Highlights",
+    //       url: "/highlight/add",
+    //       icon: Plus,
+    //     },
+    //   ],
+    // },
+    // {
+    //   title: "Settings",
+    //   url: "#",
+    //   icon: Settings2,
+    //   items: [
+    //     {
+    //       title: "General",
+    //       url: "#",
+    //       icon: Eye,
+    //     },
+    //   ],
+    // },
   ],
 };
 

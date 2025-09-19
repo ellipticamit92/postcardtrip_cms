@@ -1,6 +1,8 @@
-import { Heading } from "@/components/atoms/Heading";
-import IEHTable from "@/components/organisms/IEHTable";
+import IEHModal from "@/components/organisms/IEH/IEFModal";
+import IEHTable from "@/components/organisms/IEH/IEHTable";
+import PageHeader from "@/components/organisms/PageHeader";
 import IEHService from "@/services/ieh.service";
+import { SquaresIntersect } from "lucide-react";
 
 export const dynamic = "force-dynamic";
 
@@ -28,7 +30,13 @@ export default async function InclusionPage() {
 
   return (
     <>
-      <Heading text="All Inclusion" href="/" />
+      <PageHeader
+        title="Inclusion"
+        description="Manage travel destinations and locations"
+        Icon={SquaresIntersect}
+        modalComponent={IEHModal}
+        modalProps={{ isEdit: false, title: "Inclusion" }}
+      />
       {updateData && <IEHTable data={updateData} pagination={pagination} />}
     </>
   );

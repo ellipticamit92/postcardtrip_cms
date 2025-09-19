@@ -1,6 +1,6 @@
 "use client";
 
-import { Itinerary, PaginationProps } from "@/types/type";
+import { Itinerary, ItineraryPackage, PaginationProps } from "@/types/type";
 import { ColumnDef } from "@tanstack/react-table";
 import { ArrowUpDown, MoreHorizontal } from "lucide-react";
 import { FC } from "react";
@@ -86,8 +86,8 @@ export const columns: ColumnDef<Itinerary>[] = [
         <div className="space-y-2">
           <Dialog>
             <DialogTrigger asChild>
-              <Button variant="outline" size="sm">
-                View Details
+              <Button variant="outline" size="xs">
+                View
               </Button>
             </DialogTrigger>
             <DialogContent className="max-w-4xl max-h-[80vh] overflow-y-auto">
@@ -122,7 +122,7 @@ export const columns: ColumnDef<Itinerary>[] = [
         <div className="space-y-2 w-6">
           <Dialog>
             <DialogTrigger asChild>
-              <Button variant="outline" size="sm">
+              <Button variant="outline" size="xs">
                 View
               </Button>
             </DialogTrigger>
@@ -184,7 +184,7 @@ export const columns: ColumnDef<Itinerary>[] = [
 ];
 
 interface DestinationTableProps {
-  data: Itinerary[];
+  data: ItineraryPackage;
   pagination: PaginationProps;
 }
 

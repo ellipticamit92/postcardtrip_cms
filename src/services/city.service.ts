@@ -1,4 +1,4 @@
-import { getFieldOptions, getFieldOptionsNum } from "@/lib/helper";
+import { getFieldOptionsNum } from "@/lib/helper";
 import { prisma } from "@/lib/prisma";
 
 export class CityService {

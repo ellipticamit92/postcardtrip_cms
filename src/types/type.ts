@@ -173,6 +173,30 @@ export interface PackageHotelPrice {
   package?: Partial<Package>;
 }
 
+export interface ItineraryPackageItem {
+  package: {
+    name: string;
+    pid: number;
+    destination: {
+      name: string;
+    };
+  };
+  itineraries: Itinerary[];
+}
+
+export interface ItineraryPackage {
+  [packageId: number]: {
+    package: {
+      name: string;
+      pid: number;
+      destination: {
+        name: string;
+      };
+    };
+    itineraries: Itinerary[];
+  };
+}
+
 export interface Itinerary {
   itid: number;
   day: number;
@@ -242,6 +266,26 @@ export interface Tours {
   text: string;
   description?: string | null;
   icons?: string | null;
+}
+
+export interface Review {
+  id: number;
+  username: string;
+  places: string;
+  review: string;
+  rating: number;
+  packageId?: number | null;
+  destinationId?: number | null;
+  package?: {
+    pid: number;
+    name: string;
+  } | null;
+  destination?: {
+    did: number;
+    name: string;
+  } | null;
+  createdAt: Date;
+  updatedAt: Date;
 }
 
 export type IEHType = "inclusion" | "exclusion" | "highlight";

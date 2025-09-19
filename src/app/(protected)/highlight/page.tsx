@@ -1,6 +1,8 @@
-import { Heading } from "@/components/atoms/Heading";
+import IEHModal from "@/components/organisms/IEH/IEFModal";
 import IEHTable from "@/components/organisms/IEH/IEHTable";
+import PageHeader from "@/components/organisms/PageHeader";
 import IEHService from "@/services/ieh.service";
+import { Siren } from "lucide-react";
 
 export const dynamic = "force-dynamic";
 
@@ -28,7 +30,13 @@ export default async function HighlightPage() {
 
   return (
     <>
-      <Heading text="All Highlight" href="/highlight" />
+      <PageHeader
+        title="Highlight"
+        description="Manage reusable highlight for your packages"
+        Icon={Siren}
+        modalComponent={IEHModal}
+        modalProps={{ isEdit: false, title: "Highlight" }}
+      />
       {updateData && <IEHTable data={updateData} pagination={pagination} />}
     </>
   );

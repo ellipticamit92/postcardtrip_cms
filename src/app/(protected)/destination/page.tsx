@@ -1,6 +1,6 @@
-import PageHeader from "@/components/molecules/PageHeader";
 import DestinationGrid from "@/components/organisms/destinations/DestinationGrid";
 import DestinationTable from "@/components/organisms/destinations/DestinationTable";
+import PageHeader from "@/components/organisms/PageHeader";
 import ViewLayout from "@/components/templates/ViewLayout";
 import { DestinationService } from "@/services/destination.service";
 import { MapPin } from "lucide-react";

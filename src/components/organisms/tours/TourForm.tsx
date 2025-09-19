@@ -39,7 +39,7 @@ export function TourForm({ initialData, tourId }: TourFormProps) {
     },
   });
 
-  const { control, handleSubmit, reset } = form;
+  const { control, handleSubmit } = form;
 
   const onSubmit = async (data: CityFormValues) => {
     try {
@@ -68,38 +68,41 @@ export function TourForm({ initialData, tourId }: TourFormProps) {
   };
 
   return (
-    <Form {...form}>
-      <form onSubmit={handleSubmit(onSubmit)} className="space-y-4 mt-4">
-        <div className="grid grid-cols-3 gap-4 mb-6">
-          <FormInput
-            label="Tour Name"
-            name="text"
-            placeholder="Enter tour name"
-            control={control}
-          />
-          <FormInput
-            label="Tour Base Price"
-            name="basePrice"
-            placeholder="Enter tour base price"
-            control={control}
-          />
-
-          <FormInput name="icon" control={control} label="Tour Icon" />
-          <div className="col-span-3">
-            <FormTextarea
-              label="tour Description"
-              name="description"
-              placeholder="Describe the tour"
+    <div className="w-full bg-white p-3">
+      <h1 className="text-xl font-bold mb-5">Basic Information</h1>
+      <Form {...form}>
+        <form onSubmit={handleSubmit(onSubmit)} className="space-y-4 mt-4">
+          <div className="grid grid-cols-3 gap-4 mb-6">
+            <FormInput
+              label="Tour Name"
+              name="text"
+              placeholder="Enter tour name"
               control={control}
             />
-          </div>
-        </div>
+            <FormInput
+              label="Tour Base Price"
+              name="basePrice"
+              placeholder="Enter tour base price"
+              control={control}
+            />
 
-        <Button type="submit" disabled={loading}>
-          {loading && <Loader2 className="animate-spin mr-2" />}
-          {initialData ? "Update" : "Add"} Tour
-        </Button>
-      </form>
-    </Form>
+            <FormInput name="icon" control={control} label="Tour Icon" />
+            <div className="col-span-3">
+              <FormTextarea
+                label="Tour Description"
+                name="description"
+                placeholder="Describe the tour"
+                control={control}
+              />
+            </div>
+          </div>
+
+          <Button type="submit" size="sm" disabled={loading}>
+            {loading && <Loader2 className="animate-spin mr-2" />}
+            {initialData ? "Update" : "Add"} Tour
+          </Button>
+        </form>
+      </Form>
+    </div>
   );
 }

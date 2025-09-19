@@ -15,15 +15,21 @@ const scheama = z.object({
   text: z.string().min(2, "Text is required"),
 });
 
-type IEHFormValues = z.infer<typeof scheama>;
+export type IEHFormValues = z.infer<typeof scheama>;
 
 interface IEHFormProps {
   initialData?: IEHFormValues;
   id?: number;
   type: IEHType;
+  handleModalOpen?: () => void;
 }
 
-export function IEHForm({ initialData, id, type }: IEHFormProps) {
+export function IEHForm({
+  initialData,
+  id,
+  type,
+  handleModalOpen,
+}: IEHFormProps) {
   const { loading, createIEH, updateIEH } = useIEH({
     autoFetch: false,
     type,
@@ -35,7 +41,7 @@ export function IEHForm({ initialData, id, type }: IEHFormProps) {
     },
   });
 
-  const { control, handleSubmit, reset } = form;
+  const { control, handleSubmit } = form;
 
   const onSubmit = async (data: IEHFormValues) => {
     try {
@@ -51,9 +57,7 @@ export function IEHForm({ initialData, id, type }: IEHFormProps) {
         await createIEH(submitData, type);
       }
 
-      if (!isEditMode) {
-        reset();
-      }
+      handleModalOpen && handleModalOpen();
     } catch (err: any) {
       console.error("Error submitting destination", err);
       toast.error(err.message || "Error submitting destination");
@@ -63,7 +67,7 @@ export function IEHForm({ initialData, id, type }: IEHFormProps) {
   return (
     <Form {...form}>
       <form onSubmit={handleSubmit(onSubmit)} className="space-y-4 mt-4">
-        <div className="grid grid-cols-3 gap-4 mb-6">
+        <div className="grid mb-6">
           <FormInput
             label={`${type} Name`}
             name="text"
