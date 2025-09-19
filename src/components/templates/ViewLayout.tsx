@@ -1,7 +1,7 @@
 "use client";
 
 import { PaginationProps } from "@/types/type";
-import { FC, useState, ComponentType, useMemo, useCallback } from "react";
+import { useState, ComponentType, useMemo, useCallback } from "react";
 import FilterCard from "../organisms/FilterCard";
 
 interface ViewLayoutProps<T> {

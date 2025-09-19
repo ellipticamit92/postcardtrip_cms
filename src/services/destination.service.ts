@@ -62,7 +62,7 @@ export class DestinationService {
     try {
       const {
         page = 1,
-        limit = 150,
+        limit = 10,
         country,
         name,
         sortBy = "createdAt",
@@ -294,6 +294,14 @@ export class DestinationService {
       return destinations;
     } catch (error) {
       throw new Error(`Failed to fetch destinations: ${error}`);
+    }
+  }
+
+  static async getCount() {
+    try {
+      return prisma.destination.count();
+    } catch (error) {
+      throw new Error(`Failed to count destinations: ${error}`);
     }
   }
 }

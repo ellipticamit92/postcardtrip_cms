@@ -1,174 +1,190 @@
+import DashboardHeading from "@/components/atoms/DashboardHeading";
+import TrendingDestination from "@/components/organisms/destinations/TrendingDestination";
+import FeaturedPackage from "@/components/organisms/packages/FeaturedPaclage";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { quickLinks } from "@/consttants/constant";
+import { GenericService } from "@/services/generic.service";
 import {
   MapPin,
   Package,
   Compass,
-  Building2,
+  Building,
+  PencilIcon,
+  Zap,
   Plus,
-  TrendingUp,
-  Star,
 } from "lucide-react";
 import Link from "next/link";
 import React from "react";
 
-const stats = [
-  { title: "Destinations", count: 24, icon: MapPin, change: "+12%" },
-  { title: "Packages", count: 156, icon: Package, change: "+8%" },
-  { title: "Itineraries", count: 89, icon: Map, change: "+15%" },
-  { title: "Tours", count: 67, icon: Compass, change: "+5%" },
-  { title: "Hotels", count: 203, icon: Building2, change: "+18%" },
-];
+export const dynamic = "force-dynamic";
 
-const recentActivity = [
-  { action: "New destination", item: "Santorini, Greece", time: "2 hours ago" },
-  {
-    action: "Updated package",
-    item: "Mediterranean Explorer",
-    time: "4 hours ago",
-  },
-  { action: "Added hotel", item: "Ocean View Resort", time: "6 hours ago" },
-  { action: "Created itinerary", item: "Athens City Break", time: "1 day ago" },
-];
+export default async function DashboardPage() {
+  const destinationCount = await GenericService.getCount("Destination");
+  const reviewsCount = await GenericService.getCount("Reviews");
+  const toursCount = await GenericService.getCount("Tours");
+  const pkgCount = await GenericService.getCount("Package");
+  const hotelCount = await GenericService.getCount("Hotel");
 
-export default function DashboardPage() {
-  // const { day, date, year, month } = getTodayDetails();
+  const stats1 = [
+    {
+      title: "Destinations",
+      value: destinationCount,
+      icon: MapPin,
+      color: "text-blue-600",
+    },
+    {
+      title: "Packages",
+      value: pkgCount,
+      icon: Package,
+      color: "text-green-600",
+    },
+    {
+      title: "Tours",
+      value: toursCount,
+      icon: Compass,
+      color: "text-teal-600",
+    },
+    {
+      title: "Hotels",
+      value: hotelCount,
+      icon: Building,
+      color: "text-purple-600",
+    },
+    {
+      title: "Reviews",
+      value: reviewsCount,
+      icon: PencilIcon,
+      color: "text-orange-600",
+    },
+  ];
+
   return (
-    <>
-      <div className="space-y-6">
-        {/* Header */}
-        <div className="flex items-center justify-between">
-          <div>
-            <h1 className="text-3xl font-bold text-foreground">
-              Postcardtrip Dashboard
-            </h1>
-            <p className="text-muted-foreground mt-1">
-              Manage your travel content and bookings
-            </p>
-          </div>
-          <Button variant="gradient" className="shadow-glow">
-            <Plus className="h-4 w-4" />
-            Add Content
-          </Button>
+    <div className="space-y-12">
+      <div className="flex items-center justify-between">
+        <div>
+          <p className="text-muted-foreground mt-1">
+            {
+              "Welcome back! Here's what's happening with your travel agency today."
+            }
+          </p>
         </div>
-
-        {/* Stats Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-4">
-          {stats.map((stat) => (
-            <Card
-              key={stat.title}
-              className="relative overflow-hidden group hover:shadow-elegant transition-all duration-300"
-            >
-              <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                <CardTitle className="text-sm font-medium text-muted-foreground">
-                  {stat.title}
-                </CardTitle>
-                <Star className="h-4 w-4 text-primary group-hover:text-primary-glow transition-colors" />
-              </CardHeader>
-              <CardContent>
-                <div className="text-2xl font-bold text-foreground">
-                  {stat.count}
-                </div>
-                <div className="flex items-center text-xs text-accent">
-                  <TrendingUp className="h-3 w-3 mr-1" />
-                  {stat.change} from last month
-                </div>
-              </CardContent>
-              <div className="absolute inset-0 bg-gradient-to-r from-primary/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
-            </Card>
-          ))}
-        </div>
-
-        {/* Content Grid */}
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-          {/* Recent Activity */}
-          <Card className="lg:col-span-2">
-            <CardHeader>
-              <CardTitle className="flex items-center gap-2">
-                <div className="h-2 w-2 rounded-full bg-accent animate-pulse" />
-                Recent Activity
-              </CardTitle>
-            </CardHeader>
-            <CardContent className="space-y-4">
-              {recentActivity.map((activity, index) => (
-                <div
-                  key={index}
-                  className="flex items-center justify-between p-3 rounded-lg bg-secondary/50 hover:bg-secondary/80 transition-colors"
-                >
-                  <div>
-                    <p className="font-medium text-foreground">
-                      {activity.action}
-                    </p>
-                    <p className="text-sm text-primary">{activity.item}</p>
-                  </div>
-                  <span className="text-xs text-muted-foreground">
-                    {activity.time}
-                  </span>
-                </div>
-              ))}
-            </CardContent>
-          </Card>
-
-          {/* Quick Actions */}
-          <Card>
-            <CardHeader>
-              <CardTitle>Quick Actions</CardTitle>
-            </CardHeader>
-            <CardContent className="space-y-3">
-              <Button
-                variant="outline"
-                className="w-full justify-start"
-                asChild
-              >
-                <Link href="/destination/add">
-                  <MapPin className="h-4 w-4" />
-                  Add Destination
-                </Link>
-              </Button>
-              <Button
-                variant="outline"
-                className="w-full justify-start"
-                asChild
-              >
-                <Link href="/package/add">
-                  <Package className="h-4 w-4" />
-                  Create Package
-                </Link>
-              </Button>
-              <Button
-                variant="outline"
-                className="w-full justify-start"
-                asChild
-              >
-                <Link href="/itineraries/add">
-                  <MapPin className="h-4 w-4" />
-                  Build Itinerary
-                </Link>
-              </Button>
-              <Button
-                variant="outline"
-                className="w-full justify-start"
-                asChild
-              >
-                <Link href="/tour/add">
-                  <Compass className="h-4 w-4" />
-                  Setup Tour
-                </Link>
-              </Button>
-              <Button
-                variant="outline"
-                className="w-full justify-start"
-                asChild
-              >
-                <Link href="/hotel/add">
-                  <Building2 className="h-4 w-4" />
-                  Add Hotel
-                </Link>
-              </Button>
-            </CardContent>
-          </Card>
+        <div className="text-right">
+          <p className="text-sm text-gray-500">Last updated</p>
+          <p className="text-sm font-medium text-gray-900">
+            {new Date().toLocaleDateString()}
+          </p>
         </div>
       </div>
-    </>
+
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-6 ">
+        {stats1.map((stat) => {
+          const Icon = stat.icon;
+          return (
+            <Card
+              key={stat.title}
+              className="border-0 px-0 py-3 shadow-md hover:shadow-lg transition-shadow duration-200"
+            >
+              <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2 px-3">
+                <CardTitle className="text-sm font-medium text-gray-600">
+                  {stat.title}
+                </CardTitle>
+                <div
+                  className={`w-10 h-10 rounded-lg bg-gradient-to-br flex items-center justify-center ${
+                    stat.title === "Destinations"
+                      ? "from-blue-500 to-blue-600"
+                      : stat.title === "Packages"
+                      ? "from-green-500 to-green-600"
+                      : stat.title === "Tours"
+                      ? "from-teal-500 to-teal-600"
+                      : stat.title === "Hotels"
+                      ? "from-purple-500 to-purple-600"
+                      : "from-orange-500 to-orange-600"
+                  }`}
+                >
+                  <Icon className="w-5 h-5 text-white" />
+                </div>
+              </CardHeader>
+              <CardContent className="px-3">
+                <div className="text-3xl font-bold text-gray-900 mb-1">
+                  {stat.value}
+                </div>
+                <p className="text-sm text-gray-500">
+                  {stat.title === "Destinations"
+                    ? "Active destinations"
+                    : stat.title === "Packages"
+                    ? "Travel packages"
+                    : stat.title === "Tours"
+                    ? "Guided tours"
+                    : stat.title === "Hotels"
+                    ? "Partner hotels"
+                    : "All Reviews"}
+                </p>
+              </CardContent>
+            </Card>
+          );
+        })}
+      </div>
+
+      <div className="mb-8">
+        <DashboardHeading
+          icon={Zap}
+          title="Quick Actions"
+          description=" Create new content with just one click"
+          badgeClass="bg-gradient-to-r from-indigo-100 to-purple-100 text-indigo-700"
+          badgeText="Fast Track ⚡"
+          iconClass="bg-gradient-to-br from-indigo-500 to-purple-600"
+        />
+
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-6 gap-4">
+          {quickLinks.map((action) => {
+            const IconComponent = action.icon;
+            return (
+              <Card
+                key={action.section}
+                className={`py-0 group cursor-pointer border-0 shadow-md hover:shadow-xl transition-all duration-300 hover:-translate-y-1 bg-gradient-to-br ${action.bgGradient} ${action.hoverBg} overflow-hidden`}
+              >
+                <CardContent className="p-4">
+                  <div className="flex flex-col gap-1">
+                    <div className="flex gap-3">
+                      <div
+                        className={`w-11 h-11 rounded-2xl bg-gradient-to-r ${action.gradient} flex items-center justify-center mb-3 group-hover:scale-110 transition-transform duration-300 shadow-lg`}
+                      >
+                        <IconComponent className="w-5 h-5 text-white" />
+                      </div>
+                      <div>
+                        <h3
+                          className={`font-semibold mb-1 ${action.textColor} group-hover:scale-105 transition-transform`}
+                        >
+                          {action.title}
+                        </h3>
+                        <p className="text-xs text-gray-600 leading-relaxed mb-3">
+                          {action.description}
+                        </p>
+                      </div>
+                    </div>
+                    <Link href={action.href} className="w-full">
+                      <Button
+                        size="sm"
+                        className={`w-full bg-gradient-to-r ${action.gradient} hover:shadow-md transition-all duration-200 border-0 group-hover:scale-105`}
+                      >
+                        <Plus className="w-4 h-4 mr-1" />
+                        Create
+                      </Button>
+                    </Link>
+                  </div>
+                </CardContent>
+              </Card>
+            );
+          })}
+        </div>
+      </div>
+
+      {/* Trending Destinations Section */}
+      <TrendingDestination />
+
+      {/* Featured Packages Section */}
+      <FeaturedPackage />
+    </div>
   );
 }

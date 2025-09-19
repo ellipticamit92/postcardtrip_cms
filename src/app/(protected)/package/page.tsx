@@ -7,8 +7,14 @@ import { Package } from "lucide-react";
 
 export const dynamic = "force-dynamic";
 
-export default async function PacakgesPage() {
-  const packageData = await PackageService.getAll();
+interface PackagePageProps {
+  searchParams: Promise<Record<string, string | undefined>>;
+}
+
+export default async function PacakgesPage({ searchParams }: PackagePageProps) {
+  const params = await searchParams;
+  const page = Number(params?.page) || 1;
+  const packageData = await PackageService.getAll({ page });
   const { data, pagination } = packageData;
 
   return (

@@ -127,7 +127,7 @@ export function PackageForm({
       }
 
       if (!isEditMode) {
-        //reset();
+        reset();
       }
     } catch (err: any) {
       console.error("Error submitting Package", err);

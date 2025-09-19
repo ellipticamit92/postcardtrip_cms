@@ -52,7 +52,7 @@ export default function ItinerariesForm({
   cityOptions,
   highlightOptions,
 }: ItinerariesFormProps) {
-  const { loading, createItinerary, updateItinerary } = useItineraries();
+  const { loading, createItinerary } = useItineraries();
   const form = useForm<ItinerariesFormData>({
     resolver: zodResolver(itinerariesSchema),
   });

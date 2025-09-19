@@ -4,7 +4,6 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group";
-import { useFilter } from "@/hooks/use-filter";
 import { Grid3X3, List, Search, TableIcon } from "lucide-react";
 import { FC } from "react";
 

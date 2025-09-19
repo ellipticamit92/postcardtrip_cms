@@ -5,7 +5,7 @@ import { ColumnDef } from "@tanstack/react-table";
 import { ArrowUpDown, MoreHorizontal } from "lucide-react";
 import { FC } from "react";
 import Link from "next/link";
-import { toIndianCurrency } from "@/lib/helper";
+import { toIndianCurrency, truncateText } from "@/lib/helper";
 import CommonTable from "@/components/molecules/CommonTable";
 import ShowData from "@/components/molecules/ShowData";
 import ShowPrice from "@/components/molecules/ShowPrices";
@@ -64,7 +64,11 @@ export const columns: ColumnDef<Package>[] = [
       </Button>
     ),
     cell: ({ row }) => {
-      return <div className="w32 overflow-hidden">{row.original?.name}</div>;
+      return (
+        <div className="w32 overflow-hidden">
+          {truncateText(row.original?.name)}
+        </div>
+      );
     },
   },
   {
@@ -87,7 +91,7 @@ export const columns: ColumnDef<Package>[] = [
   },
   {
     accessorKey: "inclusions",
-    header: "INC/EXC/HLG/Cities",
+    header: "IN/EX/HL/CT",
     cell: ({ row }) => {
       const name = row.getValue("name") as string;
 
@@ -96,7 +100,7 @@ export const columns: ColumnDef<Package>[] = [
           <Dialog>
             <DialogTrigger asChild>
               <Button variant="default" size="xs">
-                View Details
+                See Details
               </Button>
             </DialogTrigger>
             <DialogContent className="max-w-4xl max-h-[80vh] overflow-y-auto">
@@ -144,7 +148,7 @@ export const columns: ColumnDef<Package>[] = [
           <Dialog>
             <DialogTrigger asChild>
               <Button variant="accent" size="xs">
-                View Prices
+                View
               </Button>
             </DialogTrigger>
             <DialogContent className="max-w-4xl max-h-[80vh] overflow-y-auto">
@@ -198,11 +202,11 @@ export const columns: ColumnDef<Package>[] = [
     cell: ({ row }) => (
       <div>
         <a
-          className="text-blue-700 hover:underline"
+          className="text-blue-700 hover:underline font-bold"
           href={row.getValue("imageUrl")}
           target="_blank"
         >
-          See image
+          View
         </a>
       </div>
     ),

@@ -77,7 +77,7 @@ export function ReviewForm({
       }
 
       if (!isEditMode) {
-        // reset();
+        reset();
       }
     } catch (err: any) {
       console.error("Error submitting review", err);

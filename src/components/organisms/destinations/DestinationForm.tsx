@@ -89,7 +89,7 @@ export function DestinationForm({
       }
 
       if (!isEditMode) {
-        //  reset();
+        reset();
       }
     } catch (err: any) {
       console.error("Error submitting destination", err);

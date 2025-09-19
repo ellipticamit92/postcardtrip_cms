@@ -22,6 +22,7 @@ export class CityService {
         select: {
           cid: true,
           name: true,
+          createdAt: true,
         },
       });
       const cityData = getFieldOptionsNum(cities, "cid");

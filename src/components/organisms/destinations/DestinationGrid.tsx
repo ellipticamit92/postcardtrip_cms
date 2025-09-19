@@ -21,7 +21,7 @@ interface DestinationsProps {
   pagination: PaginationProps;
 }
 
-const DestinationGrid: FC<DestinationsProps> = ({ data, pagination }) => {
+const DestinationGrid: FC<DestinationsProps> = ({ data }) => {
   return (
     <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
       {data.map((destination) => (

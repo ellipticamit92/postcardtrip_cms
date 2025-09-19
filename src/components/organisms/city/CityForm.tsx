@@ -27,7 +27,7 @@ interface CityFormProps {
   cityId?: number;
 }
 
-export function CityForm({ destinations, initialData, cityId }: CityFormProps) {
+export function CityForm({ initialData, cityId }: CityFormProps) {
   const { loading, createCity, updateCity } = useCities({
     autoFetch: false,
   });

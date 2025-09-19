@@ -5,6 +5,7 @@ import { SessionProvider } from "next-auth/react";
 import { SidebarInset, SidebarProvider } from "@/components/ui/sidebar";
 import { AppSidebar } from "@/components/molecules/AppSidebar";
 import { Header } from "@/components/molecules/Header";
+import { RouteLoader } from "@/components/atoms/RouteLoader";
 
 export default function ProtectedLayout({
   children,
@@ -16,6 +17,7 @@ export default function ProtectedLayout({
       <SessionProvider>
         <SidebarProvider>
           <AppSidebar />
+          <RouteLoader />
           <SidebarInset>
             <Header />
             <div className="px-10 mt-4">

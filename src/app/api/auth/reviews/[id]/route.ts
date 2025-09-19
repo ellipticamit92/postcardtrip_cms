@@ -2,7 +2,7 @@ import ReviewService from "@/services/reviews.service";
 import { NextRequest, NextResponse } from "next/server";
 
 interface RouteParams {
-  params: Promise<{ id: number }>;
+  params: Promise<{ id: string }>;
 }
 
 // ✅ GET /api/reviews/[id] - Get review by ID
@@ -11,7 +11,8 @@ export async function GET(
   { params }: RouteParams
 ): Promise<NextResponse> {
   try {
-    const { id: reviewId } = await params;
+    const { id } = await params;
+    const reviewId = Number(id);
 
     if (!reviewId) {
       return NextResponse.json(
@@ -52,7 +53,8 @@ export async function PUT(
   { params }: RouteParams
 ): Promise<NextResponse> {
   try {
-    const { id: reviewId } = await params;
+    const { id } = await params;
+    const reviewId = Number(id);
     const body = await request.json();
 
     if (!reviewId) {
@@ -93,7 +95,8 @@ export async function DELETE(
   { params }: RouteParams
 ): Promise<NextResponse> {
   try {
-    const { id: reviewId } = await params;
+    const { id } = await params;
+    const reviewId = Number(id);
 
     if (!reviewId) {
       return NextResponse.json(

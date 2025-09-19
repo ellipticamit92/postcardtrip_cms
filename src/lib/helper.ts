@@ -61,3 +61,14 @@ export const numberOptions = (max: number = 20, labelPrefix = "") =>
     label: labelPrefix ? `${labelPrefix} ${i + 1}` : `${i + 1}`,
     value: String(i + 1),
   }));
+
+/**
+ * Truncate text to a max length and add "..." if needed
+ * @param text - The string to truncate
+ * @param maxLength - Max characters before truncation (default 25)
+ * @returns Truncated string with "..." if longer
+ */
+export function truncateText(text: string, maxLength: number = 20): string {
+  if (!text) return "";
+  return text.length > maxLength ? text.slice(0, maxLength) + "..." : text;
+}

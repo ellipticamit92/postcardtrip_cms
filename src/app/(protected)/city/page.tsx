@@ -1,5 +1,4 @@
-// src/app/(protected)/city/page.tsx
-import CityCard from "@/components/organisms/city/CityCard";
+import CityGrid from "@/components/organisms/city/CityGrid";
 import CityTable from "@/components/organisms/city/CityTable";
 import PageHeader from "@/components/organisms/PageHeader";
 import ViewLayout from "@/components/templates/ViewLayout";
@@ -30,7 +29,7 @@ export default async function CityPage({ searchParams }: CityPageProps) {
         data={data ?? []}
         pagination={pagination}
         filterKey="name"
-        GridComponent={CityCard}
+        GridComponent={CityGrid}
         ListComponent={CityTable}
         TableComponent={CityTable}
       />

@@ -118,6 +118,7 @@ export interface City {
   cid: number;
   name: string;
   description: string; // Rich text HTML content
+  createdAt: Date;
   // Optional relations
   packages?: Package[];
   hotels?: Hotel[];
@@ -150,6 +151,7 @@ export interface Package {
   threePrice: number | null;
   fourPrice: number | null;
   fivePrice: number | null;
+  rating?: string | null;
   // Optional relations
   destination?: Partial<Destination>;
   itineraries?: Partial<Itinerary>[];

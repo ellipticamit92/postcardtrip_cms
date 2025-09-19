@@ -54,7 +54,6 @@ export const columns: ColumnDef<IEH>[] = [
         text: row.original?.text ?? "",
       };
       const ieh = row.original;
-      const id = String(ieh.id).trim();
       const deleteId = `${ieh.id}_${ieh?.type}`;
       return (
         <div className="flex gap-2">

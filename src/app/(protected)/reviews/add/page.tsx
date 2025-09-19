@@ -4,6 +4,8 @@ import DestinationService from "@/services/destination.service";
 import PackageService from "@/services/package.service";
 import { PencilIcon } from "lucide-react";
 
+export const dynamic = "force-dynamic";
+
 const AddReviewPage = async () => {
   const destinations = await DestinationService.getNameId();
   const packages = await PackageService.getNameId();

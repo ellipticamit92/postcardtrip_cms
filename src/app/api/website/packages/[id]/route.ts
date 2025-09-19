@@ -1,5 +1,4 @@
 import { NextRequest, NextResponse } from "next/server";
-import { DestinationService } from "@/services/destination.service";
 import { unslugifyPackageName } from "@/lib/helper";
 import PackageService from "@/services/package.service";
 

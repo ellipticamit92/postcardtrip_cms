@@ -3,16 +3,23 @@ import Pagination from "@/components/molecules/Pagination";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog";
 import { City, PaginationProps } from "@/types/type";
 import { Edit, Trash2 } from "lucide-react";
 import { FC } from "react";
 
-interface CityCardProps {
+interface CityGridProps {
   data: City[];
   pagination: PaginationProps;
 }
 
-const CityCard: FC<CityCardProps> = ({ data, pagination }) => {
+const CityGrid: FC<CityGridProps> = ({ data, pagination }) => {
   const getStatusColor = (status: string) => {
     switch (status) {
       case "active":
@@ -60,29 +67,39 @@ const CityCard: FC<CityCardProps> = ({ data, pagination }) => {
             </CardHeader>
 
             <CardContent className="space-y-4">
-              <div>
-                <span className="text-muted-foreground text-sm">
-                  <p
-                    className="prose prose-sm max-w-none"
-                    dangerouslySetInnerHTML={{ __html: city.description }}
-                  />
-                </span>
-              </div>
               <div className="flex items-center justify-between pt-4 border-t border-border/50">
                 <div className="text-sm text-muted-foreground">
-                  Updated today
+                  Added :
+                  {city.createdAt
+                    ? new Intl.DateTimeFormat("en-IN", {
+                        day: "2-digit",
+                        month: "2-digit",
+                        year: "numeric",
+                      }).format(new Date(city.createdAt))
+                    : "-"}
                 </div>
-                <div className="flex gap-2">
-                  <Button variant="default" size="sm">
-                    Edit City
-                  </Button>
-                </div>
+                <Dialog>
+                  <DialogTrigger asChild>
+                    <Button variant="outline" size="sm">
+                      View Details
+                    </Button>
+                  </DialogTrigger>
+                  <DialogContent className="max-w-4xl max-h-[80vh] overflow-y-auto">
+                    <DialogHeader>
+                      <DialogTitle>City Overview</DialogTitle>
+                    </DialogHeader>
+                    <div
+                      className="prose prose-sm max-w-none"
+                      dangerouslySetInnerHTML={{ __html: city.description }}
+                    />
+                  </DialogContent>
+                </Dialog>
               </div>
             </CardContent>
           </Card>
         ))}
       </div>
-      <div>
+      <div className="sticky bottom-0 w-full flex items-end justify-end mt-4 p-2 bg-white shadow-lg">
         <Pagination
           currentPage={pagination.page}
           totalPages={pagination.totalPages}
@@ -95,4 +112,4 @@ const CityCard: FC<CityCardProps> = ({ data, pagination }) => {
   );
 };
 
-export default CityCard;
+export default CityGrid;

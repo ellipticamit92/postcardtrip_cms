@@ -7,6 +7,8 @@ import HighlightService from "@/services/highlight.service";
 import InclusionService from "@/services/inclusion.service";
 import TourService from "@/services/tours.service";
 
+export const dynamic = "force-dynamic";
+
 export default async function AddDestinationPage() {
   const destinationsData = await DestinationService.getNameId();
   const toursOptions = await TourService.getNameId();

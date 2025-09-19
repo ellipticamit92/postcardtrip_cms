@@ -1,4 +1,3 @@
-import DestinationService from "@/services/destination.service";
 import PackageService from "@/services/package.service";
 import { NextRequest, NextResponse } from "next/server";
 

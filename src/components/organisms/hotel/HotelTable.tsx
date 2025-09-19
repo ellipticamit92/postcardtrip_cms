@@ -82,9 +82,6 @@ export const columns: ColumnDef<Hotel>[] = [
       const overview = row.getValue("description") as string;
       const name = row.getValue("name") as string;
 
-      // Preview (first 100 chars without HTML)
-      const previewText = overview.replace(/<[^>]*>/g, "").substring(0, 15);
-
       return (
         <div className="space-y-2">
           <Dialog>
