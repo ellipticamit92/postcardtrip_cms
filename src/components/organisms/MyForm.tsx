@@ -7,8 +7,8 @@ interface MyFormProps {
 
 const MyForm: FC<MyFormProps> = ({ children, title = "Basic Information" }) => {
   return (
-    <div className="w-full bg-white p-3">
-      <h1 className="text-xl font-bold mb-5">{title}</h1>
+    <div className="w-full ">
+      {/* <h1 className="text-xl font-bold mb-5">{title}</h1> */}
       {children}
     </div>
   );

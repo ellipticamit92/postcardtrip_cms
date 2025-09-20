@@ -1,3 +1,5 @@
+import { Destination, Package } from "@prisma/client";
+
 export interface PaginationOptions {
   page?: number;
   limit?: number;
@@ -93,27 +95,6 @@ export interface VerificationToken {
   expires: Date;
 }
 
-export interface Destination {
-  did: number;
-  name: string;
-  country: string;
-  overview?: string | null;
-  imageUrl?: string | null;
-  basePrice?: number | null;
-  originalPrice?: number | null;
-  heading: string;
-  trending: boolean;
-  heroTitle?: string | null;
-  description?: string | null; // Rich text HTML content
-  text?: string | null; // Rich text HTML content
-  rating?: string | null;
-  updatedAt: Date;
-  createdAt: Date;
-  // Optional relations
-  packages?: Package[];
-  cities?: City[];
-}
-
 export interface City {
   cid: number;
   name: string;
@@ -134,34 +115,6 @@ export interface Hotel {
   city?: Partial<City>;
   prices?: PackageHotelPrice[];
   images?: HotelImage[];
-}
-
-export interface Package {
-  pid: number;
-  name: string;
-  basePrice: number | null;
-  originalPrice: number | null;
-  day: number | null;
-  night: number | null;
-  description: string | null;
-  overview: string | null;
-  destinationId: number;
-  popular: boolean | null;
-  featured: boolean | null;
-  threePrice: number | null;
-  fourPrice: number | null;
-  fivePrice: number | null;
-  rating?: string | null;
-  // Optional relations
-  destination?: Partial<Destination>;
-  itineraries?: Partial<Itinerary>[];
-  hotelPrices?: PackageHotelPrice[];
-  tours?: Partial<Tours>[];
-  imageUrl?: string | null;
-  inclusions?: Partial<Inclusion>[];
-  exclusions?: Partial<Exclusion>[];
-  highlights?: Partial<Highlight>[];
-  cities?: Partial<City>[];
 }
 
 export interface PackageHotelPrice {
@@ -270,24 +223,30 @@ export interface Tours {
   icons?: string | null;
 }
 
-export interface Review {
-  id: number;
-  username: string;
-  places: string;
-  review: string;
-  rating: number;
-  packageId?: number | null;
-  destinationId?: number | null;
-  package?: {
-    pid: number;
-    name: string;
-  } | null;
-  destination?: {
-    did: number;
-    name: string;
-  } | null;
-  createdAt: Date;
-  updatedAt: Date;
-}
+// export interface Review {
+//   id: number;
+//   username: string;
+//   places: string;
+//   review: string;
+//   rating: number;
+//   packageId?: number | null;
+//   destinationId?: number | null;
+//   package?: {
+//     pid: number;
+//     name: string;
+//   } | null;
+//   destination?: {
+//     did: number;
+//     name: string;
+//   } | null;
+//   createdAt: Date;
+//   updatedAt: Date;
+// }
 
 export type IEHType = "inclusion" | "exclusion" | "highlight";
+
+export interface HooksProps {
+  autoFetch?: boolean;
+  initialPage?: number;
+  initialLimit?: number;
+}

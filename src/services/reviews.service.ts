@@ -83,6 +83,7 @@ export class ReviewService {
                     did: true,
                     name: true,
                     imageUrl: true,
+                    country: true,
                   },
                 },
               }

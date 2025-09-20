@@ -15,6 +15,9 @@ interface FormInputProps<T extends FieldValues> {
   placeholder?: string;
   type?: string;
   disabled?: boolean;
+  step?: number | string;
+  min?: number;
+  max?: number;
 }
 
 export const FormInput = <T extends FieldValues>({
@@ -24,6 +27,9 @@ export const FormInput = <T extends FieldValues>({
   placeholder = "",
   type = "text",
   disabled = false,
+  step,
+  min,
+  max,
 }: FormInputProps<T>) => {
   return (
     <FormField
@@ -39,6 +45,9 @@ export const FormInput = <T extends FieldValues>({
               type={type}
               disabled={disabled}
               value={field.value ?? ""}
+              step={step}
+              min={min}
+              max={max}
               onChange={(e) =>
                 field.onChange(
                   type === "number"

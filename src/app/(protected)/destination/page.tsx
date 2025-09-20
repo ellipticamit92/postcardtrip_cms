@@ -1,4 +1,5 @@
 import DestinationGrid from "@/components/organisms/destinations/DestinationGrid";
+import DestinationList from "@/components/organisms/destinations/DestinationList";
 import DestinationTable from "@/components/organisms/destinations/DestinationTable";
 import PageHeader from "@/components/organisms/PageHeader";
 import ViewLayout from "@/components/templates/ViewLayout";
@@ -24,7 +25,7 @@ export default async function DestinationPage() {
         pagination={pagination}
         filterKey={"name"}
         GridComponent={DestinationGrid}
-        ListComponent={DestinationGrid}
+        ListComponent={DestinationList}
         TableComponent={DestinationTable}
       />
     </>

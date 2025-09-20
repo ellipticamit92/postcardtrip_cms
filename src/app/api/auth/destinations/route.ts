@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { DestinationService } from "@/services/destination.service";
+import { DestinationFormDataType } from "@/types/form/type";
 
 /**
  * GET /api/destinations
@@ -45,7 +46,7 @@ export async function GET(req: NextRequest) {
  */
 export async function POST(req: NextRequest) {
   try {
-    const body = await req.json();
+    const body = (await req.json()) as DestinationFormDataType;
 
     if (!body.name || !body.country) {
       return NextResponse.json(
@@ -54,20 +55,7 @@ export async function POST(req: NextRequest) {
       );
     }
 
-    const destination = await DestinationService.create({
-      name: body.name,
-      country: body.country,
-      overview: body.overview,
-      imageUrl: body.imageUrl,
-      trending: body.trending,
-      heading: body.heading,
-      basePrice: body.basePrice,
-      originalPrice: body.originalPrice,
-      heroTitle: body.heroTitle,
-      description: body.description,
-      text: body.text,
-      rating: body.rating,
-    });
+    const destination = await DestinationService.create(body);
 
     return NextResponse.json(
       { success: true, data: destination, message: "Destination created" },

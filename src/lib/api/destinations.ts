@@ -1,3 +1,5 @@
+import { DestinationFormDataType } from "@/types/form/type";
+
 const API_BASE_URL = "/api/auth/destinations";
 
 export const destinationsApi = {
@@ -37,20 +39,7 @@ export const destinationsApi = {
   },
 
   // Create new destination
-  create: async (data: {
-    name: string;
-    country: string;
-    overview?: string;
-    imageUrl?: string;
-    trending?: boolean;
-    heading: string;
-    basePrice?: number;
-    originalPrice?: number;
-    heroTitle?: string;
-    description?: string;
-    text?: string;
-    rating?: string;
-  }) => {
+  create: async (data: DestinationFormDataType) => {
     const response = await fetch(API_BASE_URL, {
       method: "POST",
       headers: {
@@ -62,22 +51,7 @@ export const destinationsApi = {
   },
 
   // Update destination
-  update: async (
-    id: number,
-    data: {
-      name?: string;
-      country?: string;
-      overview?: string;
-      imageUrl?: string;
-      trending?: boolean;
-      heading: string;
-      originalPrice?: number;
-      heroTitle?: string;
-      description?: string;
-      text?: string;
-      rating?: string;
-    }
-  ) => {
+  update: async (id: number, data: DestinationFormDataType) => {
     const response = await fetch(`${API_BASE_URL}/${id}`, {
       method: "PUT",
       headers: {

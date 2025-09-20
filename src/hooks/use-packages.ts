@@ -1,3 +1,4 @@
+import { PackageFormDataType } from "@/components/organisms/packages/PackageForm";
 import { packagesApi } from "@/lib/api/packages";
 import { showToast } from "@/lib/toast";
 import { useState, useEffect } from "react";
@@ -94,26 +95,9 @@ export const usePackages = (options: UsePackagesOptions = {}) => {
   };
 
   // Create new package
-  const createPackage = async (data: {
-    name: string;
-    destinationId: number;
-    description: string;
-    day: number;
-    night: number;
-    imageUrl: string;
-    popular?: boolean;
-    tours?: number[];
-    overview?: string;
-    featured?: boolean;
-    rating?: string;
-    cities: number[];
-    highlights: number[];
-    basePrice: number;
-    originalPrice?: number;
-    threePrice: number;
-    fourPrice: number;
-    fivePrice: number;
-  }): Promise<{ success: boolean; data?: Package; error?: string }> => {
+  const createPackage = async (
+    data: PackageFormDataType
+  ): Promise<{ success: boolean; data?: Package; error?: string }> => {
     setLoading(true);
     setError(null);
 
@@ -158,30 +142,7 @@ export const usePackages = (options: UsePackagesOptions = {}) => {
   // Update package
   const updatePackage = async (
     id: number,
-    data: {
-      name?: string;
-      destinationId?: number;
-      description?: string;
-      price?: number;
-      duration?: number;
-      imageUrl?: string;
-      popular?: boolean;
-      day?: number;
-      night?: number;
-      basePrice?: number;
-      originalPrice?: number;
-      threePrice: number;
-      fourPrice: number;
-      fivePrice: number;
-      overview?: string;
-      featured?: boolean;
-      rating?: string;
-      tours?: number[];
-      cities?: number[];
-      highlights: number[];
-      inclusions: number[];
-      exclusions: number[];
-    }
+    data: PackageFormDataType
   ): Promise<{ success: boolean; data?: Package; error?: string }> => {
     setLoading(true);
     setError(null);

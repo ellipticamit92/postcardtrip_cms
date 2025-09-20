@@ -35,30 +35,39 @@ const CityGrid: FC<CityGridProps> = ({ data, pagination }) => {
 
   return (
     <div className="space-y-6">
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
         {data.map((city) => (
           <Card
             key={city.cid}
-            className="group hover:shadow-elegant transition-all duration-300 py-4 gap-2"
+            className="group hover:shadow-lg hover:border-primary/20 transition-all duration-300 rounded-xl p-3 gap-1"
           >
-            <CardHeader>
+            {/* Header */}
+            <CardHeader className="p-0 mb-3">
               <div className="flex items-start justify-between">
                 <div className="flex-1">
-                  <CardTitle className="text-xl mb-2">{city.name}</CardTitle>
-                  <div className="flex items-center gap-2 mt-3">
-                    <Badge className={getStatusColor("active")}>
-                      {'"active"'}
-                    </Badge>
-                  </div>
+                  <CardTitle className="text-lg font-semibold text-foreground">
+                    {city.name}
+                  </CardTitle>
+                  <Badge
+                    className={`${getStatusColor(
+                      "active"
+                    )} mt-2 px-2 py-0.5 text-xs rounded-full`}
+                  >
+                    Active
+                  </Badge>
                 </div>
                 <div className="flex gap-1">
-                  <Button variant="ghost" size="icon" className="h-8 w-8">
+                  <Button
+                    variant="ghost"
+                    size="icon"
+                    className="h-8 w-8 hover:bg-primary/10"
+                  >
                     <Edit className="h-4 w-4" />
                   </Button>
                   <Button
                     variant="ghost"
                     size="icon"
-                    className="h-8 w-8 text-destructive hover:text-destructive"
+                    className="h-8 w-8 text-destructive hover:bg-destructive/10"
                   >
                     <Trash2 className="h-4 w-4" />
                   </Button>
@@ -66,30 +75,39 @@ const CityGrid: FC<CityGridProps> = ({ data, pagination }) => {
               </div>
             </CardHeader>
 
-            <CardContent className="space-y-4">
-              <div className="flex items-center justify-between pt-4 border-t border-border/50">
-                <div className="text-sm text-muted-foreground">
-                  Added :
+            {/* Content */}
+            <CardContent className="p-0 space-y-4">
+              {/* Metadata */}
+              <div className="flex items-center justify-between text-xs text-muted-foreground border-t pt-2">
+                <span>
+                  Added:{" "}
                   {city.createdAt
                     ? new Intl.DateTimeFormat("en-IN", {
                         day: "2-digit",
-                        month: "2-digit",
+                        month: "short",
                         year: "numeric",
                       }).format(new Date(city.createdAt))
                     : "-"}
-                </div>
+                </span>
+
                 <Dialog>
                   <DialogTrigger asChild>
-                    <Button variant="outline" size="sm">
+                    <Button
+                      variant="outline"
+                      size="xs"
+                      className="text-xs font-medium hover:bg-primary hover:text-white"
+                    >
                       View Details
                     </Button>
                   </DialogTrigger>
-                  <DialogContent className="max-w-4xl max-h-[80vh] overflow-y-auto">
+                  <DialogContent className="max-w-2xl max-h-[70vh] overflow-y-auto">
                     <DialogHeader>
-                      <DialogTitle>City Overview</DialogTitle>
+                      <DialogTitle className="text-lg font-semibold">
+                        City Overview
+                      </DialogTitle>
                     </DialogHeader>
                     <div
-                      className="prose prose-sm max-w-none"
+                      className="prose prose-sm max-w-none mt-3"
                       dangerouslySetInnerHTML={{ __html: city.description }}
                     />
                   </DialogContent>

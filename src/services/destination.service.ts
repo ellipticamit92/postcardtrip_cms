@@ -1,21 +1,9 @@
 import { getFieldOptions } from "@/lib/helper";
 import { prisma } from "@/lib/prisma";
+import { DestinationFormDataType } from "@/types/form/type";
 
 export class DestinationService {
-  static async create(data: {
-    name: string;
-    country: string;
-    overview?: string;
-    imageUrl?: string;
-    trending?: boolean;
-    heading: string;
-    basePrice?: number;
-    originalPrice?: number;
-    heroTitle?: string;
-    description?: string;
-    text?: string;
-    rating?: string;
-  }) {
+  static async create(data: DestinationFormDataType) {
     try {
       return await prisma.destination.create({
         data,
@@ -167,7 +155,6 @@ export class DestinationService {
         select: {
           did: true,
           name: true,
-          description: true,
           country: true,
           imageUrl: true,
           heroTitle: true,
@@ -203,23 +190,7 @@ export class DestinationService {
     }
   }
 
-  static async update(
-    did: number,
-    data: {
-      name?: string;
-      country?: string;
-      overview?: string;
-      imageUrl?: string;
-      trending?: boolean;
-      heading?: string;
-      basePrice?: number;
-      originalPrice?: number;
-      heroTitle?: string;
-      description?: string;
-      text?: string;
-      rating?: string;
-    }
-  ) {
+  static async update(did: number, data: DestinationFormDataType) {
     try {
       return await prisma.destination.update({
         where: { did },
@@ -264,6 +235,7 @@ export class DestinationService {
       const data = await prisma.destination.findMany({
         where: {
           trending: true,
+          status: true,
         },
         include: {
           packages: true, // we need it temporarily to count

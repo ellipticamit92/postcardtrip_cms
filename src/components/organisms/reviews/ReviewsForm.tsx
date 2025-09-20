@@ -26,7 +26,7 @@ const schema = z.object({
   destinationId: z.string().optional(),
 });
 
-export type ReviewFormData = z.infer<typeof schema>;
+export type ReviewFormDataType = z.infer<typeof schema>;
 
 export function ReviewForm({
   initialData,
@@ -34,7 +34,7 @@ export function ReviewForm({
   destinations,
   packages,
 }: {
-  initialData?: ReviewFormData;
+  initialData?: ReviewFormDataType;
   reviewId?: string;
   destinations: { label: string; value: string }[];
   packages: { label: string; value: string }[];
@@ -43,7 +43,7 @@ export function ReviewForm({
     autoFetch: false,
   });
 
-  const form = useForm<ReviewFormData>({
+  const form = useForm<ReviewFormDataType>({
     resolver: zodResolver(schema),
     defaultValues: initialData ?? {
       username: "",
@@ -57,7 +57,7 @@ export function ReviewForm({
 
   const { control, reset } = form;
 
-  const onSubmit = async (data: ReviewFormData) => {
+  const onSubmit = async (data: ReviewFormDataType) => {
     try {
       const isEditMode = Boolean(reviewId);
 
@@ -90,16 +90,41 @@ export function ReviewForm({
       <Form {...form}>
         <form
           onSubmit={form.handleSubmit(onSubmit)}
-          className="space-y-4 mb-10"
+          className="space-y-6 rounded-xl border bg-card p-6 shadow-sm"
         >
-          <div className="grid grid-cols-3 gap-4">
-            <FormInput name="username" control={control} label="Username" />
-            <FormInput name="places" control={control} label="Places Visited" />
+          {/* Heading */}
+          <div>
+            <h2 className="text-lg font-semibold text-foreground">
+              {initialData ? "Update Review" : "Add Review"}
+            </h2>
+            <p className="text-sm text-muted-foreground">
+              Share your travel experience and help others decide!
+            </p>
+          </div>
+
+          {/* Inputs */}
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+            <FormInput
+              name="username"
+              control={control}
+              label="Username"
+              placeholder="Your name"
+            />
+            <FormInput
+              name="places"
+              control={control}
+              label="Places Visited"
+              placeholder="e.g., Paris, London"
+            />
             <FormInput
               name="rating"
               type="number"
+              step="0.1"
+              min={0}
+              max={5}
               control={control}
               label="Rating (0-5)"
+              placeholder="4.5"
             />
           </div>
 
@@ -110,27 +135,36 @@ export function ReviewForm({
             placeholder="Write your experience..."
           />
 
-          <div className="grid grid-cols-2 gap-4">
+          {/* Dropdowns */}
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <FormSelect
-              label="Select Reviewed Package"
+              label="Reviewed Package"
               name="packageId"
               control={control}
               options={packages}
-              placeholder="Select Reviewed package"
+              placeholder="Select package"
             />
             <FormSelect
-              label="Select Reviewed Destiantion"
+              label="Reviewed Destination"
               name="destinationId"
               control={control}
               options={destinations}
-              placeholder="Select Reviewed Destiantion"
+              placeholder="Select destination"
             />
           </div>
 
-          <Button variant="secondary" type="submit" disabled={loading}>
-            {loading && <Loader2 className="animate-spin mr-2" />}
-            {initialData ? "Update" : "Add"} Review
-          </Button>
+          {/* Submit */}
+          <div className="flex justify-end">
+            <Button
+              type="submit"
+              variant="default"
+              disabled={loading}
+              className="w-full md:w-auto"
+            >
+              {loading && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
+              {initialData ? "Update Review" : "Submit Review"}
+            </Button>
+          </div>
         </form>
       </Form>
     </MyForm>

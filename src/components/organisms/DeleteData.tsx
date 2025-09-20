@@ -1,17 +1,20 @@
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
 import { Button } from "../ui/button";
+import { Trash2 } from "lucide-react";
 
 const DeleteData = ({
   model,
   id,
   ieh,
   isButton,
+  isIcon,
 }: {
   model: string;
   id: string;
   ieh?: boolean;
   isButton?: boolean;
+  isIcon?: boolean;
 }) => {
   const router = useRouter();
 
@@ -46,6 +49,19 @@ const DeleteData = ({
       console.error("Delete error:", err);
     }
   };
+
+  if (isIcon) {
+    return (
+      <Button
+        variant="ghost"
+        size="icon"
+        className="h-8 w-8 px-2 text-destructive hover:text-white"
+        onClick={handleDelete}
+      >
+        <Trash2 className="h-4 w-4" />
+      </Button>
+    );
+  }
 
   if (isButton) {
     return (

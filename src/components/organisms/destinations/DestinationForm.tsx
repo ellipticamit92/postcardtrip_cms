@@ -12,10 +12,10 @@ import { useDestinations } from "@/hooks/use-destinations";
 import { toast } from "sonner";
 import { FormCheckbox } from "@/components/atoms/FormCheckbox";
 import { FormTextarea } from "@/components/atoms/FormTextarea";
-import { FormRichText } from "@/components/atoms/FormRichText";
 import ImageUploader from "@/components/atoms/ImageUploader";
 import { FormSelect } from "@/components/atoms/FormSelect";
-import MyForm from "../MyForm";
+import FormSection from "@/components/molecules/FormSection";
+import FormSwitchableEditor from "@/components/molecules/FormSwitchableEditor";
 
 const schema = z.object({
   name: z.string().min(1),
@@ -24,28 +24,30 @@ const schema = z.object({
   overview: z.string().min(1),
   imageUrl: z.string().optional(),
   trending: z.boolean().optional(),
-  description: z.string().optional(),
+  status: z.boolean().optional(),
+  featured: z.boolean().optional(),
+  isRichText: z.boolean().optional(),
   text: z.string().optional(),
   heroTitle: z.string().optional(),
-  rating: z.string().optional(),
+  rating: z.number().min(1, "Please a rating"),
   basePrice: z.number().min(1, "Please enter base price"),
   originalPrice: z.number().min(1, "Please enter original price"),
 });
 
-export type DestinationFormData = z.infer<typeof schema>;
+export type DestinationFormDataType = z.infer<typeof schema>;
 
 export function DestinationForm({
   initialData,
   destinationId,
 }: {
-  initialData?: DestinationFormData;
+  initialData?: DestinationFormDataType;
   destinationId?: number;
 }) {
   const { createDestination, updateDestination, loading } = useDestinations({
     autoFetch: false,
   });
 
-  const form = useForm<DestinationFormData>({
+  const form = useForm<DestinationFormDataType>({
     resolver: zodResolver(schema),
     defaultValues: initialData ?? {
       name: "",
@@ -54,16 +56,17 @@ export function DestinationForm({
       overview: "",
       imageUrl: "",
       trending: false,
+      featured: false,
+      isRichText: false,
+      status: false,
       heroTitle: "",
-      description: "",
       text: "",
-      rating: "1.0",
     },
   });
 
   const { control, reset } = form;
 
-  const onSubmit = async (data: DestinationFormData) => {
+  const onSubmit = async (data: DestinationFormDataType) => {
     try {
       const isEditMode = Boolean(destinationId);
 
@@ -74,12 +77,14 @@ export function DestinationForm({
         overview: data.overview?.trim() || undefined,
         imageUrl: data.imageUrl?.trim() || undefined,
         trending: data.trending || false,
+        featured: data.featured || false,
+        isRichText: data.isRichText || false,
+        status: data.status || false,
         basePrice: data.basePrice,
         originalPrice: data.originalPrice,
-        description: data.description?.trim() || undefined,
         text: data.text?.trim() || undefined,
         heroTitle: data.heroTitle?.trim() || undefined,
-        rating: data.rating ?? "",
+        rating: data.rating,
       };
 
       if (isEditMode && destinationId) {
@@ -89,7 +94,7 @@ export function DestinationForm({
       }
 
       if (!isEditMode) {
-        reset();
+        //reset();
       }
     } catch (err: any) {
       console.error("Error submitting destination", err);
@@ -98,97 +103,105 @@ export function DestinationForm({
   };
 
   return (
-    <MyForm title="Destination Details">
-      <Form {...form}>
-        <form
-          onSubmit={form.handleSubmit(onSubmit)}
-          className="space-y-4 mb-10"
-        >
-          <div className="grid grid-cols-8 gap-4">
-            <div className="col-span-2">
-              <FormInput name="name" control={control} label="Name" />
-            </div>
-            <div className="col-span-3">
-              <FormInput name="heading" control={control} label="Heading" />
-            </div>
-            <div className="col-span-3">
-              <FormInput
-                name="heroTitle"
-                control={control}
-                label="Destination Hero Title"
-              />
-            </div>
-            <div className="col-span-2">
-              <FormSelect
-                name="country"
-                control={control}
-                label="Select Country"
-                placeholder="Choose your country"
-                options={COUNTRIES}
-              />
-            </div>
+    <Form {...form}>
+      <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-5 mb-12">
+        {/* --- Basic Info Section --- */}
+        <FormSection title="Basic Information" icon="📍">
+          <FormInput name="name" control={control} label="Destination Name" />
+          <FormInput name="heading" control={control} label="Heading" />
+          <FormInput name="heroTitle" control={control} label="Hero Title" />
+          <FormSelect
+            name="country"
+            control={control}
+            label="Country"
+            placeholder="Select a country"
+            options={COUNTRIES}
+          />
+          <FormInput
+            name="basePrice"
+            type="number"
+            control={control}
+            label="Current Price"
+          />
+          <FormInput
+            name="originalPrice"
+            type="number"
+            control={control}
+            label="Original Price"
+          />
+        </FormSection>
+        <FormSection title="Highlights" icon="⭐">
+          <FormTextarea
+            name="text"
+            control={control}
+            label="Destination Card Text"
+          />
+          <div>
             <FormInput
-              name="basePrice"
               type="number"
+              name="rating"
+              step="0.1" // <-- important to allow decimal numbers
+              min={0}
+              max={5}
               control={control}
-              label="Current Price"
+              label="Rating (0-5)"
             />
-            <FormInput
-              name="originalPrice"
-              type="number"
+            <p className="text-xs text-gray-500 mt-2">
+              Enter rating between 0 and 5
+            </p>
+          </div>
+          <div className="flex flex-col gap-3">
+            <FormCheckbox
+              name="trending"
               control={control}
-              label="Original Price"
+              label="Trending Destination"
             />
-
-            <FormInput name="rating" control={control} label="Rating (0-5)" />
-            <FormCheckbox name="trending" control={control} label="Trending" />
+            <FormCheckbox
+              name="featured"
+              control={control}
+              label="Featured Destination"
+            />
+            <FormCheckbox name="status" control={control} label="Active" />
           </div>
-          <div className="grid grid-cols-6 gap-4">
-            <div className="col-span-3">
-              <FormTextarea
-                name="description"
-                control={control}
-                label="Description"
-              />
-            </div>
-            <div className="col-span-3">
-              <FormTextarea
-                name="text"
-                control={control}
-                label="Destination Card Text"
-              />
-            </div>
-
-            <div className="col-span-4">
-              <FormRichText
-                label="Overview"
-                name="overview"
-                placeholder="Describe the destination"
-                control={control}
-                height={260}
-              />
-            </div>
-            <div className="col-span-2">
-              <Controller
-                control={control}
-                name="imageUrl"
-                render={({ field }) => (
-                  <ImageUploader
-                    value={field.value}
-                    onChange={field.onChange}
-                    label="Upload Destination Image"
-                  />
-                )}
-              />
-            </div>
+        </FormSection>
+        <FormSection title="Content & Media" icon="🖋️">
+          <div className="lg:col-span-2">
+            <FormSwitchableEditor
+              name="overview"
+              isRichName="isRichText"
+              control={control}
+              label="Overview"
+              placeholder="Write something about this destination..."
+            />
           </div>
+          <div>
+            <Controller
+              control={control}
+              name="imageUrl"
+              render={({ field }) => (
+                <ImageUploader
+                  value={field.value}
+                  onChange={field.onChange}
+                  label="Destination Image"
+                />
+              )}
+            />
+          </div>
+        </FormSection>
 
-          <Button variant="secondary" type="submit" disabled={loading}>
+        {/* --- Submit Button --- */}
+        <div className="flex justify-end bg-white p-4 shadow-md sticky bottom-0">
+          <Button
+            variant="default"
+            type="submit"
+            disabled={loading}
+            className="px-8 py-3 text-base font-medium rounded-xl shadow-md hover:shadow-lg transition-all"
+          >
             {loading && <Loader2 className="animate-spin mr-2" />}
-            {initialData ? "Update" : "Add"} Destination
+            {initialData ? "Update Destination" : "Add Destination"}
           </Button>
-        </form>
-      </Form>
-    </MyForm>
+        </div>
+      </form>
+    </Form>
   );
 }

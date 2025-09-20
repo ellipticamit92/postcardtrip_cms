@@ -1,7 +1,6 @@
 "use client";
 
 import { format } from "date-fns";
-import { Review, PaginationProps } from "@/types/type";
 import { ColumnDef } from "@tanstack/react-table";
 import { ArrowUpDown, MoreHorizontal } from "lucide-react";
 import { FC } from "react";
@@ -25,8 +24,12 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import {
+  ReviewsTableProps,
+  ReviewsWithPackageDestination,
+} from "@/types/form/type";
 
-export const columns: ColumnDef<Review>[] = [
+export const columns: ColumnDef<ReviewsWithPackageDestination>[] = [
   {
     id: "select",
     header: ({ table }) => (
@@ -149,11 +152,6 @@ export const columns: ColumnDef<Review>[] = [
     },
   },
 ];
-
-interface ReviewsTableProps {
-  data: Review[];
-  pagination: PaginationProps;
-}
 
 const ReviewsTable: FC<ReviewsTableProps> = ({ data, pagination }) => {
   return (

@@ -60,7 +60,7 @@ const FeaturedPackage = async () => {
                   </div>
                 </div>
               </div>
-              <CardContent className="p-5">
+              <CardContent className="p-5 pt-4">
                 <div className="mb-3">
                   <Badge
                     variant="secondary"

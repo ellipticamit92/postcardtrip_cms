@@ -81,7 +81,7 @@ export default function ImageUploader({
       </Label>
 
       <div
-        className={`relative border-2 border-dashed rounded-lg p-1 py-2 transition-all duration-300 ${
+        className={`relative border-2 border-dashed rounded-lg p-1 py-5 transition-all duration-300 ${
           dragActive
             ? "border-primary bg-accent/20"
             : "border-border hover:border-primary/50"

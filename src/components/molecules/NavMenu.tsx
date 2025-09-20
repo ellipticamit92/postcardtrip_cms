@@ -18,6 +18,7 @@ import {
   SidebarMenuSubButton,
   SidebarMenuSubItem,
 } from "@/components/ui/sidebar";
+import { useCallback } from "react";
 
 export function NavMenu({
   items,
@@ -36,14 +37,18 @@ export function NavMenu({
 }) {
   const pathname = usePathname();
 
-  const getClasses = (url: string) => {
-    let classes =
-      "hover:bg-secondary hover:text-white p-3 py-5 text-sm rounded-none";
-    if (pathname?.includes(url)) {
-      classes += " bg-primary text-primary-foreground font-semibold";
-    }
-    return classes;
-  };
+  const getClasses = useCallback(
+    (url: string) => {
+      let classes =
+        "hover:bg-whtie hover:text-secondary hover:border-secondary hover:border-r-3 hover:border-b-1 hover:shadow-sm w-full flex items-center gap-3 px-4 py-5 rounded-lg transition-all duration-200 text-left font-medium shadow-sm border-b-1 border-white";
+      if (pathname?.includes(url)) {
+        classes +=
+          "bg-blue-50 text-blue-700 border-r-3 border-blue-600 border-b-1";
+      }
+      return classes;
+    },
+    [items]
+  );
 
   return (
     <SidebarGroup>

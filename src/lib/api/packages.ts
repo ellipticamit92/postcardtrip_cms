@@ -1,29 +1,4 @@
-// src/lib/api/packages.ts
-export interface PackagePayload {
-  name: string;
-  basePrice: number;
-  day: number;
-  night: number;
-  description: string;
-  destinationId: number;
-  hotelPrices?: { hotelId: number; price: number }[];
-  imageUrl?: string;
-  popular?: boolean;
-  tourId?: number;
-  overview?: string;
-  originalPrice?: number;
-  featured?: boolean;
-  heroTitle?: string;
-  text?: string;
-  rating?: string;
-  highlights?: number[];
-  cities?: number[];
-  inclusions?: number[];
-  exclusions?: number[];
-  threePrice?: number;
-  fourPrice?: number;
-  fivePrice?: number;
-}
+import { PackageFormDataType } from "@/components/organisms/packages/PackageForm";
 
 export interface ApiResponse<T = unknown> {
   success: boolean;
@@ -96,7 +71,7 @@ export const packagesApi = {
   },
 
   /* Create */
-  create: async (data: PackagePayload) => {
+  create: async (data: PackageFormDataType) => {
     const response = await fetch(BASE, {
       method: "POST",
       headers: {
@@ -108,7 +83,7 @@ export const packagesApi = {
   },
 
   /* Update */
-  update: async (id: number, data: Partial<PackagePayload>) => {
+  update: async (id: number, data: Partial<PackageFormDataType>) => {
     const response = await fetch(`${BASE}/${id}`, {
       method: "PUT",
       headers: {

@@ -26,7 +26,7 @@ export default async function EditPackagePage({
     name: packages?.name ?? "",
     day: packages?.day ?? 1,
     night: packages?.night ?? 1,
-    destinationId: packages?.destinationId.toString() ?? "",
+    destinationId: packages?.destinationId,
     imageUrl: packages?.imageUrl ?? "",
     description: packages?.description ?? "",
     popular: packages?.popular ?? false,
@@ -39,7 +39,7 @@ export default async function EditPackagePage({
     featured: packages?.featured ?? false,
     herorTitle: packages?.heroTitle ?? "",
     text: packages?.text ?? "",
-    rating: packages?.rating ?? "1.0",
+    rating: packages?.rating ?? 1,
     tours:
       (packages as any)?.tours?.map((tour: { tid: number }) => tour.tid) ?? [],
     cities:

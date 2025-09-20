@@ -1,4 +1,4 @@
-import { Destination } from "@/types/type";
+import { Destination } from "@prisma/client";
 
 export const getFieldOptions = (data: any, id: string) => {
   return data?.map((item: any) => {
@@ -71,4 +71,14 @@ export const numberOptions = (max: number = 20, labelPrefix = "") =>
 export function truncateText(text: string, maxLength: number = 20): string {
   if (!text) return "";
   return text.length > maxLength ? text.slice(0, maxLength) + "..." : text;
+}
+
+export function getInitials(name: string): string {
+  if (!name) return "";
+
+  return name
+    .trim()
+    .split(/\s+/) // split by spaces
+    .map((word) => word.charAt(0).toUpperCase())
+    .join("");
 }

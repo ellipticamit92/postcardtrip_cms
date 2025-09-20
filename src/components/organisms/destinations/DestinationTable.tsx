@@ -1,6 +1,5 @@
 "use client";
 
-import { Destination, PaginationProps } from "@/types/type";
 import { ColumnDef } from "@tanstack/react-table";
 import { ArrowUpDown, MoreHorizontal } from "lucide-react";
 import { FC } from "react";
@@ -24,6 +23,8 @@ import {
   DropdownMenuItem,
 } from "@/components/ui/dropdown-menu";
 import { Checkbox } from "@/components/ui/checkbox";
+import { Destination } from "@prisma/client";
+import { DestinationsProps } from "@/types/form/type";
 
 export const columns: ColumnDef<Destination>[] = [
   {
@@ -178,12 +179,7 @@ export const columns: ColumnDef<Destination>[] = [
   },
 ];
 
-interface DestinationTableProps {
-  data: Destination[];
-  pagination: PaginationProps;
-}
-
-const DestinationTable: FC<DestinationTableProps> = ({ data, pagination }) => {
+const DestinationTable: FC<DestinationsProps> = ({ data, pagination }) => {
   return (
     <div className="w-full">
       <CommonTable

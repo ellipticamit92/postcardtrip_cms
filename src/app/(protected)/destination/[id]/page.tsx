@@ -20,10 +20,12 @@ export default async function EditDestinationPage({
   const trending = destination?.trending ?? false;
   const basePrice = destination?.basePrice ?? 0;
   const originalPrice = destination?.originalPrice ?? 0;
-  const description = destination?.description ?? "";
   const text = destination?.text ?? "";
   const heroTitle = destination?.heroTitle ?? "";
-  const rating = destination?.rating ?? "";
+  const rating = destination?.rating ?? 0;
+  const featured = destination?.featured ?? false;
+  const status = destination?.status ?? false;
+  const isRichText = destination?.isRichText ?? false;
 
   const updatedDestination = {
     name,
@@ -34,10 +36,12 @@ export default async function EditDestinationPage({
     trending,
     basePrice,
     originalPrice,
-    description,
     text,
     heroTitle,
     rating,
+    featured,
+    status,
+    isRichText,
   };
 
   return (

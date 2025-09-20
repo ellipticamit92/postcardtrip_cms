@@ -56,7 +56,7 @@ const TrendingDestination = async () => {
             </div>
             <CardContent className="p-4">
               <p className="text-gray-600 text-sm mb-3 line-clamp-2">
-                {truncateText(destination?.description ?? "", 60)}
+                {truncateText(destination?.overview ?? "", 60)}
               </p>
               <div className="flex items-center justify-between">
                 <div className="flex items-center gap-1 text-sm text-gray-500">

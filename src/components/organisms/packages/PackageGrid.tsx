@@ -1,7 +1,6 @@
 "use client";
 import Image from "next/image";
 import Link from "next/link";
-import { Package, PaginationProps } from "@/types/type";
 import { FC } from "react";
 import { Button } from "@/components/ui/button";
 import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
@@ -16,17 +15,13 @@ import { toIndianCurrency } from "@/lib/helper";
 import { Star, Edit, Trash2 } from "lucide-react";
 import Pagination from "@/components/molecules/Pagination";
 import { Badge } from "@/components/ui/badge";
-
-interface PackageGridProps {
-  data: Package[];
-  pagination: PaginationProps;
-}
+import { PackageGridProps, PackageWithDestiantion } from "@/types/form/type";
 
 const PackageGrid: FC<PackageGridProps> = ({ data, pagination }) => {
   return (
     <>
       <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
-        {data.map((pkg: Package) => (
+        {data.map((pkg: PackageWithDestiantion) => (
           <Card
             key={pkg.pid}
             className="group hover:shadow-elegant transition-all duration-300 overflow-hidden py-0 gap-3 pb-4"
@@ -92,27 +87,6 @@ const PackageGrid: FC<PackageGridProps> = ({ data, pagination }) => {
             </CardHeader>
 
             <CardContent>
-              <div className="flex items-center justify-between mb-2">
-                <Dialog>
-                  {/* <DialogTrigger asChild>
-                    <Button variant="outline" size="sm">
-                      View Description
-                    </Button>
-                  </DialogTrigger> */}
-                  <DialogContent className="max-w-4xl max-h-[80vh] overflow-y-auto">
-                    <DialogHeader>
-                      <DialogTitle>{pkg?.name} - Description</DialogTitle>
-                    </DialogHeader>
-                    <div
-                      className="prose prose-sm max-w-none"
-                      dangerouslySetInnerHTML={{
-                        __html: pkg?.overview ?? "",
-                      }}
-                    />
-                  </DialogContent>
-                </Dialog>
-              </div>
-
               <div className="flex items-center justify-between">
                 <Dialog>
                   <DialogTrigger asChild>

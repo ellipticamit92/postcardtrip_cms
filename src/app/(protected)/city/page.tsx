@@ -14,7 +14,7 @@ interface CityPageProps {
 export default async function CityPage({ searchParams }: CityPageProps) {
   const params = await searchParams;
   const page = Number(params?.page) || 1;
-  const cityData = await cityService.getAll({ page });
+  const cityData = await cityService.getAll({ page, limit: 12 });
   const { data, pagination } = cityData;
 
   return (

@@ -1,4 +1,5 @@
 import PageHeader from "@/components/organisms/PageHeader";
+import ReviewsGrid from "@/components/organisms/reviews/ReviewsGrid";
 import ReviewsTable from "@/components/organisms/reviews/ReviewsTable";
 import ViewLayout from "@/components/templates/ViewLayout";
 import ReviewService from "@/services/reviews.service";
@@ -22,7 +23,7 @@ const ReviewsPage = async () => {
         data={data ?? []}
         pagination={pagination}
         filterKey={"username"}
-        GridComponent={ReviewsTable}
+        GridComponent={ReviewsGrid}
         ListComponent={ReviewsTable}
         TableComponent={ReviewsTable}
       />

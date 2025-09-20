@@ -1,42 +1,17 @@
 import { destinationsApi } from "@/lib/api/destinations";
 import { showToast } from "@/lib/toast";
+import { DestinationFormDataType } from "@/types/form/type";
+import { HooksProps } from "@/types/type";
+import { Destination } from "@prisma/client";
 import { useState, useEffect } from "react";
 import { toast } from "sonner";
 
-interface Destination {
-  did: number;
-  name: string;
-  country: string;
-  overview?: string;
-  imageUrl?: string;
-  cities: any[];
-  packages: any[];
-  createdAt: string;
-  updatedAt: string;
-}
-
-interface UseDestinationsOptions {
-  autoFetch?: boolean;
-  initialPage?: number;
-  initialLimit?: number;
-}
-
-interface PaginationInfo {
-  page: number;
-  limit: number;
-  total: number;
-  totalPages: number;
-  hasNext: boolean;
-  hasPrev: boolean;
-}
-
-export const useDestinations = (options: UseDestinationsOptions = {}) => {
-  const { autoFetch = false, initialPage = 1, initialLimit = 150 } = options;
+export const useDestinations = (options: HooksProps = {}) => {
+  const { autoFetch = false, initialPage = 1, initialLimit = 10 } = options;
 
   const [destinations, setDestinations] = useState<Destination[]>([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
-  const [pagination, _] = useState<PaginationInfo | null>(null);
   const [currentPage, setCurrentPage] = useState(initialPage);
 
   // Fetch destinations with filters
@@ -61,8 +36,6 @@ export const useDestinations = (options: UseDestinationsOptions = {}) => {
       });
 
       if (result.success) {
-        //setDestinations(result.data);
-        // setPagination(result.pagination);
         if (params?.page) {
           setCurrentPage(params.page);
         }
@@ -93,20 +66,9 @@ export const useDestinations = (options: UseDestinationsOptions = {}) => {
   };
 
   // Create new destination
-  const createDestination = async (data: {
-    name: string;
-    country: string;
-    overview?: string;
-    imageUrl?: string;
-    heading: string;
-    basePrice?: number;
-    originalPrice?: number;
-    trending?: boolean;
-    description?: string;
-    text?: string;
-    heroTitle?: string;
-    rating?: string;
-  }): Promise<{ success: boolean; data?: Destination; error?: string }> => {
+  const createDestination = async (
+    data: DestinationFormDataType
+  ): Promise<{ success: boolean; data?: Destination; error?: string }> => {
     setLoading(true);
     setError(null);
 
@@ -150,20 +112,7 @@ export const useDestinations = (options: UseDestinationsOptions = {}) => {
   // Update destination
   const updateDestination = async (
     id: number,
-    data: {
-      name?: string;
-      country?: string;
-      overview?: string;
-      imageUrl?: string;
-      trending?: boolean;
-      heading: string;
-      basePrice?: number;
-      originalPrice?: number;
-      description?: string;
-      text?: string;
-      heroTitle?: string;
-      rating?: string;
-    }
+    data: DestinationFormDataType
   ): Promise<{ success: boolean; data?: Destination; error?: string }> => {
     setLoading(true);
     setError(null);
@@ -252,7 +201,6 @@ export const useDestinations = (options: UseDestinationsOptions = {}) => {
     destinations,
     loading,
     error,
-    pagination,
     currentPage,
 
     // Actions
