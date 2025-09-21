@@ -1,3 +1,4 @@
+import { ReviewFormDataType } from "@/components/organisms/reviews/ReviewsForm";
 import { reviewsApi } from "@/lib/api/reviews";
 import { showToast } from "@/lib/toast";
 import { useState, useEffect } from "react";
@@ -93,14 +94,9 @@ export const useReviews = (options: UseReviewsOptions = {}) => {
   };
 
   // Create review
-  const createReview = async (data: {
-    username: string;
-    places: string;
-    review: string;
-    rating: number;
-    packageId?: number;
-    destinationId?: number;
-  }): Promise<{ success: boolean; data?: Review; error?: string }> => {
+  const createReview = async (
+    data: ReviewFormDataType
+  ): Promise<{ success: boolean; data?: Review; error?: string }> => {
     setLoading(true);
     setError(null);
 
@@ -135,7 +131,7 @@ export const useReviews = (options: UseReviewsOptions = {}) => {
   // Update review
   const updateReview = async (
     id: string,
-    data: Partial<Omit<Review, "id" | "createdAt" | "updatedAt">>
+    data: ReviewFormDataType
   ): Promise<{ success: boolean; data?: Review; error?: string }> => {
     setLoading(true);
     setError(null);

@@ -134,8 +134,6 @@ export function PackageForm({
     }
   };
 
-  console.log("DEBUG errors = ", form.formState.errors);
-
   return (
     <Form {...form}>
       <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8 mb-12">

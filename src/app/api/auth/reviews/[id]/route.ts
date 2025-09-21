@@ -1,3 +1,4 @@
+import { ReviewFormDataType } from "@/components/organisms/reviews/ReviewsForm";
 import ReviewService from "@/services/reviews.service";
 import { NextRequest, NextResponse } from "next/server";
 
@@ -55,7 +56,7 @@ export async function PUT(
   try {
     const { id } = await params;
     const reviewId = Number(id);
-    const body = await request.json();
+    const body = (await request.json()) as ReviewFormDataType;
 
     if (!reviewId) {
       return NextResponse.json(
@@ -64,12 +65,7 @@ export async function PUT(
       );
     }
 
-    const updatedReview = await ReviewService.update(reviewId, {
-      username: body.username,
-      places: body.places,
-      review: body.review,
-      rating: body.rating,
-    });
+    const updatedReview = await ReviewService.update(reviewId, body);
 
     return NextResponse.json({
       success: true,

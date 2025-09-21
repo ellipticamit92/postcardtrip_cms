@@ -69,20 +69,20 @@ const FeaturedPackage = async () => {
                     {/* {pkg.category} */}
                   </Badge>
                   <p className="text-gray-600 text-sm line-clamp-2">
-                    {pkg.description}
+                    {pkg.overview}
                   </p>
                 </div>
 
                 <div className="flex items-center justify-between pt-3 border-t border-gray-100">
                   <div>
-                    {pkg.originalPrice &&
-                      pkg.originalPrice > (pkg.basePrice ?? 0) && (
+                    {pkg.threePrice &&
+                      pkg.threePrice > (pkg.threePrice ?? 0) && (
                         <p className="text-sm text-gray-400 line-through">
-                          ${pkg.originalPrice}
+                          ${pkg.threePrice}
                         </p>
                       )}
                     <p className="text-2xl font-bold text-gray-900">
-                      ${pkg.basePrice}
+                      ${pkg.threePrice}
                     </p>
                     <p className="text-sm text-gray-500">per person</p>
                   </div>

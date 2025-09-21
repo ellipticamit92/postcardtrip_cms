@@ -1,14 +1,8 @@
+import { ReviewFormDataType } from "@/components/organisms/reviews/ReviewsForm";
 import { prisma } from "@/lib/prisma";
 
 export class ReviewService {
-  static async create(data: {
-    username: string;
-    places: string;
-    review: string;
-    rating?: number;
-    packageId: number;
-    destinationId: number;
-  }) {
+  static async create(data: ReviewFormDataType) {
     try {
       return await prisma.reviews.create({
         data,
@@ -159,15 +153,7 @@ export class ReviewService {
     }
   }
 
-  static async update(
-    id: number,
-    data: {
-      username?: string;
-      places?: string;
-      review?: string;
-      rating?: number;
-    }
-  ) {
+  static async update(id: number, data: ReviewFormDataType) {
     try {
       return await prisma.reviews.update({
         where: { id },

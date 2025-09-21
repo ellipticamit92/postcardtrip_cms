@@ -66,14 +66,7 @@ export async function POST(req: NextRequest) {
       );
     }
 
-    const review = await ReviewService.create({
-      username: body.username,
-      places: body.places,
-      review: body.review,
-      rating: Number(body.rating),
-      packageId: Number(body.packageId),
-      destinationId: Number(body.destinationId),
-    });
+    const review = await ReviewService.create(body);
 
     return NextResponse.json(
       { success: true, data: review, message: "Review created" },

@@ -336,6 +336,48 @@ export const COUNTRIES = [
   { label: "Austria", value: "Austria" },
 ];
 
+export const MONTHS = [
+  { label: "January", value: "Jan" },
+  { label: "February", value: "Feb" },
+  { label: "March", value: "Mar" },
+  { label: "April", value: "Apr" },
+  { label: "May", value: "May" },
+  { label: "June", value: "June" },
+  { label: "July", value: "July" },
+  { label: "August", value: "Aug" },
+  { label: "September", value: "Sep" },
+  { label: "October", value: "Oct" },
+  { label: "November", value: "Nov" },
+  { label: "December", value: "Dec" },
+];
+
+export const YEARS = [
+  {
+    label: "2020",
+    value: "2020",
+  },
+  {
+    label: "2021",
+    value: "2021",
+  },
+  {
+    label: "2022",
+    value: "2022",
+  },
+  {
+    label: "2023",
+    value: "2023",
+  },
+  {
+    label: "2024",
+    value: "2024",
+  },
+  {
+    label: "2025",
+    value: "2025",
+  },
+];
+
 // {
 //   title: "View Package Price",
 //   url: "/package/hotel-price",

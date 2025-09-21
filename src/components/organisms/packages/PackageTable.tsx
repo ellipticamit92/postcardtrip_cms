@@ -1,6 +1,5 @@
 "use client";
 
-import { Package, PaginationProps } from "@/types/type";
 import { ColumnDef } from "@tanstack/react-table";
 import { ArrowUpDown, MoreHorizontal } from "lucide-react";
 import { FC } from "react";
@@ -28,8 +27,9 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { format } from "date-fns";
+import { PackageTableProps, PackageWithDestiantion } from "@/types/form/type";
 
-export const columns: ColumnDef<Package>[] = [
+export const columns: ColumnDef<PackageWithDestiantion>[] = [
   {
     id: "select",
     header: ({ table }) => (
@@ -157,14 +157,6 @@ export const columns: ColumnDef<Package>[] = [
               </DialogHeader>
               <div className="flex flex-col gap-4">
                 <ShowPrice
-                  title="Base price"
-                  price={row.original?.basePrice ?? 0}
-                />
-                <ShowPrice
-                  title="Original price"
-                  price={row.original?.originalPrice ?? 0}
-                />
-                <ShowPrice
                   title="3 Star price"
                   price={row.original?.threePrice ?? 0}
                 />
@@ -282,11 +274,6 @@ export const columns: ColumnDef<Package>[] = [
     },
   },
 ];
-
-interface PackageTableProps {
-  data: Package[];
-  pagination: PaginationProps;
-}
 
 const PackageTable: FC<PackageTableProps> = ({ data, pagination }) => {
   return (

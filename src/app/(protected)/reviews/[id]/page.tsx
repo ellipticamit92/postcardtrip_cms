@@ -23,8 +23,10 @@ const EditReviewPage = async ({
     places: reviews.places ?? "",
     review: reviews.review ?? "",
     rating: reviews.rating ?? 1,
-    packageId: String(reviews.packageId),
-    destinationId: String(reviews.destinationId),
+    year: reviews.year ?? "",
+    month: reviews?.month ?? "",
+    packageId: reviews.packageId,
+    destinationId: reviews.destinationId,
   };
 
   return (

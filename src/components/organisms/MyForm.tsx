@@ -5,13 +5,8 @@ interface MyFormProps {
   title?: string;
 }
 
-const MyForm: FC<MyFormProps> = ({ children, title = "Basic Information" }) => {
-  return (
-    <div className="w-full ">
-      {/* <h1 className="text-xl font-bold mb-5">{title}</h1> */}
-      {children}
-    </div>
-  );
+const MyForm: FC<MyFormProps> = ({ children }) => {
+  return <div className="w-full ">{children}</div>;
 };
 
 export default MyForm;

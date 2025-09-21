@@ -21,7 +21,7 @@ const schema = z.object({
   name: z.string().min(1),
   heading: z.string().min(1),
   country: z.string().min(1),
-  overview: z.string().min(1),
+  overview: z.string().optional(),
   imageUrl: z.string().optional(),
   trending: z.boolean().optional(),
   status: z.boolean().optional(),
@@ -94,7 +94,7 @@ export function DestinationForm({
       }
 
       if (!isEditMode) {
-        //reset();
+        reset();
       }
     } catch (err: any) {
       console.error("Error submitting destination", err);

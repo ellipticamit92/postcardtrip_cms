@@ -3,11 +3,10 @@ import {
   Destination,
   Exclusion,
   Inclusion,
-  Itinerary,
   Package,
-  PackageHotelPrice,
   Reviews,
   Tours,
+  Highlight,
 } from "@prisma/client";
 import { PaginationProps } from "../type";
 
@@ -22,13 +21,18 @@ export interface PackageWithDestiantion extends Package {
   // hotelPrices?: PackageHotelPrice[];
   // tours?: Partial<Tours>[];
   // imageUrl?: string | null;
-  // inclusions?: Partial<Inclusion>[];
-  // exclusions?: Partial<Exclusion>[];
-  // highlights?: Partial<Highlight>[];
-  // cities?: Partial<City>[];
+  inclusions?: Partial<Inclusion>[];
+  exclusions?: Partial<Exclusion>[];
+  highlights?: Partial<Highlight>[];
+  cities?: Partial<City>[];
 }
 
 export interface PackageGridProps {
+  data: PackageWithDestiantion[];
+  pagination: PaginationProps;
+}
+
+export interface PackageTableProps {
   data: PackageWithDestiantion[];
   pagination: PaginationProps;
 }

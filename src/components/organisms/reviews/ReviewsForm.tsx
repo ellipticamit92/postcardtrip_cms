@@ -12,6 +12,7 @@ import { FormTextarea } from "@/components/atoms/FormTextarea";
 import { FormSelect } from "@/components/atoms/FormSelect";
 import MyForm from "../MyForm";
 import { useReviews } from "@/hooks/use-reviews"; // ✅ You'll need to create this hook
+import { MONTHS, YEARS } from "@/consttants/constant";
 
 // ✅ Validation schema
 const schema = z.object({
@@ -22,8 +23,10 @@ const schema = z.object({
     .number()
     .min(0, "Rating must be between 0-5")
     .max(5, "Rating must be between 0-5"),
-  packageId: z.string().optional(),
-  destinationId: z.string().optional(),
+  year: z.string(),
+  month: z.string(),
+  packageId: z.number().min(1, "Places select a package"),
+  destinationId: z.number().min(1, "Places select a destination"),
 });
 
 export type ReviewFormDataType = z.infer<typeof schema>;
@@ -50,8 +53,6 @@ export function ReviewForm({
       places: "",
       review: "",
       rating: 0,
-      packageId: "",
-      destinationId: "",
     },
   });
 
@@ -62,12 +63,14 @@ export function ReviewForm({
       const isEditMode = Boolean(reviewId);
 
       const submitData = {
-        username: data.username.trim(),
+        username: data.username.trim() ?? "",
         places: data.places.trim(),
         review: data.review.trim(),
         rating: data.rating,
-        packageId: Number(data.packageId) || undefined,
-        destinationId: Number(data.destinationId) || undefined,
+        year: data.year,
+        month: data.month,
+        packageId: Number(data.packageId),
+        destinationId: Number(data.destinationId),
       };
 
       if (isEditMode && reviewId) {
@@ -103,7 +106,7 @@ export function ReviewForm({
           </div>
 
           {/* Inputs */}
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+          <div className="grid grid-cols-1 md:grid-cols-5 gap-4">
             <FormInput
               name="username"
               control={control}
@@ -126,6 +129,20 @@ export function ReviewForm({
               label="Rating (0-5)"
               placeholder="4.5"
             />
+            <FormSelect
+              label="Month"
+              name="month"
+              control={control}
+              options={MONTHS}
+              placeholder="Select month"
+            />
+            <FormSelect
+              label="Years"
+              name="year"
+              control={control}
+              options={YEARS}
+              placeholder="Select year"
+            />
           </div>
 
           <FormTextarea
@@ -143,6 +160,7 @@ export function ReviewForm({
               control={control}
               options={packages}
               placeholder="Select package"
+              isNumber
             />
             <FormSelect
               label="Reviewed Destination"
@@ -150,6 +168,7 @@ export function ReviewForm({
               control={control}
               options={destinations}
               placeholder="Select destination"
+              isNumber
             />
           </div>
 

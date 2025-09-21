@@ -82,9 +82,9 @@ export class PackageService {
       }
 
       if (minPrice || maxPrice) {
-        where.basePrice = {};
-        if (minPrice) where.basePrice.gte = minPrice;
-        if (maxPrice) where.basePrice.lte = maxPrice;
+        where.threePrice = {};
+        if (minPrice) where.threePrice.gte = minPrice;
+        if (maxPrice) where.threePrice.lte = maxPrice;
       }
 
       if (minDuration || maxDuration) {
@@ -141,7 +141,6 @@ export class PackageService {
                 name: true,
               },
             },
-            hotelPrices: true,
           },
           orderBy: {
             [sortBy]: sortOrder,

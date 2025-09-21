@@ -1,3 +1,5 @@
+import { ReviewFormDataType } from "@/components/organisms/reviews/ReviewsForm";
+
 const API_BASE_URL = "/api/auth/reviews";
 
 export const reviewsApi = {
@@ -31,14 +33,7 @@ export const reviewsApi = {
   },
 
   // Create new review
-  create: async (data: {
-    username: string;
-    places: string;
-    review: string;
-    rating: number;
-    packageId?: number;
-    destinationId?: number;
-  }) => {
+  create: async (data: ReviewFormDataType) => {
     const response = await fetch(API_BASE_URL, {
       method: "POST",
       headers: {
@@ -50,17 +45,7 @@ export const reviewsApi = {
   },
 
   // Update review
-  update: async (
-    id: string,
-    data: {
-      username?: string;
-      places?: string;
-      review?: string;
-      rating?: number;
-      packageId?: number;
-      destinationId?: number;
-    }
-  ) => {
+  update: async (id: string, data: ReviewFormDataType) => {
     const response = await fetch(`${API_BASE_URL}/${id}`, {
       method: "PUT",
       headers: {

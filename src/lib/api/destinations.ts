@@ -1,4 +1,4 @@
-import { DestinationFormDataType } from "@/types/form/type";
+import { DestinationFormDataType } from "@/components/organisms/destinations/DestinationForm";
 
 const API_BASE_URL = "/api/auth/destinations";
 

@@ -1,6 +1,6 @@
+import { DestinationFormDataType } from "@/components/organisms/destinations/DestinationForm";
 import { destinationsApi } from "@/lib/api/destinations";
 import { showToast } from "@/lib/toast";
-import { DestinationFormDataType } from "@/types/form/type";
 import { HooksProps } from "@/types/type";
 import { Destination } from "@prisma/client";
 import { useState, useEffect } from "react";

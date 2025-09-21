@@ -1,6 +1,6 @@
+import { DestinationFormDataType } from "@/components/organisms/destinations/DestinationForm";
 import { getFieldOptions } from "@/lib/helper";
 import { prisma } from "@/lib/prisma";
-import { DestinationFormDataType } from "@/types/form/type";
 
 export class DestinationService {
   static async create(data: DestinationFormDataType) {
@@ -167,9 +167,6 @@ export class DestinationService {
               day: true,
               night: true,
               imageUrl: true,
-              description: true,
-              basePrice: true,
-              originalPrice: true,
               text: true,
               cities: {
                 select: {
