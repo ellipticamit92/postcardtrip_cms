@@ -42,30 +42,7 @@ export async function PUT(req: NextRequest, { params }: RouteParams) {
     }
 
     const body = await req.json();
-    const updated = await PackageService.update(id, {
-      name: body.name,
-      basePrice: body.basePrice,
-      description: body.description,
-      popular: body.popular,
-      tourId: body.tourId,
-      imageUrl: body.imageUrl,
-      day: body.day,
-      night: body.night,
-      overview: body.overview,
-      originalPrice: body.originalPrice,
-      featured: body.featured,
-      heroTitle: body.heroTitle,
-      text: body.text,
-      rating: body.rating,
-      tours: body.tours,
-      cities: body.cities,
-      highlights: body.highlights,
-      inclusions: body.inclusions,
-      exclusions: body.exclusions,
-      threePrice: body.threePrice,
-      fourPrice: body.fourPrice,
-      fivePrice: body.fivePrice,
-    });
+    const updated = await PackageService.update(id, body);
 
     return NextResponse.json({
       success: true,

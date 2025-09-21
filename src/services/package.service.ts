@@ -1,66 +1,32 @@
+import { PackageFormDataType } from "@/components/organisms/packages/PackageForm";
 import { getFieldOptions } from "@/lib/helper";
 import { prisma } from "@/lib/prisma";
 
 export class PackageService {
-  static async create(data: {
-    name: string;
-    basePrice: number;
-    day: number;
-    night: number;
-    description: string;
-    destinationId: number;
-    hotelPrices?: { hotelId: number; price: number }[];
-    imageUrl?: string;
-    popular?: boolean;
-    overview?: string;
-    originalPrice?: number;
-    featured?: boolean;
-    heroTitle?: string;
-    text?: string;
-    rating?: string;
-    tours: number[];
-    cities: number[];
-    highlights: number[];
-    inclusions: number[];
-    exclusions: number[];
-    threePrice?: number;
-    fourPrice?: number;
-    fivePrice?: number;
-  }) {
+  static async create(data: PackageFormDataType) {
     try {
-      const { hotelPrices, ...packageData } = data;
       return await prisma.package.create({
         data: {
-          ...packageData,
+          ...data,
           tours: {
-            connect: data.tours.map((tid) => ({ tid })), // 👈 connect multiple tours
+            connect: data?.tours?.map((tid: number) => ({ tid })), // 👈 connect multiple tours
           },
           cities: {
-            connect: data.cities.map((cid) => ({ cid })), // 👈 connect multiple tours
+            connect: data?.cities?.map((cid: number) => ({ cid })), // 👈 connect multiple tours
           },
           highlights: {
-            connect: data.highlights.map((hlid) => ({ hlid })), // 👈 connect multiple tours
+            connect: data?.highlights?.map((hlid: number) => ({ hlid })), // 👈 connect multiple tours
           },
           inclusions: {
-            connect: data.inclusions.map((lid) => ({ lid })), // 👈 connect multiple tours
+            connect: data?.inclusions?.map((lid: number) => ({ lid })), // 👈 connect multiple tours
           },
           exclusions: {
-            connect: data.exclusions.map((eid) => ({ eid })), // 👈 connect multiple tours
+            connect: data?.exclusions?.map((eid: number) => ({ eid })), // 👈 connect multiple tours
           },
-          hotelPrices: hotelPrices
-            ? {
-                create: hotelPrices,
-              }
-            : undefined,
         },
         include: {
           destination: true,
           itineraries: true,
-          hotelPrices: {
-            include: {
-              hotel: true,
-            },
-          },
         },
       });
     } catch (error) {
@@ -90,7 +56,7 @@ export class PackageService {
       minDuration?: number;
       maxDuration?: number;
       name?: string;
-      sortBy?: "name" | "basePrice" | "durationDays" | "createdAt";
+      sortBy?: "name" | "durationDays" | "createdAt";
       sortOrder?: "asc" | "desc";
     } = {}
   ) {
@@ -293,15 +259,14 @@ export class PackageService {
         select: {
           name: true,
           pid: true,
-          basePrice: true,
-          originalPrice: true,
           day: true,
           night: true,
-          description: true,
           imageUrl: true,
           popular: true,
           overview: true,
           featured: true,
+          isRichText: true,
+          status: true,
           rating: true,
           heroTitle: true,
           destination: {
@@ -318,34 +283,7 @@ export class PackageService {
     }
   }
 
-  static async update(
-    pid: number,
-    data: {
-      name?: string;
-      basePrice?: number;
-      description?: string;
-      popular?: boolean;
-      tourId: number;
-      destinationId?: number;
-      imageUrl?: string;
-      day?: number;
-      night?: number;
-      overview?: string;
-      originalPrice?: number;
-      featured?: boolean;
-      heroTitle?: string;
-      text?: string;
-      rating?: string;
-      tours: string[];
-      cities: number[];
-      highlights: number[];
-      inclusions: number[];
-      exclusions: number[];
-      threePrice?: number;
-      fourPrice?: number;
-      fivePrice?: number;
-    }
-  ) {
+  static async update(pid: number, data: PackageFormDataType) {
     try {
       return await prisma.package.update({
         where: { pid },
@@ -353,7 +291,7 @@ export class PackageService {
           ...data,
           tours: {
             set: [],
-            connect: data.tours?.map((id: string) => ({
+            connect: data?.tours?.map((id: number) => ({
               tid: Number(id),
             })),
           },
@@ -505,7 +443,7 @@ export class PackageService {
     try {
       return await prisma.package.findMany({
         where: {
-          basePrice: {
+          threePrice: {
             gte: minPrice,
             lte: maxPrice,
           },
@@ -558,10 +496,7 @@ export class PackageService {
       const packages = await prisma.package.findMany({
         select: {
           name: true,
-          description: true,
           rating: true,
-          originalPrice: true,
-          basePrice: true,
           imageUrl: true,
         },
         orderBy: {

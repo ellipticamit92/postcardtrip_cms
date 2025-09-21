@@ -69,7 +69,7 @@ const PackageGrid: FC<PackageGridProps> = ({ data, pagination }) => {
                 </div>
 
                 <div className="flex gap-1 ">
-                  <Link href={`/destination/${pkg.pid}`}>
+                  <Link href={`/package/${pkg.pid}`}>
                     <Button variant="ghost" size="icon" className="h-8 w-8">
                       <Edit className="h-4 w-4" />
                     </Button>
@@ -107,16 +107,16 @@ const PackageGrid: FC<PackageGridProps> = ({ data, pagination }) => {
                   </DialogContent>
                 </Dialog>
                 <div className="flex items-center gap-2">
-                  {pkg?.basePrice && (
+                  {pkg?.threePrice && (
                     <span className="text-2xl font-bold text-ocean">
-                      {toIndianCurrency(pkg.basePrice)}
+                      {toIndianCurrency(pkg.threePrice)}
                     </span>
                   )}
-                  {pkg?.originalPrice && (
+                  {/* {pkg?.originalPrice && (
                     <span className="text-sm text-muted-foreground line-through">
                       {toIndianCurrency(pkg.originalPrice)}
                     </span>
-                  )}
+                  )} */}
                 </div>
               </div>
             </CardContent>

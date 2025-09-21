@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { DestinationService } from "@/services/destination.service";
-import { DestinationFormDataType } from "@/types/form/type";
+import { DestinationFormDataType } from "@/components/organisms/destinations/DestinationForm";
 
 /**
  * GET /api/destinations

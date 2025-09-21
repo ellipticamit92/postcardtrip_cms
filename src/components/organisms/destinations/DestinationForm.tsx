@@ -164,7 +164,7 @@ export function DestinationForm({
             <FormCheckbox name="status" control={control} label="Active" />
           </div>
         </FormSection>
-        <FormSection title="Content & Media" icon="🖋️">
+        <FormSection title="Content & 🎨 Media" icon="🖋️">
           <div className="lg:col-span-2">
             <FormSwitchableEditor
               name="overview"
