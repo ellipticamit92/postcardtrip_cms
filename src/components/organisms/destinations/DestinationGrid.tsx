@@ -59,7 +59,7 @@ const DestinationGrid: FC<DestinationsProps> = ({ data, pagination }) => {
               )}
 
               {destination?.status && (
-                <div className="absolute top-4 right-2 z-10">
+                <div className="absolute top-2 right-2 z-10">
                   <Badge className="bg-green-500 text-white">Active</Badge>
                 </div>
               )}
@@ -105,7 +105,7 @@ const DestinationGrid: FC<DestinationsProps> = ({ data, pagination }) => {
               <div className="flex items-center justify-between">
                 <Dialog>
                   <DialogTrigger asChild>
-                    <Button variant="outline" size="xs">
+                    <Button variant="outline" size="sm">
                       View Overview
                     </Button>
                   </DialogTrigger>

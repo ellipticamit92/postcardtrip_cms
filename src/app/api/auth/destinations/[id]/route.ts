@@ -59,19 +59,10 @@ export async function PUT(request: NextRequest, { params }: RouteParams) {
       );
     }
 
-    const updatedDestination = await DestinationService.update(destinationId, {
-      name: body.name,
-      country: body.country,
-      overview: body.overview,
-      imageUrl: body.imageUrl,
-      trending: body.trending,
-      heading: body.heading,
-      basePrice: body.basePrice,
-      originalPrice: body.originalPrice,
-      heroTitle: body.heroTitle,
-      text: body.text,
-      rating: body.rating,
-    });
+    const updatedDestination = await DestinationService.update(
+      destinationId,
+      body
+    );
 
     return NextResponse.json({
       success: true,
