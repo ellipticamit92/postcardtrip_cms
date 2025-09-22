@@ -30,7 +30,7 @@ export const useIEH = (options: UseIEHOptions) => {
 
   // const [ieh, setIEH] = useState<IEH[]>([]);
   const [loading, setLoading] = useState(false);
-  const [_, setError] = useState<string | null>(null);
+  const [, setError] = useState<string | null>(null);
   // const [pagination, setPagination] = useState<PaginationInfo | null>(null);
   // const [currentPage, setCurrentPage] = useState(initialPage);
 

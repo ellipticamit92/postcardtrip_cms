@@ -25,11 +25,11 @@ const DestinationGrid: FC<DestinationsProps> = ({ data, pagination }) => {
         {data.map((destination) => (
           <Card
             key={destination.did}
-            className="group hover:shadow-elegant transition-all duration-300 overflow-hidden py-0 gap-3 pb-4"
+            className="group hover:shadow-elegant transition-all duration-300 overflow-hidden py-0 gap-1"
           >
             <div className="relative overflow-hidden group">
               {destination?.imageUrl && (
-                <div className="w-full h-64 group-hover:scale-110 transition-transform duration-500">
+                <div className="w-full h-44 group-hover:scale-110 transition-transform duration-500">
                   <Image
                     src={destination?.imageUrl ?? ""}
                     alt={destination.name}
@@ -41,26 +41,26 @@ const DestinationGrid: FC<DestinationsProps> = ({ data, pagination }) => {
                 </div>
               )}
 
-              <div className="absolute top-4 left-4 z-10">
+              <div className="absolute top-2 left-2 z-10">
                 <Badge className="bg-pink-500 text-white">
                   {destination?.packages?.length} Pacakges
                 </Badge>
               </div>
 
               {destination?.trending && (
-                <div className="absolute bottom-4 right-4 z-10">
+                <div className="absolute bottom-4 right-2 z-10">
                   <Badge className="bg-cyan-500 text-white">Trending</Badge>
                 </div>
               )}
               {destination?.featured && (
-                <div className="absolute bottom-8 right-4 z-10">
+                <div className="absolute bottom-8 right-2 z-10">
                   <Badge className="bg-cyan-500 text-white">Featured</Badge>
                 </div>
               )}
 
               {destination?.status && (
-                <div className="absolute top-4 right-4 z-10">
-                  <Badge className="bg-cyan-500 text-white">Active</Badge>
+                <div className="absolute top-4 right-2 z-10">
+                  <Badge className="bg-green-500 text-white">Active</Badge>
                 </div>
               )}
 
@@ -74,16 +74,14 @@ const DestinationGrid: FC<DestinationsProps> = ({ data, pagination }) => {
               </div>
             </div>
 
-            <CardHeader>
+            <CardHeader className="px-3 pt-1 pb-0">
               <CardTitle className="flex items-center justify-between">
                 <div className="flex flex-col gap-1">
-                  <span className="text-lg">
-                    {destination.name}
-                    <span className="text-sm font-light italic">
-                      , {destination?.country}
-                    </span>
+                  <span className="text-md">{destination.name}</span>
+                  <span className="text-xs font-light italic">
+                    {destination?.country}
                   </span>
-                  <span className="text-sm font-light italic">
+                  <span className="text-sm font-light">
                     {destination.heading}
                   </span>
                 </div>
@@ -103,34 +101,11 @@ const DestinationGrid: FC<DestinationsProps> = ({ data, pagination }) => {
               </CardTitle>
             </CardHeader>
 
-            <CardContent>
-              <div className="flex items-center justify-between mb-2">
-                <Dialog>
-                  {/* <DialogTrigger asChild>
-                  <Button variant="outline" size="sm">
-                    View Description
-                  </Button>
-                </DialogTrigger> */}
-                  <DialogContent className="max-w-4xl max-h-[80vh] overflow-y-auto">
-                    <DialogHeader>
-                      <DialogTitle>
-                        {destination?.name} - Description
-                      </DialogTitle>
-                    </DialogHeader>
-                    <div
-                      className="prose prose-sm max-w-none"
-                      dangerouslySetInnerHTML={{
-                        __html: destination?.overview ?? "",
-                      }}
-                    />
-                  </DialogContent>
-                </Dialog>
-              </div>
-
+            <CardContent className="px-3 pt-0 pb-1">
               <div className="flex items-center justify-between">
                 <Dialog>
                   <DialogTrigger asChild>
-                    <Button variant="outline" size="sm">
+                    <Button variant="outline" size="xs">
                       View Overview
                     </Button>
                   </DialogTrigger>
@@ -146,14 +121,14 @@ const DestinationGrid: FC<DestinationsProps> = ({ data, pagination }) => {
                     />
                   </DialogContent>
                 </Dialog>
-                <div className="flex items-center gap-2">
+                <div className="flex flex-col items-end gap-1">
                   {destination?.basePrice && (
-                    <span className="text-2xl font-bold text-ocean">
+                    <span className="text-xl font-bold text-ocean">
                       {toIndianCurrency(destination.basePrice)}
                     </span>
                   )}
                   {destination?.originalPrice && (
-                    <span className="text-sm text-muted-foreground line-through">
+                    <span className="text-xs text-muted-foreground line-through">
                       {toIndianCurrency(destination.originalPrice)}
                     </span>
                   )}

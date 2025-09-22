@@ -5,6 +5,14 @@ import { getToken } from "next-auth/jwt";
 export async function middleware(request: NextRequest) {
   const { pathname } = request.nextUrl;
 
+  if (
+    pathname.startsWith("/api/auth/") || // Skip all NextAuth.js routes
+    pathname.startsWith("/api/google/") || // Skip Google API routes
+    pathname.startsWith("/api/business/") // Skip business API routes
+  ) {
+    return NextResponse.next();
+  }
+
   // Allow public access to login and home
   if (pathname === "/login") {
     return NextResponse.next();
@@ -32,12 +40,5 @@ export async function middleware(request: NextRequest) {
 }
 
 export const config = {
-  matcher: [
-    "/",
-    "/destination",
-    "/destination/add",
-    "/api/auth/destination",
-    "/api/destination/:path*",
-    "/api/auth/reviews",
-  ],
+  matcher: ["/", "/destination", "/destination/add"],
 };

@@ -39,12 +39,36 @@ const PackageGrid: FC<PackageGridProps> = ({ data, pagination }) => {
                   <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/20 to-transparent" />
                 </div>
               )}
+              {!pkg?.imageUrl && (
+                <div className="w-full h-64 group-hover:scale-110 transition-transform duration-500">
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/20 to-transparent" />
+                </div>
+              )}
 
               <div className="absolute top-4 left-4 z-10">
                 <Badge className="bg-pink-500 text-white font-bold">
                   {pkg.day}D / {pkg.night}N
                 </Badge>
               </div>
+              {pkg?.status && (
+                <div className="absolute top-4 right-4 z-10">
+                  <Badge className="bg-cyan-500 text-white">Active</Badge>
+                </div>
+              )}
+              {pkg?.featured && (
+                <div className="absolute bottom-4 right-4 z-10">
+                  <Badge className="bg-green-600 text-white">Featured</Badge>
+                </div>
+              )}
+              {pkg?.popular && (
+                <div
+                  className={`absolute right-4 z-10 ${
+                    pkg.featured ? "bottom-12" : "bottom-4"
+                  }`}
+                >
+                  <Badge className="bg-secondary text-white">Popular</Badge>
+                </div>
+              )}
 
               <div className="absolute bottom-4 left-4">
                 <div className="flex items-center gap-1 bg-white/20 backdrop-blur-sm rounded-full px-2 py-1">
@@ -59,13 +83,10 @@ const PackageGrid: FC<PackageGridProps> = ({ data, pagination }) => {
             <CardHeader>
               <CardTitle className="flex items-center justify-between">
                 <div className="flex flex-col gap-1">
-                  <span className="text-md leading-5">
-                    {pkg.name}
-                    <span className="text-sm font-light italic">
-                      , {pkg?.destination?.country}
-                    </span>
+                  <span className="text-md leading-5">{pkg.name}</span>
+                  <span className="text-sm font-light italic">
+                    {pkg?.destination?.country}
                   </span>
-                  <span className="text-xs font-light italic">{pkg.name}</span>
                 </div>
 
                 <div className="flex gap-1 ">
@@ -112,11 +133,6 @@ const PackageGrid: FC<PackageGridProps> = ({ data, pagination }) => {
                       {toIndianCurrency(pkg.threePrice)}
                     </span>
                   )}
-                  {/* {pkg?.originalPrice && (
-                    <span className="text-sm text-muted-foreground line-through">
-                      {toIndianCurrency(pkg.originalPrice)}
-                    </span>
-                  )} */}
                 </div>
               </div>
             </CardContent>

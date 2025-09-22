@@ -19,6 +19,7 @@ export default async function DestinationPage() {
         description="Manage travel destinations and locations"
         Icon={MapPin}
         href="/destination/add"
+        aiHref="/destination/ai"
       />
       <ViewLayout
         data={data ?? []}

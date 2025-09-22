@@ -1,4 +1,4 @@
-import { Plus } from "lucide-react";
+import { AirVent, Plus } from "lucide-react"; // Optional icon for AI button
 import { Button } from "../ui/button";
 import Link from "next/link";
 import { PageHeaderLeft } from "../molecules/PageHeaderLeft";
@@ -11,6 +11,8 @@ export interface PageHeaderProps<T = any> {
   href?: string;
   modalComponent?: React.ComponentType<T>;
   modalProps?: T;
+  aiHref?: string;
+  aiBtnText?: string; // optional custom text for AI button
 }
 
 const HeaderAction = <T,>({
@@ -19,23 +21,34 @@ const HeaderAction = <T,>({
   modalComponent: ModalComponent,
   modalProps,
   btnText,
+  aiHref,
+  aiBtnText,
 }: PageHeaderProps<T>) => {
-  if (ModalComponent && modalProps) {
-    return <ModalComponent {...modalProps} />;
-  }
+  return (
+    <div className="flex gap-2">
+      {/* Original Button / Modal */}
+      {ModalComponent && modalProps ? (
+        <ModalComponent {...modalProps} />
+      ) : href ? (
+        <Link href={href}>
+          <Button variant="gradient" className="shadow-glow">
+            <Plus className="h-4 w-4" />
+            {btnText ?? `Add ${title}`}
+          </Button>
+        </Link>
+      ) : null}
 
-  if (href) {
-    return (
-      <Link href={href}>
-        <Button variant="gradient" className="shadow-glow">
-          <Plus className="h-4 w-4" />
-          {btnText ?? `Add ${title}`}
-        </Button>
-      </Link>
-    );
-  }
-
-  return null;
+      {/* Extra AI Button */}
+      {aiHref && (
+        <Link href={aiHref}>
+          <Button variant="gradient" className="shadow-glow">
+            <AirVent className="h-4 w-4" />
+            {aiBtnText ?? `Generate ${title}`}
+          </Button>
+        </Link>
+      )}
+    </div>
+  );
 };
 
 const PageHeader = <T,>(props: PageHeaderProps<T>) => {

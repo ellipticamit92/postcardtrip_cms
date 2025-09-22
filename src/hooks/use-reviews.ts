@@ -37,7 +37,7 @@ export const useReviews = (options: UseReviewsOptions = {}) => {
   const [reviews, setReviews] = useState<Review[]>([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
-  const [pagination, _] = useState<PaginationInfo | null>(null);
+  const [pagination] = useState<PaginationInfo | null>(null);
   const [currentPage, setCurrentPage] = useState(initialPage);
 
   // Fetch reviews with filters
@@ -192,10 +192,9 @@ export const useReviews = (options: UseReviewsOptions = {}) => {
   };
 
   // Search reviews (by places or username)
-  const searchReviews = async (searchTerm: string) => {
+  const searchReviews = async () => {
     await fetchReviews({
       page: 1,
-      // backend should support filtering by username or places
     });
   };
 

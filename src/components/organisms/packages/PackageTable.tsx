@@ -28,6 +28,7 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { format } from "date-fns";
 import { PackageTableProps, PackageWithDestiantion } from "@/types/form/type";
+import { Badge } from "@/components/ui/badge";
 
 export const columns: ColumnDef<PackageWithDestiantion>[] = [
   {
@@ -67,6 +68,21 @@ export const columns: ColumnDef<PackageWithDestiantion>[] = [
       return (
         <div className="w32 overflow-hidden">
           {truncateText(row.original?.name)}
+        </div>
+      );
+    },
+  },
+  {
+    accessorKey: "status",
+    header: "Status",
+    cell: ({ row }) => {
+      return (
+        <div>
+          {row.original?.status ? (
+            <Badge className="bg-cyan-500 text-white">Active</Badge>
+          ) : (
+            <Badge className="bg-destructive text-white">Inactive</Badge>
+          )}
         </div>
       );
     },

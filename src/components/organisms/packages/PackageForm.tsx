@@ -265,6 +265,7 @@ export function PackageForm({
               control={control}
               label="Overview"
               placeholder="Write something about this destination..."
+              height={360}
             />
           </div>
           <div>

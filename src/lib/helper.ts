@@ -82,3 +82,41 @@ export function getInitials(name: string): string {
     .map((word) => word.charAt(0).toUpperCase())
     .join("");
 }
+
+export const cleanAIResponse = (text: string): string => {
+  if (!text) return "{}";
+  // Remove markdown code blocks
+  let cleaned = text.replace(/``````\s*/g, "");
+
+  // Remove extra whitespace
+  cleaned = cleaned.trim();
+
+  // ES5-compatible regex (without 's' flag)
+  const jsonMatch = cleaned.match(/\{[\s\S]*\}/);
+  if (jsonMatch) {
+    cleaned = jsonMatch[0];
+  }
+
+  return cleaned;
+};
+
+const rateLimitMap = new Map<string, { count: number; resetTime: number }>();
+const RATE_LIMIT = 10; // requests per minute
+const RATE_WINDOW = 60 * 1000; // 1 minute
+
+export const checkRateLimit = (ip: string): boolean => {
+  const now = Date.now();
+  const userLimit = rateLimitMap.get(ip);
+
+  if (!userLimit || now > userLimit.resetTime) {
+    rateLimitMap.set(ip, { count: 1, resetTime: now + RATE_WINDOW });
+    return true;
+  }
+
+  if (userLimit.count >= RATE_LIMIT) {
+    return false;
+  }
+
+  userLimit.count++;
+  return true;
+};

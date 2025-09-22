@@ -65,6 +65,39 @@ export const useDestinations = (options: HooksProps = {}) => {
     }
   };
 
+  const createAIDestination = async (
+    name: string
+  ): Promise<{ success: boolean; data?: Destination; error?: string }> => {
+    setLoading(true);
+    setError(null);
+    const loadingToast = showToast.createLoading("AI destination");
+
+    try {
+      const result = await destinationsApi.createAI(name);
+      if (result.success) {
+        // Refresh the list if we're showing destinations
+        if (destinations.length > 0 || autoFetch) {
+          await fetchDestinations({ page: currentPage });
+        }
+        toast.dismiss(loadingToast);
+        showToast.createSuccess("Destination created using AI");
+        return { success: true, data: result.data };
+      } else {
+        toast.dismiss(loadingToast);
+        showToast.createError("Destination error using AI");
+        return { success: false, error: result.error };
+      }
+    } catch (err) {
+      const errorMsg = err instanceof Error ? err.message : "An error occurred";
+      toast.dismiss(loadingToast);
+      showToast.createError("AI destination", errorMsg);
+      setError(errorMsg);
+      return { success: false, error: errorMsg };
+    } finally {
+      setLoading(false);
+    }
+  };
+
   // Create new destination
   const createDestination = async (
     data: DestinationFormDataType
@@ -211,6 +244,7 @@ export const useDestinations = (options: HooksProps = {}) => {
     deleteDestination,
     searchDestinations,
     changePage,
+    createAIDestination,
 
     // Utilities
     clearError: () => setError(null),

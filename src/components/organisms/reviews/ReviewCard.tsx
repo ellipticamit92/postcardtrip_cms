@@ -2,7 +2,7 @@
 import { Button } from "@/components/ui/button";
 import { getInitials, truncateText } from "@/lib/helper";
 import { ReviewsWithPackageDestination } from "@/types/form/type";
-import { CheckCircle, Edit, Star } from "lucide-react";
+import { CheckCircle, Edit } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 import { FC } from "react";

@@ -67,10 +67,11 @@ model Destination {
   name           String    @unique
   heading        String    @unique
   heroTitle      String?
-  country        String
+  country        String?
   overview       String?   @db.Text
   text           String?
   imageUrl       String?
+  thumbnailUrl   String?
   isRichText     Boolean?   @default(false)
   trending       Boolean   @default(false)
   featured       Boolean   @default(false)
@@ -237,4 +238,15 @@ model Reviews {
 
   destinationId Int
   destination   Destination @relation(fields: [destinationId], references: [did])  
+}
+
+model GoogleCredentials {
+  id           Int      @id @default(autoincrement())
+  accessToken  String   @db.Text
+  refreshToken String?  @db.Text
+  expiresAt    DateTime
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+
+  @@map("google_credentials")
 }

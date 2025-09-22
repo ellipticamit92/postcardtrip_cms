@@ -1,4 +1,4 @@
-import { Destination, Package } from "@prisma/client";
+import { Package } from "@prisma/client";
 
 export interface PaginationOptions {
   page?: number;

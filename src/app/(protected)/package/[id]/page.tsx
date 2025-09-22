@@ -64,7 +64,7 @@ export default async function EditPackagePage({
 
   return (
     <>
-      <Heading text="Edit Package" subText={name} href="/" />
+      <Heading text="Edit Package" subText={name} href="/package" />
       <PackageForm
         initialData={updatePackage}
         PackageId={id}
