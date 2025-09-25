@@ -6,7 +6,7 @@ import DestinationService from "@/services/destination.service";
 import { Calendar, Star, TrendingUp } from "lucide-react";
 
 const TrendingDestination = async () => {
-  const destinations = await DestinationService.getTrending();
+  const destinations = await DestinationService.getDashboardTrending();
   return (
     <>
       <DashboardHeading
@@ -42,7 +42,7 @@ const TrendingDestination = async () => {
                   <div className="flex items-center gap-1">
                     <Star className="w-4 h-4 text-yellow-500 fill-current" />
                     <span className="text-sm font-medium">
-                      {destination.rating}
+                      {destination?.rating}
                     </span>
                   </div>
                 </div>

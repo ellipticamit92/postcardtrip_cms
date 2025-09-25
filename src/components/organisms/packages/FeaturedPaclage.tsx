@@ -5,7 +5,7 @@ import PackageService from "@/services/package.service";
 import { Calendar, Package, Star, TrendingUp } from "lucide-react";
 
 const FeaturedPackage = async () => {
-  const packages = await PackageService.getPopular();
+  const packages = await PackageService.getDashboardPopular();
   return (
     <>
       <DashboardHeading

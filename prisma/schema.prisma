@@ -250,3 +250,15 @@ model GoogleCredentials {
 
   @@map("google_credentials")
 }
+
+model Inquiry {
+ inid         Int      @id @default(autoincrement())
+ name         String?
+ email        String?
+ mobile       String?
+ destination  String?
+ budget       String?
+ travellers   String?
+ message      String?  @db.Text
+ createdAt    DateTime @default(now())
+}

@@ -119,7 +119,7 @@ export class DestinationService {
   static async getById(did: number) {
     try {
       const destination = await prisma.destination.findUnique({
-        where: { did: did },
+        where: { did },
         include: {
           packages: {
             include: {
@@ -214,7 +214,7 @@ export class DestinationService {
         ? {
             OR: [{ country: { contains: country, mode: "insensitive" } }],
           }
-        : {};
+        : { status: true };
 
       return await prisma.destination.findMany({
         where: whereClause,
@@ -226,16 +226,25 @@ export class DestinationService {
       throw new Error(`Failed to search destinations by country: ${error}`);
     }
   }
-
-  static async getTrending() {
+  static async getDashboardTrending() {
     try {
       const data = await prisma.destination.findMany({
         where: {
           trending: true,
           status: true,
         },
-        include: {
-          packages: true, // we need it temporarily to count
+        select: {
+          did: true,
+          name: true,
+          trending: true,
+          status: true,
+          packages: true,
+          basePrice: true,
+          imageUrl: true,
+          country: true,
+          heading: true,
+          rating: true,
+          overview: true,
         },
         take: 4,
       });
@@ -247,16 +256,67 @@ export class DestinationService {
 
       return updatedData;
     } catch (error) {
-      throw new Error(`Failed to fetch destination by name: ${error}`);
+      throw new Error(`Failed to fetch trending destinations: ${error}`);
+    }
+  }
+
+  static async getTrending() {
+    try {
+      const data = await prisma.destination.findMany({
+        where: {
+          trending: true,
+          status: true,
+        },
+        select: {
+          did: true,
+          name: true,
+          trending: true,
+          status: true,
+          packages: true,
+          basePrice: true,
+          imageUrl: true,
+          country: true,
+          heading: true,
+        },
+        take: 4,
+      });
+
+      const updatedData = data.map(({ packages, ...destination }) => ({
+        ...destination,
+        packagesCount: packages.length,
+      }));
+
+      return updatedData;
+    } catch (error) {
+      throw new Error(`Failed to fetch trending destinations: ${error}`);
     }
   }
 
   static async getWebAll() {
     try {
       const destinations = await prisma.destination.findMany({
-        take: 20,
+        where: { status: true },
+        take: 15,
         orderBy: {
           createdAt: "desc",
+        },
+        select: {
+          did: true,
+          name: true,
+          country: true,
+          imageUrl: true,
+          heroTitle: true,
+          trending: true,
+          status: true,
+          basePrice: true,
+          originalPrice: true,
+          heading: true,
+          overview: true,
+          text: true,
+          thumbnailUrl: true,
+          isRichText: true,
+          featured: true,
+          rating: true,
         },
       });
 
@@ -268,9 +328,32 @@ export class DestinationService {
 
   static async getCount() {
     try {
-      return prisma.destination.count();
+      return prisma.destination.count({
+        where: { status: true },
+      });
     } catch (error) {
       throw new Error(`Failed to count destinations: ${error}`);
+    }
+  }
+
+  static async getDestinationNames() {
+    try {
+      const destinations = await prisma.destination.findMany({
+        where: { status: true }, // optional: only active destinations
+        select: {
+          name: true,
+        },
+        orderBy: {
+          name: "asc",
+        },
+      });
+
+      // Extract only the names into an array
+      const destinationNames = destinations.map((d) => d.name);
+
+      return destinationNames; // ["Kerala", "Goa", "Rajasthan"]
+    } catch (error) {
+      throw new Error(`Failed to fetch destination names: ${error}`);
     }
   }
 }

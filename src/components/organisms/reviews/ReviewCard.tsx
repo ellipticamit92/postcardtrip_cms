@@ -27,9 +27,9 @@ const ReviewCard: FC<ReviewCardProps> = ({ review }) => {
         </div>
         <div className="absolute top-4 left-3 w-12 h-12 border-2 border-gray-400 rounded-full opacity-30 flex items-center justify-center">
           <div className="text-[8px] text-gray-600 font-mono text-center leading-tight">
-            {/* {review.date.split(" ")[0]} */} September
+            {review.month}
             <br />
-            {/* {review.date.split(" ")[1]} */} 2024
+            {review.year}
           </div>
         </div>
         <div className="p-6 pt-10 pb-2">

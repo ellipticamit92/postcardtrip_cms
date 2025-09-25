@@ -174,29 +174,23 @@ export class ReviewService {
     }
   }
 
-  static async getAverageRating(destinationId: number) {
+  static async getAllWebReviews(limit: number, page: number) {
     try {
-      const result = await prisma.reviews.aggregate({
-        where: { destinationId },
-        _avg: {
-          rating: true,
-        },
-      });
-
-      return result._avg.rating ?? 0;
-    } catch (error) {
-      throw new Error(`Failed to calculate average rating: ${error}`);
-    }
-  }
-
-  static async getRecent(limit = 5) {
-    try {
+      const skip = (page - 1) * limit;
       return await prisma.reviews.findMany({
+        skip,
         take: limit,
-        orderBy: {
-          createdAt: "desc",
-        },
-        include: {
+        orderBy: [
+          { year: "desc" }, // newest year first
+          { month: "desc" }, // within the same year, newest month first
+        ],
+        select: {
+          id: true,
+          username: true,
+          rating: true,
+          review: true,
+          year: true,
+          month: true,
           package: {
             select: {
               pid: true,
@@ -207,6 +201,42 @@ export class ReviewService {
             select: {
               did: true,
               name: true,
+              country: true,
+            },
+          },
+        },
+      });
+    } catch (error) {
+      throw new Error(`Failed to fetch web reviews: ${error}`);
+    }
+  }
+
+  static async getRecent(limit = 5) {
+    try {
+      return await prisma.reviews.findMany({
+        take: limit,
+        orderBy: [
+          { year: "desc" }, // newest year first
+          { month: "desc" }, // within the same year, newest month first
+        ],
+        select: {
+          id: true,
+          username: true,
+          rating: true,
+          review: true,
+          year: true,
+          month: true,
+          package: {
+            select: {
+              pid: true,
+              name: true,
+            },
+          },
+          destination: {
+            select: {
+              did: true,
+              name: true,
+              country: true,
             },
           },
         },

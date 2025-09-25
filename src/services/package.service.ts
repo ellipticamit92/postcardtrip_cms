@@ -1,6 +1,7 @@
 import { PackageFormDataType } from "@/components/organisms/packages/PackageForm";
 import { getFieldOptions } from "@/lib/helper";
 import { prisma } from "@/lib/prisma";
+import { tr } from "zod/v4/locales";
 
 export class PackageService {
   static async create(data: PackageFormDataType) {
@@ -475,14 +476,52 @@ export class PackageService {
     }
   }
 
-  static async getPopular() {
+  static async getDashboardPopular() {
     try {
       return await prisma.package.findMany({
-        where: { popular: true },
+        where: { popular: true, status: true },
         orderBy: {
           updatedAt: "desc",
         },
         take: 3,
+        select: {
+          pid: true,
+          name: true,
+          imageUrl: true,
+          rating: true,
+          threePrice: true,
+          day: true,
+          night: true,
+          text: true,
+          popular: true,
+          overview: true,
+          isRichText: true,
+        },
+      });
+    } catch (error) {
+      throw new Error(`Failed to fetch popular packages: ${error}`);
+    }
+  }
+
+  static async getPopular() {
+    try {
+      return await prisma.package.findMany({
+        where: { popular: true, status: true },
+        orderBy: {
+          updatedAt: "desc",
+        },
+        take: 3,
+        select: {
+          pid: true,
+          name: true,
+          imageUrl: true,
+          rating: true,
+          threePrice: true,
+          day: true,
+          night: true,
+          text: true,
+          isRichText: true,
+        },
       });
     } catch (error) {
       throw new Error(`Failed to fetch popular packages: ${error}`);
@@ -491,6 +530,7 @@ export class PackageService {
 
   static async getAllWebPacakges(limit: number, page?: number) {
     try {
+      const skip = (page ?? 2 - 1) * limit;
       const packageCount = await prisma.package.count();
       const packages = await prisma.package.findMany({
         select: {
@@ -502,6 +542,7 @@ export class PackageService {
           updatedAt: "desc",
         },
         take: limit,
+        skip,
       });
       return {
         data: packages,
