@@ -13,6 +13,7 @@ interface Package {
   day: number;
   night: number;
   imageUrl?: string;
+  category?: string;
   createdAt: string;
   updatedAt: string;
 }

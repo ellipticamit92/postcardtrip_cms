@@ -1,7 +1,6 @@
 import { PackageFormDataType } from "@/components/organisms/packages/PackageForm";
 import { getFieldOptions } from "@/lib/helper";
 import { prisma } from "@/lib/prisma";
-import { tr } from "zod/v4/locales";
 
 export class PackageService {
   static async create(data: PackageFormDataType) {
@@ -530,13 +529,42 @@ export class PackageService {
 
   static async getAllWebPacakges(limit: number, page?: number) {
     try {
-      const skip = (page ?? 2 - 1) * limit;
-      const packageCount = await prisma.package.count();
+      let skip = 0;
+      console.log("Skip:", skip, "Limit:", limit);
+      console.log("Page  = ", page);
+      const packageCount = await prisma.package.count({
+        where: { status: true },
+      });
+
+      console.log("packageCount  = ", packageCount);
+      if (packageCount <= limit && page && page >= 2) {
+        skip = (page ?? 2 - 1) * limit;
+      }
       const packages = await prisma.package.findMany({
+        where: { status: true },
         select: {
+          pid: true,
           name: true,
           rating: true,
           imageUrl: true,
+          category: true,
+          threePrice: true,
+          featured: true,
+          popular: true,
+          day: true,
+          night: true,
+          text: true,
+          destination: {
+            select: {
+              name: true,
+              country: true,
+            },
+          },
+          highlights: {
+            select: {
+              text: true,
+            },
+          },
         },
         orderBy: {
           updatedAt: "desc",

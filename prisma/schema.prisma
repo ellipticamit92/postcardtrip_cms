@@ -133,11 +133,12 @@ model Package {
   popular       Boolean?  @default(false)
   featured      Boolean?  @default(false)
   isRichText    Boolean?  @default(false)
-  status         Boolean   @default(false)
+  status        Boolean   @default(false)
   overview      String?   @db.Text
   rating        Float?
   heroTitle     String?  @db.Text
   text          String?
+  category      String?
   destination   Destination  @relation(fields: [destinationId], references: [did])
   destinationId Int
   itineraries   Itinerary[]

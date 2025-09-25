@@ -52,7 +52,7 @@ const PackageGrid: FC<PackageGridProps> = ({ data, pagination }) => {
               </div>
               {pkg?.status && (
                 <div className="absolute top-4 right-4 z-10">
-                  <Badge className="bg-cyan-500 text-white">Active</Badge>
+                  <Badge className="bg-destructive text-white">Active</Badge>
                 </div>
               )}
               {pkg?.featured && (
@@ -108,6 +108,19 @@ const PackageGrid: FC<PackageGridProps> = ({ data, pagination }) => {
             </CardHeader>
 
             <CardContent>
+              <div className="pb-3 flex gap-2 flex-wrap">
+                {pkg?.category?.split(",")?.map((item, index) => (
+                  <Badge
+                    key={index}
+                    className="bg-yellow-200 text-black text-[10px]"
+                  >
+                    {item}
+                  </Badge>
+                ))}
+              </div>
+              <p className="text-sm text-muted-foreground mb-4 line-clamp-2">
+                {pkg.text}
+              </p>
               <div className="flex items-center justify-between">
                 <Dialog>
                   <DialogTrigger asChild>

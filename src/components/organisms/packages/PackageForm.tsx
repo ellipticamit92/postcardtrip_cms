@@ -41,6 +41,7 @@ const schema = z.object({
   fourPrice: z.number().min(1, "Please enter 4 star price"),
   fivePrice: z.number().min(1, "Please enter 5 star price"),
   destinationId: z.number().min(1, "Please atleast one number"),
+  category: z.string().optional(),
 });
 
 export type PackageFormDataType = z.infer<typeof schema>;
@@ -81,6 +82,7 @@ export function PackageForm({
       overview: "",
       heroTitle: "",
       text: "",
+      category: "",
       tours: [],
       cities: [],
       highlights: [],
@@ -90,6 +92,15 @@ export function PackageForm({
   });
 
   const { control, reset } = form;
+
+  const getCategory = (selectedTours: number[]) => {
+    if (!toursOptions || toursOptions.length === 0) return "";
+    const selectedLabels = toursOptions
+      ?.filter((opt) => selectedTours?.includes(Number(opt.value)))
+      ?.map((opt) => opt.label)
+      ?.join(", ");
+    return selectedLabels;
+  };
 
   const onSubmit = async (data: PackageFormDataType) => {
     try {
@@ -117,6 +128,7 @@ export function PackageForm({
         highlights: data.highlights || [],
         inclusions: data.inclusions || [],
         exclusions: data.exclusions || [],
+        category: data?.tours ? getCategory(data.tours) : "",
       };
 
       if (isEditMode && PackageId) {

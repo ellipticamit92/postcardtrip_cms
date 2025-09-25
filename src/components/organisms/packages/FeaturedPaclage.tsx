@@ -1,6 +1,7 @@
 import DashboardHeading from "@/components/atoms/DashboardHeading";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent } from "@/components/ui/card";
+import { toIndianCurrency } from "@/lib/helper";
 import PackageService from "@/services/package.service";
 import { Calendar, Package, Star, TrendingUp } from "lucide-react";
 
@@ -78,11 +79,11 @@ const FeaturedPackage = async () => {
                     {pkg.threePrice &&
                       pkg.threePrice > (pkg.threePrice ?? 0) && (
                         <p className="text-sm text-gray-400 line-through">
-                          ${pkg.threePrice}
+                          {toIndianCurrency(pkg.threePrice)}
                         </p>
                       )}
                     <p className="text-2xl font-bold text-gray-900">
-                      ${pkg.threePrice}
+                      {toIndianCurrency(pkg.threePrice ?? 0)}
                     </p>
                     <p className="text-sm text-gray-500">per person</p>
                   </div>
