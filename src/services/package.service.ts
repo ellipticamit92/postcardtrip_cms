@@ -520,6 +520,11 @@ export class PackageService {
           night: true,
           text: true,
           isRichText: true,
+          destination: {
+            select: {
+              name: true,
+            },
+          },
         },
       });
     } catch (error) {

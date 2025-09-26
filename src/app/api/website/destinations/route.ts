@@ -21,7 +21,7 @@ export async function GET(req: NextRequest) {
 
     const result = await DestinationService.getWebAll();
 
-    return NextResponse.json({ success: true, ...result });
+    return NextResponse.json({ success: true, data: result });
   } catch (err) {
     console.error("GET /api/destinations error:", err);
     return NextResponse.json(
