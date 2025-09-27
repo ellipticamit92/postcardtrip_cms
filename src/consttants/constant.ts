@@ -19,6 +19,7 @@ import {
   List,
   MapPin,
   Route,
+  MessageSquareText,
 } from "lucide-react";
 
 export const SIDEBAR_URLS = {
@@ -100,6 +101,11 @@ export const SIDEBAR_URLS = {
       title: "Reviews",
       url: "/reviews",
       icon: PencilIcon,
+    },
+    {
+      title: "Inquiry",
+      url: "/inquiry",
+      icon: MessageSquareText,
     },
     // {
     //   title: "Destination",

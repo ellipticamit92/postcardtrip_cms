@@ -7,6 +7,7 @@ import {
   Reviews,
   Tours,
   Highlight,
+  Inquiry,
 } from "@prisma/client";
 import { PaginationProps } from "../type";
 
@@ -44,6 +45,11 @@ export interface DestinationsProps {
 
 export interface ReviewsTableProps {
   data: ReviewsWithPackageDestination[];
+  pagination: PaginationProps;
+}
+
+export interface InquiryTableProps {
+  data: Inquiry[];
   pagination: PaginationProps;
 }
 

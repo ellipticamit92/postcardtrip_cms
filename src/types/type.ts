@@ -250,3 +250,7 @@ export interface HooksProps {
   initialPage?: number;
   initialLimit?: number;
 }
+
+export interface SearchPageProps {
+  searchParams: Promise<Record<string, string | undefined>>;
+}
