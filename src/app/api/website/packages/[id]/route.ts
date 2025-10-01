@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
-import { unslugifyPackageName } from "@/lib/helper";
+import { unslugify } from "@/lib/helper";
 import PackageService from "@/services/package.service";
 
 interface RouteParams {
@@ -10,8 +10,7 @@ interface RouteParams {
 export async function GET(request: NextRequest, { params }: RouteParams) {
   try {
     const { id } = await params;
-    const packageName = unslugifyPackageName(id);
-    const packagesData = await PackageService.getByName(packageName);
+    const packagesData = await PackageService.getByName(id);
 
     return NextResponse.json({
       success: true,

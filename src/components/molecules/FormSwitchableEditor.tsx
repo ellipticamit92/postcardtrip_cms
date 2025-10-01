@@ -13,6 +13,7 @@ interface FormSwitchableEditorProps {
   label: string;
   placeholder?: string;
   height?: number;
+  className?: string;
 }
 
 export default function FormSwitchableEditor({
@@ -22,6 +23,7 @@ export default function FormSwitchableEditor({
   label,
   placeholder,
   height = 260,
+  className = "",
 }: FormSwitchableEditorProps) {
   const { setValue, watch } = useFormContext();
 
@@ -67,7 +69,7 @@ export default function FormSwitchableEditor({
               label={label}
               placeholder={placeholder}
               control={control}
-              className="h-[210px]"
+              className={`h-[210px] ${className}`}
             />
           )
         }

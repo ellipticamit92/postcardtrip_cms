@@ -3,7 +3,7 @@ import { Badge } from "@/components/ui/badge";
 import { Card, CardContent } from "@/components/ui/card";
 import { toIndianCurrency } from "@/lib/helper";
 import PackageService from "@/services/package.service";
-import { Calendar, Package, Star, TrendingUp } from "lucide-react";
+import { Calendar, Package, Star } from "lucide-react";
 
 const FeaturedPackage = async () => {
   const packages = await PackageService.getDashboardPopular();

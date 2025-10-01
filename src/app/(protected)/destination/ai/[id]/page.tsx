@@ -1,10 +1,10 @@
 import { Heading } from "@/components/atoms/Heading";
-import { DestinationForm } from "@/components/organisms/destinations/DestinationForm";
+import { DestinationAIForm } from "@/components/organisms/destinations/DestinationAIForm";
 import DestinationService from "@/services/destination.service";
 
 export const dynamic = "force-dynamic";
 
-export default async function EditDestinationPage({
+export default async function EditAIDestinationPage({
   params,
 }: {
   params: Promise<{ id: string }>; // Note: params is now a Promise
@@ -50,8 +50,13 @@ export default async function EditDestinationPage({
 
   return (
     <>
-      <Heading text="Edit Destination" subText={name} href="/destination" />
-      <DestinationForm initialData={updatedDestination} destinationId={id} />
+      <Heading text="AI Edit Destination" subText={name} href="/destination" />
+
+      <DestinationAIForm
+        destName={name}
+        destData={updatedDestination}
+        destinationId={id}
+      />
     </>
   );
 }

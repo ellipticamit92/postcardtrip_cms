@@ -1,3 +1,4 @@
+import { PackageAIFormDataType } from "@/components/organisms/packages/PackageAIForm";
 import { PackageFormDataType } from "@/components/organisms/packages/PackageForm";
 
 export interface ApiResponse<T = unknown> {
@@ -16,6 +17,7 @@ export interface ApiResponse<T = unknown> {
 }
 
 const BASE = "/api/auth/packages";
+const AI_API_URL = "/api/auth/ai-generate/package";
 
 export const packagesApi = {
   /* List with pagination & filters */
@@ -73,6 +75,17 @@ export const packagesApi = {
   /* Create */
   create: async (data: PackageFormDataType) => {
     const response = await fetch(BASE, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(data),
+    });
+    return response.json();
+  },
+
+  createAI: async (data: PackageAIFormDataType) => {
+    const response = await fetch(AI_API_URL, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",

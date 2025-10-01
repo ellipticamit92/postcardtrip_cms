@@ -51,13 +51,17 @@ export const destinationsApi = {
     return response.json();
   },
 
-  createAI: async (name: string) => {
+  createUpdateAI: async (
+    name: string,
+    isEdit: boolean,
+    isImageChange: boolean
+  ) => {
     const response = await fetch(`${AI_API_URL}`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
       },
-      body: JSON.stringify({ destination: name }),
+      body: JSON.stringify({ destination: name, isEdit, isImageChange }),
     });
     return response.json();
   },

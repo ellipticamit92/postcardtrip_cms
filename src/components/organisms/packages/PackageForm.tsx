@@ -9,7 +9,7 @@ import { Button } from "@/components/ui/button";
 import { Loader2 } from "lucide-react";
 import { toast } from "sonner";
 import { usePackages } from "@/hooks/use-packages";
-import { numberOptions } from "@/lib/helper";
+import { numberOptions, slugify } from "@/lib/helper";
 import { FormCheckbox } from "@/components/atoms/FormCheckbox";
 import { FormMultiSelect } from "@/components/atoms/FormMultiSelect";
 import { FormSelect } from "@/components/atoms/FormSelect";
@@ -42,6 +42,8 @@ const schema = z.object({
   fivePrice: z.number().min(1, "Please enter 5 star price"),
   destinationId: z.number().min(1, "Please atleast one number"),
   category: z.string().optional(),
+  slug: z.string().optional(),
+  thumbnailUrl: z.string().optional(),
 });
 
 export type PackageFormDataType = z.infer<typeof schema>;
@@ -88,6 +90,7 @@ export function PackageForm({
       highlights: [],
       inclusions: [],
       exclusions: [],
+      slug: "",
     },
   });
 
@@ -129,6 +132,7 @@ export function PackageForm({
         inclusions: data.inclusions || [],
         exclusions: data.exclusions || [],
         category: data?.tours ? getCategory(data.tours) : "",
+        slug: slugify(data.name.trim()) ?? "",
       };
 
       if (isEditMode && PackageId) {

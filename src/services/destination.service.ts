@@ -1,5 +1,5 @@
 import { DestinationFormDataType } from "@/components/organisms/destinations/DestinationForm";
-import { getFieldOptions } from "@/lib/helper";
+import { getFieldOptionsNum } from "@/lib/helper";
 import { prisma } from "@/lib/prisma";
 
 export class DestinationService {
@@ -27,7 +27,7 @@ export class DestinationService {
           name: "asc",
         },
       });
-      const destinationsData = getFieldOptions(destinations, "did");
+      const destinationsData = getFieldOptionsNum(destinations, "did");
       return {
         data: destinationsData,
       };

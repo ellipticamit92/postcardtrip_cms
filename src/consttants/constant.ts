@@ -24,13 +24,13 @@ import {
 
 export const SIDEBAR_URLS = {
   user: {
-    name: "Postcardtrip Admin",
+    name: "Travel Admin",
     email: "abc@a.com",
     avatar: "",
   },
   teams: [
     {
-      name: "Postcardtrip CMS",
+      name: "Travel CMS",
       logo: GalleryVerticalEnd,
       plan: "Manage your travel content",
     },

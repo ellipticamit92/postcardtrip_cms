@@ -12,7 +12,6 @@ export default async function InquiryPage({ searchParams }: SearchPageProps) {
 
   const inquiryData = await InquiryService.getAll({ page, limit: 12 });
   const { data, pagination } = inquiryData;
-  console.log("DEBUG: ", data, pagination);
 
   return (
     <>

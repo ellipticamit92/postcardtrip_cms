@@ -1,3 +1,4 @@
+import { PackageAIFormDataType } from "@/components/organisms/packages/PackageAIForm";
 import { PackageFormDataType } from "@/components/organisms/packages/PackageForm";
 import { packagesApi } from "@/lib/api/packages";
 import { showToast } from "@/lib/toast";
@@ -92,6 +93,38 @@ export const usePackages = (options: UsePackagesOptions = {}) => {
     } catch (err) {
       setError(err instanceof Error ? err.message : "An error occurred");
       return null;
+    }
+  };
+
+  const createAIPackage = async (
+    data: PackageAIFormDataType
+  ): Promise<{ success: boolean; data?: Package; error?: string }> => {
+    setLoading(true);
+    setError(null);
+    const loadingToast = showToast.createLoading("package");
+    try {
+      const result = await packagesApi.createAI(data);
+      if (result.success) {
+        // Refresh the list if we're showing packages
+        if (packages.length > 0 || autoFetch) {
+          await fetchPackages({ page: currentPage });
+        }
+        toast.dismiss(loadingToast);
+        showToast.createSuccess("Packages");
+        return { success: true, data: result.data };
+      } else {
+        toast.dismiss(loadingToast);
+        showToast.createError("Packages");
+        return { success: false, error: result.error };
+      }
+    } catch (err) {
+      const errorMsg = err instanceof Error ? err.message : "An error occurred";
+      toast.dismiss(loadingToast);
+      showToast.createError("package", errorMsg);
+      setError(errorMsg);
+      return { success: false, error: errorMsg };
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -237,6 +270,7 @@ export const usePackages = (options: UsePackagesOptions = {}) => {
     fetchPackages,
     getPackage,
     createPackage,
+    createAIPackage,
     updatePackage,
     deletePackage,
     searchPackages,

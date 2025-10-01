@@ -24,6 +24,7 @@ export default async function PacakgesPage({ searchParams }: PackagePageProps) {
         description="Create and manage travel packages"
         Icon={Package}
         href="/package/add"
+        aiHref="/package/ai"
       />
       <ViewLayout
         data={data ?? []}

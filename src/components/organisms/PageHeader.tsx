@@ -25,13 +25,13 @@ const HeaderAction = <T,>({
   aiBtnText,
 }: PageHeaderProps<T>) => {
   return (
-    <div className="flex gap-2">
+    <div className="flex flex-col md:flex-row gap-2">
       {/* Original Button / Modal */}
       {ModalComponent && modalProps ? (
         <ModalComponent {...modalProps} />
       ) : href ? (
         <Link href={href}>
-          <Button variant="gradient" className="shadow-glow">
+          <Button size="sm" variant="cyan" className="shadow-glow">
             <Plus className="h-4 w-4" />
             {btnText ?? `Add ${title}`}
           </Button>
@@ -41,7 +41,7 @@ const HeaderAction = <T,>({
       {/* Extra AI Button */}
       {aiHref && (
         <Link href={aiHref}>
-          <Button variant="gradient" className="shadow-glow">
+          <Button size="sm" variant="cyan" className="shadow-glow">
             <AirVent className="h-4 w-4" />
             {aiBtnText ?? `Generate ${title}`}
           </Button>
@@ -54,7 +54,7 @@ const HeaderAction = <T,>({
 const PageHeader = <T,>(props: PageHeaderProps<T>) => {
   const { title, description, Icon } = props;
   return (
-    <div className="flex items-center justify-between">
+    <div className="flex flex-col gap-2 md:flex-row md:items-center md:justify-between">
       <PageHeaderLeft title={title} description={description} Icon={Icon} />
       <HeaderAction {...props} />
     </div>

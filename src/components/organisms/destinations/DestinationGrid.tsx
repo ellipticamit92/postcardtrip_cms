@@ -86,7 +86,12 @@ const DestinationGrid: FC<DestinationsProps> = ({ data, pagination }) => {
                   </span>
                 </div>
 
-                <div className="flex gap-1 ">
+                <div className="flex gap-1 items-center ">
+                  <Link href={`/destination/ai/${destination.did}`}>
+                    <Button variant="outline" size="xs" className="">
+                      AI Edit
+                    </Button>
+                  </Link>
                   <Link href={`/destination/${destination.did}`}>
                     <Button variant="ghost" size="icon" className="h-8 w-8">
                       <Edit className="h-4 w-4" />

@@ -36,7 +36,7 @@ export const LoginForm = () => {
 
   return (
     <Form {...form}>
-      <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
+      <form onSubmit={form.handleSubmit(onSubmit)} className="w-full space-y-5">
         <FormInput<LoginFormValues>
           name="email"
           control={form.control}
@@ -53,16 +53,19 @@ export const LoginForm = () => {
           type="password"
         />
 
-        <div className="text-right">
-          <a
+        <div className="flex items-center justify-between text-sm">
+          {/* <a
             href="/auth/forgot-password-simple"
-            className="text-sm hover:underline"
+            className="text-blue-600 hover:underline dark:text-blue-400"
           >
             Forgot password?
-          </a>
+          </a> */}
         </div>
 
-        <Button type="submit" className="w-full h-12 rounded-xl">
+        <Button
+          type="submit"
+          className="w-full h-12 rounded-xl bg-blue-600 hover:bg-blue-700 text-white font-semibold shadow-md transition-all duration-200"
+        >
           Sign In
         </Button>
       </form>

@@ -170,6 +170,14 @@ export const columns: ColumnDef<Destination>[] = [
               </Link>
             </DropdownMenuItem>
             <DropdownMenuItem>
+              <Link
+                className="hover:text-blue-400 font-semibold w-full block"
+                href={`/destination/ai/${did}`}
+              >
+                AI Edit
+              </Link>
+            </DropdownMenuItem>
+            <DropdownMenuItem>
               <DeleteData id={did} model="destinations" />
             </DropdownMenuItem>
           </DropdownMenuContent>

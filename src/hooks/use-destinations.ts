@@ -65,27 +65,44 @@ export const useDestinations = (options: HooksProps = {}) => {
     }
   };
 
-  const createAIDestination = async (
-    name: string
-  ): Promise<{ success: boolean; data?: Destination; error?: string }> => {
+  const createUpdateAIDestination = async (
+    name: string,
+    isEdit: boolean = false,
+    isImageChange: boolean = false
+  ): Promise<{
+    success: boolean;
+    data?: Destination;
+    error?: string;
+    details?: any;
+  }> => {
     setLoading(true);
     setError(null);
-    const loadingToast = showToast.createLoading("AI destination");
+    const loadingToast = showToast.createLoading("Create AI destination");
 
     try {
-      const result = await destinationsApi.createAI(name);
+      const result = await destinationsApi.createUpdateAI(
+        name,
+        isEdit,
+        isImageChange
+      );
       if (result.success) {
         // Refresh the list if we're showing destinations
         if (destinations.length > 0 || autoFetch) {
           await fetchDestinations({ page: currentPage });
         }
         toast.dismiss(loadingToast);
-        showToast.createSuccess("Destination created using AI");
+        showToast.createSuccess(
+          "Destination content genearated successfully using AI"
+        );
         return { success: true, data: result.data };
       } else {
         toast.dismiss(loadingToast);
         showToast.createError("Destination error using AI");
-        return { success: false, error: result.error };
+        return {
+          success: false,
+          error: result.error,
+          details: result?.details,
+        };
       }
     } catch (err) {
       const errorMsg = err instanceof Error ? err.message : "An error occurred";
@@ -244,7 +261,7 @@ export const useDestinations = (options: HooksProps = {}) => {
     deleteDestination,
     searchDestinations,
     changePage,
-    createAIDestination,
+    createUpdateAIDestination,
 
     // Utilities
     clearError: () => setError(null),

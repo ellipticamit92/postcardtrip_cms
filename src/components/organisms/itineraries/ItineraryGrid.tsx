@@ -3,7 +3,13 @@
 import { Itinerary, ItineraryPackageItem, PaginationProps } from "@/types/type";
 import { FC } from "react";
 import { Button } from "@/components/ui/button";
-import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
+import {
+  Card,
+  CardHeader,
+  CardTitle,
+  CardContent,
+  CardFooter,
+} from "@/components/ui/card";
 import {
   Dialog,
   DialogContent,
@@ -20,14 +26,14 @@ interface ItineraryGridProps {
 
 const ItineraryGrid: FC<ItineraryGridProps> = ({ data }) => {
   return (
-    <div className="grid grid-cols-1 md:grid-cols-3 xl:grid-cols-3 gap-6">
+    <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-2 gap-6">
       {data.map((iti: ItineraryPackageItem) => (
         <Card
           key={iti.package.pid}
-          className="py-0 group hover:shadow-lg hover:border-primary/20 transition-all duration-300 rounded-xl overflow-hidden"
+          className="py-0 group hover:shadow-lg hover:border-primary/20 transition-all duration-300 rounded-xl overflow-hidden gap-3"
         >
           {/* Header */}
-          <CardHeader className="!px-4 !py-3 border-b bg-muted/40">
+          <CardHeader className="!px-4 !pt-3 !pb-0 border-b bg-muted/40">
             <div className="flex items-start justify-between">
               <div className="flex-1">
                 <CardTitle className="text-lg font-semibold text-foreground mb-1">
@@ -57,7 +63,7 @@ const ItineraryGrid: FC<ItineraryGridProps> = ({ data }) => {
           </CardHeader>
 
           {/* Content */}
-          <CardContent className="!px-4 !py-3 space-y-4">
+          <CardContent className="!px-4 !py-0 !pb-2 space-y-4">
             {/* Days */}
             <div className="flex items-center gap-2 text-sm text-muted-foreground">
               <Calendar className="h-4 w-4 text-primary" />
@@ -66,10 +72,10 @@ const ItineraryGrid: FC<ItineraryGridProps> = ({ data }) => {
 
             {/* Itineraries */}
             <div className="flex flex-col gap-3 mt-3">
-              {iti.itineraries.map((item: Itinerary) => (
+              {iti.itineraries?.slice(0, 3).map((item: Itinerary) => (
                 <div
                   key={item.itid}
-                  className="p-3 rounded-lg border hover:shadow-sm transition-all"
+                  className="p-2 rounded-lg border hover:shadow-sm transition-all"
                 >
                   <h4 className="font-medium text-sm text-foreground mb-2">
                     Day {item.day}: {item.title}
@@ -79,7 +85,7 @@ const ItineraryGrid: FC<ItineraryGridProps> = ({ data }) => {
                     <DialogTrigger asChild>
                       <Button
                         variant="outline"
-                        size="sm"
+                        size="xs"
                         className="text-xs font-medium hover:bg-primary hover:text-white transition-colors"
                       >
                         View Itinerary Details
@@ -103,6 +109,14 @@ const ItineraryGrid: FC<ItineraryGridProps> = ({ data }) => {
               ))}
             </div>
           </CardContent>
+
+          {iti.itineraries.length > 3 && (
+            <CardFooter className="text-center flex items-center justify-center !pb-3">
+              <p className="text-sm text-black text-center">
+                +{iti.itineraries.length - 3} more days
+              </p>
+            </CardFooter>
+          )}
         </Card>
       ))}
     </div>

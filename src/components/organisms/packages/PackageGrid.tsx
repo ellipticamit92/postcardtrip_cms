@@ -138,6 +138,8 @@ const PackageGrid: FC<PackageGridProps> = ({ data, pagination }) => {
                         __html: pkg?.overview ?? "",
                       }}
                     />
+
+                    <p>SLug: {pkg?.slug}</p>
                   </DialogContent>
                 </Dialog>
                 <div className="flex items-center gap-2">

@@ -8,6 +8,7 @@ export class PackageService {
       return await prisma.package.create({
         data: {
           ...data,
+          slug: data.slug ?? "",
           tours: {
             connect: data?.tours?.map((tid: number) => ({ tid })), // 👈 connect multiple tours
           },
@@ -251,10 +252,10 @@ export class PackageService {
     }
   }
 
-  static async getByName(name: string) {
+  static async getByName(slug: string) {
     try {
       return await prisma.package.findUnique({
-        where: { name },
+        where: { slug },
         select: {
           name: true,
           pid: true,
@@ -262,7 +263,7 @@ export class PackageService {
           night: true,
           imageUrl: true,
           popular: true,
-          overview: true,
+          text: true,
           featured: true,
           isRichText: true,
           status: true,
@@ -273,8 +274,25 @@ export class PackageService {
               country: true,
             },
           },
-          itineraries: true,
+          itineraries: {
+            select: {
+              day: true,
+              title: true,
+              details: true,
+            },
+          },
           hotelPrices: true,
+          inclusions: {
+            select: {
+              text: true,
+            },
+          },
+          exclusions: {
+            select: {
+              text: true,
+            },
+          },
+          highlights: true,
         },
       });
     } catch (error) {
@@ -520,6 +538,7 @@ export class PackageService {
           night: true,
           text: true,
           isRichText: true,
+          slug: true,
           destination: {
             select: {
               name: true,
@@ -535,13 +554,10 @@ export class PackageService {
   static async getAllWebPacakges(limit: number, page?: number) {
     try {
       let skip = 0;
-      console.log("Skip:", skip, "Limit:", limit);
-      console.log("Page  = ", page);
       const packageCount = await prisma.package.count({
         where: { status: true },
       });
 
-      console.log("packageCount  = ", packageCount);
       if (packageCount <= limit && page && page >= 2) {
         skip = (page ?? 2 - 1) * limit;
       }
@@ -584,6 +600,20 @@ export class PackageService {
     } catch (error) {
       throw new Error(`Failed to fetch destinations name and id: ${error}`);
     }
+  }
+
+  static async slugExists(slug: string): Promise<boolean> {
+    const existing = await prisma.package.findFirst({
+      where: { slug },
+    });
+    return !!existing;
+  }
+
+  static async isPackageExist(name: string) {
+    const existing = await prisma.package.findFirst({
+      where: { name },
+    });
+    return !!existing;
   }
 }
 

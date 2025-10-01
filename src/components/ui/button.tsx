@@ -23,6 +23,9 @@ const buttonVariants = cva(
           "bg-gradient-to-r from-primary to-primary-glow text-primary-foreground hover:shadow-glow transition-all duration-300",
         accent:
           "bg-accent text-accent-foreground hover:bg-accent/90 shadow-elegant transition-all duration-300",
+        cyan: "bg-cyan-500 text-white hover:bg-cyan-600 shadow-lg hover:shadow-cyan-500/25 transition-all duration-300",
+        yellow:
+          "bg-yellow-500 text-black hover:bg-yellow-600 shadow-lg hover:shadow-yellow-500/25 transition-all duration-300",
       },
       size: {
         default: "h-10 px-4 py-2",

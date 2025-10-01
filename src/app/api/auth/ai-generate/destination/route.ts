@@ -4,19 +4,23 @@ import { z } from "zod";
 import { checkRateLimit, cleanAIResponse } from "@/lib/helper";
 import { getGeminiClient } from "@/lib/gemini";
 import { fetchUnsplashImage } from "@/lib/api/fetchImage";
-import DestinationService from "@/services/destination.service";
 import { DestinationFormDataType } from "@/components/organisms/destinations/DestinationForm";
 
 const requestSchema = z.object({
   destination: z.string().min(1).max(100).trim(),
+  isEdit: z.boolean().optional(),
+  isImageChange: z.boolean().optional(),
 });
 
 const aiResponseSchema = z.object({
   name: z.string().min(1).max(200),
-  description: z.string().min(10).max(400),
+  description: z.string().min(150).max(500),
   heroTitle: z.string().min(20).max(70),
   heading: z.string().min(15).max(25),
   country: z.string().min(2).max(100),
+  cardText: z.string().min(20).max(200),
+  bestTimeToVisit: z.string().min(10).max(50).optional(),
+  highlights: z.string().min(50).max(300).optional(),
 });
 
 export async function POST(req: NextRequest) {
@@ -49,31 +53,34 @@ export async function POST(req: NextRequest) {
         { status: 400 }
       );
     }
-    const where: any = {};
 
-    const { destination } = validationResult.data;
-    if (destination) {
-      where.name = {
-        equals: destination,
-        mode: "insensitive",
-      };
-    }
+    const { destination, isEdit, isImageChange } = validationResult.data;
 
-    // Check if destination already exists
-    const existingDestination = await prisma.destination.findFirst({
-      where: {
-        name: {
-          contains: destination, // Case-insensitive partial matching
+    if (!isEdit) {
+      const where: any = {};
+      if (destination) {
+        where.name = {
+          equals: destination,
+          mode: "insensitive",
+        };
+      }
+
+      // Check if destination already exists
+      const existingDestination = await prisma.destination.findFirst({
+        where: {
+          name: {
+            contains: destination, // Case-insensitive partial matching
+          },
         },
-      },
-    });
-
-    if (existingDestination) {
-      return NextResponse.json({
-        ...existingDestination,
-        message: "Destination already exists",
-        requestId,
       });
+
+      if (existingDestination) {
+        return NextResponse.json({
+          ...existingDestination,
+          message: "Destination already exists",
+          requestId,
+        });
+      }
     }
 
     const imageData = await fetchUnsplashImage(destination);
@@ -82,17 +89,21 @@ export async function POST(req: NextRequest) {
     const gemini = getGeminiClient();
     const response = await gemini.models.generateContent({
       model: "gemini-2.0-flash",
-      contents: `Generate a JSON object for the travel destination "${destination} and find irs country as well ".
-      Requirements:
-      - name: The destination name (string, 1-200 characters)
-      - description: Detailed travel description highlighting attractions, culture, and experiences (string, 50-400 characters)
-      - heroTitle: A catchy title for the destination (string, 20-70 characters)
-      - heading: A short heading for the destination (string, 15-25 characters)
-      - country: The country where the destination is located (string, 2-100 characters)
-      Return only valid JSON without markdown formatting.`,
-    });
+      contents: `Generate a JSON object for the travel destination "${destination}" and identify its country.
+        The output must be ONLY valid JSON (no markdown, no extra text).
 
-    console.log("AI response:", response);
+        Requirements:
+        - name: The destination name (string, 1-200 characters). Use the most common travel-friendly name.
+        - description: A detailed, engaging travel description highlighting attractions, culture, food, nature, and unique experiences (string, 150-500 characters). Write in an inspiring and inviting tone suitable for a travel agency website.
+        - heroTitle: A catchy and SEO-friendly headline for the destination page hero banner (string, 30-70 characters). Should inspire travelers to visit and highlight what makes the destination unique.
+        - cardText: A short teaser/summary for use in a destination card or listing (string, 30-100 characters). Keep it punchy and appealing.
+        - heading: A concise, memorable heading for the destination (string, 15-25 characters). Should work well as a section title.
+        - country: The country where the destination is located (string, 2-100 characters). Ensure accuracy.
+        - highlights: A single string containing 3-5 must-see attractions, activities, or experiences, separated by commas (string, 50-300 characters).
+        - bestTimeToVisit: A short phrase describing the ideal travel season (string, 10-50 characters).
+
+        Return a single valid JSON object matching this schema.`,
+    });
 
     if (!response.text) {
       throw new Error("Empty response from AI service");
@@ -142,33 +153,43 @@ export async function POST(req: NextRequest) {
       );
     }
 
-    const data: DestinationFormDataType = {
-      name: aiValidation.data.name.trim(),
+    const aiResponseData: Partial<DestinationFormDataType> = {
+      name: aiValidation?.data?.name?.trim(),
       overview: aiValidation?.data?.description?.trim() ?? "",
       isRichText: false,
-      imageUrl: imageData?.url ?? "",
-      thumbnailUrl: imageData?.thumbnailUrl ?? "",
-      basePrice: Math.floor(Math.random() * 900) + 100, // Random price between 100-999
-      originalPrice: Math.floor(Math.random() * 900) + 100,
-      heroTitle: aiValidation.data.heroTitle.trim(),
-      rating: Math.floor(Math.random() * 5) + 1, // Random rating between 1-5
-      country: aiValidation.data.country.trim(),
-      heading: aiValidation.data.heading.trim(),
-      trending: false,
-      featured: false,
-      status: true,
+      country: aiValidation?.data?.country?.trim() ?? "",
+      heading: aiValidation?.data?.heading?.trim() ?? "",
+      text: aiValidation?.data?.cardText?.trim() ?? "",
+      heroTitle: aiValidation?.data?.heroTitle?.trim() ?? "",
+      bestTimeToVisit: aiValidation?.data?.bestTimeToVisit?.trim() ?? "",
+      highlights: aiValidation?.data?.highlights ?? "",
+      ...(isImageChange
+        ? { imageUrl: imageData?.url, thumbnailUrl: imageData?.thumbnailUrl }
+        : {}),
     };
 
-    // Save to database with transaction
-    const savedDestination = await DestinationService.create(data);
+    // const data: DestinationFormDataType = {
+    //   name: aiValidation.data.name.trim(),
+    //   overview: aiValidation?.data?.description?.trim() ?? "",
+    //   isRichText: false,
+    //   imageUrl: imageData?.url ?? "",
+    //   thumbnailUrl: imageData?.thumbnailUrl ?? "",
+    //   basePrice: Math.floor(Math.random() * 900) + 100, // Random price between 100-999
+    //   originalPrice: Math.floor(Math.random() * 900) + 100,
+    //   heroTitle: aiValidation.data.heroTitle.trim(),
+    //   rating: Math.floor(Math.random() * 5) + 1, // Random rating between 1-5
+    //   country: aiValidation.data.country.trim(),
+    //   heading: aiValidation.data.heading.trim(),
+    //   trending: false,
+    //   featured: false,
+    //   status: true,
+    // };
 
-    console.log(
-      `[${requestId}] Successfully created destination:`,
-      savedDestination.did
-    );
+    // Save to database with transaction
+    // const savedDestination = await DestinationService.create(data);
 
     return NextResponse.json({
-      ...savedDestination,
+      data: aiResponseData,
       requestId,
       message: "Destination created successfully",
       success: true,

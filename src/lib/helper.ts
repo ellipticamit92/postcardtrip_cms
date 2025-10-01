@@ -1,3 +1,5 @@
+import { COUNTRIES } from "@/consttants/constant";
+import PackageService from "@/services/package.service";
 import { Destination } from "@prisma/client";
 
 export const getFieldOptions = (data: any, id: string) => {
@@ -119,4 +121,38 @@ export const checkRateLimit = (ip: string): boolean => {
 
   userLimit.count++;
   return true;
+};
+
+export function unslugify(slug: string) {
+  return slug
+    .replace(/-/g, " ") // dashes -> spaces
+    .replace(/\b\w/g, (c) => c.toUpperCase()); // capitalize words
+}
+
+export function slugify(text: string) {
+  return text
+    .toString()
+    .normalize("NFD") // remove accents
+    .replace(/[\u0300-\u036f]/g, "")
+    .replace(/['’]/g, "") // remove apostrophes
+    .replace(/[^a-zA-Z0-9]+/g, "-") // non-alphanumeric → dash
+    .replace(/^-+|-+$/g, "") // trim dashes
+    .toLowerCase();
+}
+
+export async function ensureUniqueSlug(baseSlug: string): Promise<string> {
+  let uniqueSlug = baseSlug;
+  let counter = 1;
+
+  while (await PackageService.slugExists(uniqueSlug)) {
+    uniqueSlug = `${baseSlug}-${counter}`;
+    counter++;
+  }
+  return uniqueSlug;
+}
+
+export const filterCountry = (country: string): string => {
+  return country
+    ? COUNTRIES.filter((item) => item.label.includes(country))?.[0]?.value
+    : "";
 };

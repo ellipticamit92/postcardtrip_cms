@@ -16,13 +16,14 @@ import ImageUploader from "@/components/atoms/ImageUploader";
 import { FormSelect } from "@/components/atoms/FormSelect";
 import FormSection from "@/components/molecules/FormSection";
 import FormSwitchableEditor from "@/components/molecules/FormSwitchableEditor";
+import { useEffect, useRef } from "react";
 
 const schema = z.object({
   name: z.string().min(1),
   heading: z.string().min(1),
   country: z.string().min(1),
   overview: z.string().optional(),
-  imageUrl: z.string().optional(),
+  imageUrl: z.string().nullable().optional(),
   thumbnailUrl: z.string().optional(),
   trending: z.boolean().optional(),
   status: z.boolean().optional(),
@@ -33,6 +34,8 @@ const schema = z.object({
   rating: z.number().min(1, "Please a rating"),
   basePrice: z.number().min(1, "Please enter base price"),
   originalPrice: z.number().min(1, "Please enter original price"),
+  bestTimeToVisit: z.string().optional(),
+  highlights: z.string().optional(),
 });
 
 export type DestinationFormDataType = z.infer<typeof schema>;
@@ -41,7 +44,7 @@ export function DestinationForm({
   initialData,
   destinationId,
 }: {
-  initialData?: DestinationFormDataType;
+  initialData?: Partial<DestinationFormDataType>;
   destinationId?: number;
 }) {
   const { createDestination, updateDestination, loading } = useDestinations({
@@ -62,10 +65,22 @@ export function DestinationForm({
       status: false,
       heroTitle: "",
       text: "",
+      bestTimeToVisit: "",
+      highlights: "",
     },
   });
 
-  const { control, reset } = form;
+  const { control, reset, getValues, watch } = form;
+
+  const initialValues = useRef(getValues());
+
+  useEffect(() => {
+    reset(initialData);
+  }, [initialData, reset]);
+
+  const isFieldChanged = (field: keyof DestinationFormDataType) => {
+    return watch(field) !== initialValues.current[field];
+  };
 
   const onSubmit = async (data: DestinationFormDataType) => {
     try {
@@ -87,6 +102,8 @@ export function DestinationForm({
         text: data.text?.trim() || undefined,
         heroTitle: data.heroTitle?.trim() || undefined,
         rating: data.rating,
+        bestTimeToVisit: data.bestTimeToVisit?.trim() || undefined,
+        highlights: data.highlights || "",
       };
 
       if (isEditMode && destinationId) {
@@ -110,48 +127,100 @@ export function DestinationForm({
         {/* --- Basic Info Section --- */}
         <FormSection title="Basic Information" icon="📍">
           <FormInput name="name" control={control} label="Destination Name" />
-          <FormInput name="heading" control={control} label="Heading" />
-          <FormInput name="heroTitle" control={control} label="Hero Title" />
-          <FormSelect
-            name="country"
+          <FormInput
+            name="heading"
             control={control}
-            label="Country"
-            placeholder="Select a country"
-            options={COUNTRIES}
+            label="Heading"
+            className={`border-2 ${
+              isFieldChanged("heading")
+                ? "border-orange-300"
+                : "border-gray-300"
+            }`}
           />
           <FormInput
-            name="basePrice"
-            type="number"
+            name="heroTitle"
             control={control}
-            label="Current Price"
+            label="Hero Title"
+            className={`border ${
+              isFieldChanged("heroTitle")
+                ? "border-orange-300"
+                : "border-gray-300"
+            }`}
           />
+
+          <div className="flex items-center gap-3">
+            <div className="flex-1">
+              <FormSelect
+                name="country"
+                control={control}
+                label="Country"
+                placeholder="Select a country"
+                options={COUNTRIES}
+              />
+            </div>
+            <div className="flex-1">
+              <FormInput
+                type="number"
+                name="rating"
+                step="0.1" // <-- important to allow decimal numbers
+                min={0}
+                max={5}
+                control={control}
+                label="Rating (0-5)"
+              />
+            </div>
+          </div>
+
           <FormInput
-            name="originalPrice"
-            type="number"
+            name="bestTimeToVisit"
             control={control}
-            label="Original Price"
+            label="Best Time To Visit"
+            className={`border ${
+              isFieldChanged("bestTimeToVisit")
+                ? "border-orange-300"
+                : "border-gray-300"
+            }`}
           />
+          <div className="flex items-center gap-3">
+            <div className="flex-1">
+              <FormInput
+                name="basePrice"
+                type="number"
+                control={control}
+                label="Current Price"
+              />
+            </div>
+            <div className="flex-1">
+              <FormInput
+                name="originalPrice"
+                type="number"
+                control={control}
+                label="Original Price"
+              />
+            </div>
+          </div>
         </FormSection>
         <FormSection title="Highlights" icon="⭐">
           <FormTextarea
             name="text"
             control={control}
-            label="Destination Card Text"
+            label="Card Text"
+            className={`border ${
+              isFieldChanged("text") ? "border-orange-300" : "border-gray-300"
+            }`}
           />
-          <div>
-            <FormInput
-              type="number"
-              name="rating"
-              step="0.1" // <-- important to allow decimal numbers
-              min={0}
-              max={5}
-              control={control}
-              label="Rating (0-5)"
-            />
-            <p className="text-xs text-gray-500 mt-2">
-              Enter rating between 0 and 5
-            </p>
-          </div>
+
+          <FormTextarea
+            name="highlights"
+            control={control}
+            label="Highlights"
+            className={`border ${
+              isFieldChanged("highlights")
+                ? "border-orange-300"
+                : "border-gray-300"
+            }`}
+          />
+
           <div className="flex flex-col gap-3">
             <FormCheckbox
               name="trending"
@@ -174,6 +243,11 @@ export function DestinationForm({
               control={control}
               label="Overview"
               placeholder="Write something about this destination..."
+              className={`border ${
+                isFieldChanged("overview")
+                  ? "border-orange-300"
+                  : "border-gray-300"
+              }`}
             />
           </div>
           <div>

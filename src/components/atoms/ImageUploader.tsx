@@ -17,7 +17,7 @@ import { toast } from "sonner";
 
 interface ImageUploaderProps {
   label?: string;
-  value?: string;
+  value?: string | null;
   onChange: (url: string) => void;
 }
 

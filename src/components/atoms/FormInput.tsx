@@ -18,6 +18,7 @@ interface FormInputProps<T extends FieldValues> {
   step?: number | string;
   min?: number;
   max?: number;
+  className?: string;
 }
 
 export const FormInput = <T extends FieldValues>({
@@ -30,6 +31,7 @@ export const FormInput = <T extends FieldValues>({
   step,
   min,
   max,
+  className = "",
 }: FormInputProps<T>) => {
   return (
     <FormField
@@ -57,6 +59,7 @@ export const FormInput = <T extends FieldValues>({
                     : e.target.value
                 )
               }
+              className={className}
             />
           </FormControl>
           <FormMessage />
