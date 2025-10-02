@@ -88,7 +88,7 @@ export async function POST(req: NextRequest) {
     // Generate content with improved prompt
     const gemini = getGeminiClient();
     const response = await gemini.models.generateContent({
-      model: "gemini-2.0-flash",
+      model: "gemini-2.5-flash",
       contents: `Generate a JSON object for the travel destination "${destination}" and identify its country.
         The output must be ONLY valid JSON (no markdown, no extra text).
 
