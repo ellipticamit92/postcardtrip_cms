@@ -2,6 +2,7 @@ import { Button } from "@/components/ui/button";
 import { SidebarTrigger } from "@/components/ui/sidebar";
 import { Input } from "../ui/input";
 import { Bell, Search, User } from "lucide-react";
+import { UserMenu } from "./UserMenu";
 
 export function Header() {
   return (
@@ -28,9 +29,7 @@ export function Header() {
           <span className="absolute -top-1 -right-1 h-2 w-2 bg-accent rounded-full"></span>
         </Button>
 
-        <Button variant="ghost" size="icon" className="hover:bg-secondary/80">
-          <User className="h-4 w-4" />
-        </Button>
+        <UserMenu />
       </div>
     </header>
   );

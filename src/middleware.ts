@@ -5,40 +5,48 @@ import { getToken } from "next-auth/jwt";
 export async function middleware(request: NextRequest) {
   const { pathname } = request.nextUrl;
 
+  // Skip NextAuth routes and public APIs
   if (
-    pathname.startsWith("/api/auth/") || // Skip all NextAuth.js routes
-    pathname.startsWith("/api/google/") || // Skip Google API routes
-    pathname.startsWith("/api/business/") // Skip business API routes
+    pathname.startsWith("/api/auth/") ||
+    pathname.startsWith("/api/google/") ||
+    pathname.startsWith("/api/business/")
   ) {
     return NextResponse.next();
   }
 
-  // Allow public access to login and home
-  if (pathname === "/login") {
-    return NextResponse.next();
+  // Get token once
+  const token = await getToken({
+    req: request,
+    secret: process.env.NEXTAUTH_SECRET,
+  });
+
+  // Redirect logged-in user away from /login
+  if (pathname === "/login" && token) {
+    const dashboardUrl = new URL("/dashboard", request.url);
+    return NextResponse.redirect(dashboardUrl);
   }
 
-  // Protect /dashboard routes
-  if (pathname.startsWith("/")) {
-    const token = await getToken({
-      req: request,
-      secret: process.env.NEXTAUTH_SECRET,
-    });
-
-    if (!token) {
+  // Redirect root "/" to dashboard if logged in
+  if (pathname === "/") {
+    if (token) {
+      const dashboardUrl = new URL("/dashboard", request.url);
+      return NextResponse.redirect(dashboardUrl);
+    } else {
       const loginUrl = new URL("/login", request.url);
       return NextResponse.redirect(loginUrl);
     }
+  }
 
-    if (pathname === "/") {
-      const dashboardUrl = new URL("/dashboard", request.url);
-      return NextResponse.redirect(dashboardUrl);
-    }
+  // Protect private routes
+  const protectedPaths = ["/dashboard", "/destination", "/destination/add"];
+  if (protectedPaths.some((path) => pathname.startsWith(path)) && !token) {
+    const loginUrl = new URL("/login", request.url);
+    return NextResponse.redirect(loginUrl);
   }
 
   return NextResponse.next();
 }
 
 export const config = {
-  matcher: ["/", "/destination", "/destination/add"],
+  matcher: ["/", "/login", "/dashboard/:path*", "/destination/:path*"],
 };

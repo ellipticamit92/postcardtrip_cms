@@ -127,7 +127,7 @@ export const DestinationAIForm: FC<DestinationAIFormProps> = ({
                 className="w-full md:w-auto flex items-center justify-center gap-2 rounded-lg font-medium"
               >
                 {loading && <Loader2 className="animate-spin h-4 w-4" />}
-                {destinationId ? "Update" : "Create"} with AI
+                {destinationId ? "Update" : "Generate"} AI Destination
               </Button>
             </div>
           </div>

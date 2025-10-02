@@ -18,6 +18,7 @@ import ImageUploader from "@/components/atoms/ImageUploader";
 import { Options } from "@/types/type";
 import FormSection from "@/components/molecules/FormSection";
 import FormSwitchableEditor from "@/components/molecules/FormSwitchableEditor";
+import { useEffect } from "react";
 
 const schema = z.object({
   name: z.string().min(1),
@@ -51,7 +52,7 @@ export type PackageFormDataType = z.infer<typeof schema>;
 export function PackageForm({
   destinations,
   initialData,
-  PackageId,
+  packageId,
   toursOptions,
   cityOptions,
   highlightOptions,
@@ -59,8 +60,8 @@ export function PackageForm({
   exclusionOptions,
 }: {
   destinations: Options;
-  initialData?: PackageFormDataType;
-  PackageId?: number;
+  initialData?: Partial<PackageFormDataType>;
+  packageId?: number;
   toursOptions?: Options;
   cityOptions?: Options;
   highlightOptions: Options;
@@ -96,6 +97,11 @@ export function PackageForm({
 
   const { control, reset } = form;
 
+  useEffect(() => {
+    console.log("DEBUG initial data  = ", initialData);
+    reset(initialData);
+  }, [initialData, reset]);
+
   const getCategory = (selectedTours: number[]) => {
     if (!toursOptions || toursOptions.length === 0) return "";
     const selectedLabels = toursOptions
@@ -107,7 +113,7 @@ export function PackageForm({
 
   const onSubmit = async (data: PackageFormDataType) => {
     try {
-      const isEditMode = Boolean(PackageId);
+      const isEditMode = Boolean(packageId);
 
       const submitData = {
         name: data.name.trim(),
@@ -135,8 +141,8 @@ export function PackageForm({
         slug: slugify(data.name.trim()) ?? "",
       };
 
-      if (isEditMode && PackageId) {
-        await updatePackage(PackageId, submitData);
+      if (isEditMode && packageId) {
+        await updatePackage(packageId, submitData);
       } else {
         await createPackage(submitData);
       }
@@ -154,7 +160,7 @@ export function PackageForm({
     <Form {...form}>
       <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8 mb-12">
         {/* Basic Information */}
-        <FormSection title="Basic Information & 💰 Pricing" icon="📍">
+        <FormSection title="Basic Information - 💰 Pricing" icon="📍">
           <FormInput name="name" control={control} label="Package Name" />
           <FormSelect
             label="Destination"

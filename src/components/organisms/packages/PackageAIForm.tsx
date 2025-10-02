@@ -10,8 +10,10 @@ import { toast } from "sonner";
 import { usePackages } from "@/hooks/use-packages";
 import { numberOptions } from "@/lib/helper";
 import { FormSelect } from "@/components/atoms/FormSelect";
-import { OptionsNum } from "@/types/type";
+import { Options, OptionsNum } from "@/types/type";
 import FormSection from "@/components/molecules/FormSection";
+import { PackageForm, PackageFormDataType } from "./PackageForm";
+import { useState } from "react";
 
 const schema = z.object({
   day: z.number().min(1, "Please select day"),
@@ -20,38 +22,57 @@ const schema = z.object({
   toursId: z.number().optional(),
   destination: z.string().optional(),
   tourType: z.string().optional(),
+  imageChange: z.boolean().optional(),
 });
 
 export type PackageAIFormDataType = z.infer<typeof schema>;
 
 export function PackageAIForm({
   destinations,
+  initialData,
+  packageId,
   toursOptions,
+  cityOptions,
+  highlightOptions,
+  inclusionOptions,
+  exclusionOptions,
 }: {
-  destinations: OptionsNum[];
-  toursOptions: OptionsNum[];
+  destinations: Options;
+  toursOptions?: Options;
+  initialData?: PackageFormDataType;
+  packageId?: number;
+  cityOptions?: Options;
+  highlightOptions: Options;
+  inclusionOptions: Options;
+  exclusionOptions: Options;
 }) {
-  const { createAIPackage, loading } = usePackages({
+  const { createUpdateAIPackage, loading } = usePackages({
     autoFetch: false,
   });
+  const [aiData, setAIData] = useState<Partial<PackageFormDataType>>(
+    initialData ?? ({} as Partial<PackageFormDataType>)
+  );
 
   const form = useForm<PackageAIFormDataType>({
     resolver: zodResolver(schema),
     defaultValues: {
-      destinationId: Number(destinations?.[0]?.value) ?? 0,
+      destinationId:
+        initialData?.destinationId ?? Number(destinations?.[0]?.value),
+      day: initialData?.day,
+      night: initialData?.night,
     },
   });
 
-  const { control, reset } = form;
+  const { control, setError } = form;
 
   const onSubmit = async (data: PackageAIFormDataType) => {
     try {
       const destinationName = destinations?.filter(
-        (dest) => dest.value === data.destinationId
+        (dest) => Number(dest.value) === data.destinationId
       );
 
       const toursName = toursOptions?.filter(
-        (tour) => tour.value === data.toursId
+        (tour) => Number(tour.value) === data.toursId
       );
 
       const submitData = {
@@ -63,9 +84,41 @@ export function PackageAIForm({
         tourType: toursName?.[0]?.label ?? "",
       };
 
-      await createAIPackage(submitData);
+      const aiResponseData = await createUpdateAIPackage(
+        submitData,
+        !!packageId,
+        data.imageChange || false
+      );
 
-      reset();
+      if (aiResponseData.success) {
+        const ai = aiResponseData?.data ?? {};
+        setAIData({
+          ...(initialData ?? {}), // fall back to empty object if undefined
+          name: ai.name ?? initialData?.name ?? "",
+          overview: ai.overview ?? initialData?.overview ?? "",
+          heroTitle: ai.heroTitle ?? initialData?.heroTitle ?? "",
+          text: ai.text ?? initialData?.text ?? "",
+          isRichText: false,
+
+          ...(packageId
+            ? {}
+            : { imageUrl: ai.imageUrl ?? initialData?.imageUrl }),
+
+          day: ai.day ?? initialData?.day,
+          night: ai.night ?? initialData?.night,
+          destinationId: ai.destinationId ?? initialData?.destinationId,
+          tours: (ai as any)?.tours ?? (initialData as any)?.tours,
+          imageUrl: ai?.imageUrl ?? initialData?.imageUrl,
+          thumbnailUrl: ai?.thumbnailUrl ?? initialData?.thumbnailUrl,
+        });
+      } else {
+        setError("destination", {
+          type: "manual",
+          message:
+            `${aiResponseData.error}: ${aiResponseData?.details?.[0]?.message}` ||
+            "Failed to generate destination",
+        });
+      }
     } catch (err: any) {
       console.error("Error submitting Package", err);
       toast.error(err.message || "Error submitting Package");
@@ -73,59 +126,77 @@ export function PackageAIForm({
   };
 
   return (
-    <Form {...form}>
-      <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8 mb-12">
-        {/* Basic Information */}
-        <FormSection title="Basic Information & 💰 Pricing" icon="📍">
-          <FormSelect
-            label="Destination"
-            name="destinationId"
-            control={control}
-            options={destinations}
-            placeholder="Select destination"
-            isNumber
-          />
-          <div className="cols-span-2 flex gap-2">
-            <div className="flex-1">
-              <FormSelect
-                label="Day"
-                name="day"
-                control={control}
-                options={numberOptions(15)}
-                placeholder="Day"
-                isNumber
-              />
+    <>
+      <Form {...form}>
+        <form
+          onSubmit={form.handleSubmit(onSubmit)}
+          className="space-y-8 mb-12"
+        >
+          {/* Basic Information */}
+          <FormSection title="AI Basic Form" icon="📍">
+            <FormSelect
+              label="Destination"
+              name="destinationId"
+              control={control}
+              options={destinations}
+              placeholder="Select destination"
+              isNumber
+            />
+            <div className="cols-span-2 flex gap-2">
+              <div className="flex-1">
+                <FormSelect
+                  label="Day"
+                  name="day"
+                  control={control}
+                  options={numberOptions(15)}
+                  placeholder="Day"
+                  isNumber
+                />
+              </div>
+              <div className="flex-1">
+                <FormSelect
+                  label="Night"
+                  name="night"
+                  control={control}
+                  options={numberOptions(15)}
+                  placeholder="Night"
+                  isNumber
+                />
+              </div>
             </div>
-            <div className="flex-1">
-              <FormSelect
-                label="Night"
-                name="night"
-                control={control}
-                options={numberOptions(15)}
-                placeholder="Night"
-                isNumber
-              />
-            </div>
-          </div>
 
-          <FormSelect
-            name="toursId"
-            control={control}
-            label="Tours"
-            options={toursOptions || []}
-            isNumber
-          />
+            <FormSelect
+              name="toursId"
+              control={control}
+              label="Tours"
+              options={toursOptions || []}
+              isNumber
+            />
 
-          <Button
-            type="submit"
-            disabled={loading}
-            className="px-6 py-2 text-base font-medium"
-          >
-            {loading && <Loader2 className="animate-spin mr-2" />}
-            Add Package
-          </Button>
-        </FormSection>
-      </form>
-    </Form>
+            <Button
+              type="submit"
+              disabled={loading}
+              className="px-6 py-2 text-base font-medium"
+            >
+              {loading && <Loader2 className="animate-spin mr-2" />}
+              {packageId ? "Update" : "Generate"} AI Package
+            </Button>
+          </FormSection>
+        </form>
+      </Form>
+
+      {aiData && Object.keys(aiData).length > 0 && (
+        <PackageForm
+          initialData={aiData}
+          packageId={packageId}
+          toursOptions={toursOptions}
+          cityOptions={cityOptions}
+          highlightOptions={highlightOptions}
+          inclusionOptions={inclusionOptions}
+          exclusionOptions={exclusionOptions}
+          destinations={destinations}
+        />
+      )}
+    </>
   );
 }

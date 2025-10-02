@@ -2,22 +2,9 @@ import { PackageAIFormDataType } from "@/components/organisms/packages/PackageAI
 import { PackageFormDataType } from "@/components/organisms/packages/PackageForm";
 import { packagesApi } from "@/lib/api/packages";
 import { showToast } from "@/lib/toast";
+import { Package } from "@prisma/client";
 import { useState, useEffect } from "react";
 import { toast } from "sonner";
-
-interface Package {
-  pid: number;
-  name: string;
-  destinationId: number;
-  description?: string;
-  basePrice: number;
-  day: number;
-  night: number;
-  imageUrl?: string;
-  category?: string;
-  createdAt: string;
-  updatedAt: string;
-}
 
 interface UsePackagesOptions {
   autoFetch?: boolean;
@@ -96,9 +83,16 @@ export const usePackages = (options: UsePackagesOptions = {}) => {
     }
   };
 
-  const createAIPackage = async (
-    data: PackageAIFormDataType
-  ): Promise<{ success: boolean; data?: Package; error?: string }> => {
+  const createUpdateAIPackage = async (
+    data: PackageAIFormDataType,
+    isEdit: boolean = false,
+    isImageChange: boolean = false
+  ): Promise<{
+    success: boolean;
+    data?: Partial<Package>;
+    error?: string;
+    details?: any;
+  }> => {
     setLoading(true);
     setError(null);
     const loadingToast = showToast.createLoading("package");
@@ -270,7 +264,7 @@ export const usePackages = (options: UsePackagesOptions = {}) => {
     fetchPackages,
     getPackage,
     createPackage,
-    createAIPackage,
+    createUpdateAIPackage,
     updatePackage,
     deletePackage,
     searchPackages,

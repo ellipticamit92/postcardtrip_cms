@@ -12,7 +12,7 @@ export const AuthLayout = ({ children }: { children: ReactNode }) => (
         {/* Logo */}
         <div className="mb-8 text-center">
           <div className="text-2xl font-extrabold tracking-tight text-gray-900 dark:text-white">
-            🌍 POSTCARD TRIP CMS
+            🌍 TRAVEL AGNECY CMS
           </div>
         </div>
 

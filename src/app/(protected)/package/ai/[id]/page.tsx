@@ -1,5 +1,5 @@
 import { Heading } from "@/components/atoms/Heading";
-import { PackageForm } from "@/components/organisms/packages/PackageForm";
+import { PackageAIForm } from "@/components/organisms/packages/PackageAIForm";
 import CityService from "@/services/city.service";
 import DestinationService from "@/services/destination.service";
 import ExclusionService from "@/services/exclusion.service";
@@ -7,17 +7,18 @@ import HighlightService from "@/services/highlight.service";
 import InclusionService from "@/services/inclusion.service";
 import PackageService from "@/services/package.service";
 import TourService from "@/services/tours.service";
+import { Package } from "lucide-react";
 
 export const dynamic = "force-dynamic";
 
-export default async function EditPackagePage({
+export default async function EditAIPakcagePage({
   params,
 }: {
-  params: Promise<{ id: string }>;
+  params: Promise<{ id: string }>; // Note: params is now a Promise
 }) {
   const { id: idString } = await params;
   const id = Number(idString);
-  const destinationsData = await DestinationService.getNameId();
+  const destinationOptions = await DestinationService.getNameId();
   const packages = await PackageService.getById(id);
 
   const name = packages?.name ?? "";
@@ -60,19 +61,18 @@ export default async function EditPackagePage({
   const hlOptions = await HighlightService.getNameId();
   const inclusionOptions = await InclusionService.getNameId();
   const exclusionOptions = await ExclusionService.getNameId();
-
   return (
     <>
-      <Heading text="Edit Package" subText={name} href="/package" />
-      <PackageForm
-        initialData={updatePackage}
-        packageId={id}
-        destinations={destinationsData.data}
+      <Heading text="Update AI Package" href="/package" Icon={Package} />
+      <PackageAIForm
+        destinations={destinationOptions.data}
         toursOptions={toursOptions.data}
-        cityOptions={cityOptions?.data}
+        cityOptions={cityOptions.data}
         highlightOptions={hlOptions.data}
         inclusionOptions={inclusionOptions.data}
         exclusionOptions={exclusionOptions.data}
+        initialData={updatePackage}
+        packageId={id}
       />
     </>
   );

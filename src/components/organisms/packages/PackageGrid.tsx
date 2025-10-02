@@ -45,13 +45,13 @@ const PackageGrid: FC<PackageGridProps> = ({ data, pagination }) => {
                 </div>
               )}
 
-              <div className="absolute top-4 left-4 z-10">
+              <div className="absolute top-2 left-2 z-10">
                 <Badge className="bg-pink-500 text-white font-bold">
                   {pkg.day}D / {pkg.night}N
                 </Badge>
               </div>
               {pkg?.status && (
-                <div className="absolute top-4 right-4 z-10">
+                <div className="absolute top-2 right-2 z-10">
                   <Badge className="bg-destructive text-white">Active</Badge>
                 </div>
               )}
@@ -70,7 +70,7 @@ const PackageGrid: FC<PackageGridProps> = ({ data, pagination }) => {
                 </div>
               )}
 
-              <div className="absolute bottom-4 left-4">
+              <div className="absolute bottom-2 left-2">
                 <div className="flex items-center gap-1 bg-white/20 backdrop-blur-sm rounded-full px-2 py-1">
                   <Star className="h-3 w-3 fill-yellow-400 text-yellow-400" />
                   <span className="text-xs text-white font-medium">
@@ -90,6 +90,11 @@ const PackageGrid: FC<PackageGridProps> = ({ data, pagination }) => {
                 </div>
 
                 <div className="flex gap-1 ">
+                  <Link href={`/package/ai/${pkg.pid}`}>
+                    <Button variant="outline" size="xs" className="">
+                      AI Edit
+                    </Button>
+                  </Link>
                   <Link href={`/package/${pkg.pid}`}>
                     <Button variant="ghost" size="icon" className="h-8 w-8">
                       <Edit className="h-4 w-4" />
