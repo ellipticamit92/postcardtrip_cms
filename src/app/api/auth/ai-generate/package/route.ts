@@ -1,10 +1,9 @@
 import { NextRequest, NextResponse } from "next/server";
 import { z } from "zod";
-import { checkRateLimit, cleanAIResponse, slugify } from "@/lib/helper";
+import { checkRateLimit, cleanAIResponse } from "@/lib/helper";
 import { getGeminiClient } from "@/lib/gemini";
 import { fetchUnsplashImage } from "@/lib/api/fetchImage";
 import { PackageFormDataType } from "@/components/organisms/packages/PackageForm";
-import PackageService from "@/services/package.service";
 
 const requestSchema = z.object({
   day: z.number().min(1),
@@ -65,139 +64,98 @@ export async function POST(req: NextRequest) {
     } = validationResult.data;
     const imageData = await fetchUnsplashImage(destination);
 
-    // const gemini = getGeminiClient();
-    // const response = await gemini.models.generateContent({
-    //   model: "gemini-2.5-flash",
-    //   contents: `Generate a JSON object for a "${tourType}" travel package to "${destination}" for ${day} days and "${night}" nights.
+    const gemini = getGeminiClient();
+    const response = await gemini.models.generateContent({
+      model: "gemini-2.5-flash",
+      contents: `Generate a JSON object for a "${tourType}" travel package to "${destination}" for ${day} days and "${night}" nights.
 
-    //   Requirements:
-    //   - baseName: SEO-friendly package name using primary keywords like destination, duration, and experience type. Avoid filler words (the, of, for, in). Keep 20-75 characters. Examples: "Kerala Backwater Hills Adventure", "Goa Beach Heritage Tour"
-    //   - description: Compelling package description highlighting key attractions, cultural experiences, activities, and unique selling points. Include specific landmarks, experiences, and travel highlights. 100-400 characters.
-    //   - heroTitle: Marketing-focused title for headers and promotions. Should be catchy and memorable. 25-70 characters.
-    //   - text: Concise promotional text summarizing the package value proposition. Perfect for cards and listings. 60-120 characters.
+      Requirements:
+      - baseName: SEO-friendly package name using primary keywords like destination, duration, and experience type. Avoid filler words (the, of, for, in). Keep 20-75 characters. Examples: "Kerala Backwater Hills Adventure", "Goa Beach Heritage Tour"
+      - description: Compelling package description highlighting key attractions, cultural experiences, activities, and unique selling points. Include specific landmarks, experiences, and travel highlights. 100-400 characters.
+      - heroTitle: Marketing-focused title for headers and promotions. Should be catchy and memorable. 25-70 characters.
+      - text: Concise promotional text summarizing the package value proposition. Perfect for cards and listings. 60-120 characters.
 
-    //   Focus on:
-    //   - Include destination name naturally
-    //   - Mention key attractions/experiences
-    //   - Use action words and compelling language
-    //   - Ensure content is unique and engaging
-    //   - Make names suitable for URL slugs (avoid special characters)
+      Focus on:
+      - Include destination name naturally
+      - Mention key attractions/experiences
+      - Use action words and compelling language
+      - Ensure content is unique and engaging
+      - Make names suitable for URL slugs (avoid special characters)
 
-    //   Example good baseName: "Kerala Hills Wildlife Backwater Adventure"
-    //   Example bad baseName: "The Best of Kerala Tour for All Ages"
-    //   Example bad baseName: "Kerala Romance 3 Days 4 Night"
+      Example good baseName: "Kerala Hills Wildlife Backwater Adventure"
+      Example bad baseName: "The Best of Kerala Tour for All Ages"
+      Example bad baseName: "Kerala Romance 3 Days 4 Night"
 
-    //   Return only valid JSON without markdown formatting or code blocks.`,
-    // });
+      Return only valid JSON without markdown formatting or code blocks.`,
+    });
 
-    // if (!response.text) {
-    //   throw new Error("Empty response from AI service");
-    // }
+    if (!response.text) {
+      throw new Error("Empty response from AI service");
+    }
 
-    // // Parse and validate AI response
-    // let aiData;
-    // try {
-    //   if (!response) {
-    //     throw new Error("No response from AI service");
-    //   }
+    // Parse and validate AI response
+    let aiData;
+    try {
+      if (!response) {
+        throw new Error("No response from AI service");
+      }
 
-    //   const responseText = response.text;
-    //   if (!responseText || typeof responseText !== "string") {
-    //     throw new Error("Invalid response format from AI service");
-    //   }
+      const responseText = response.text;
+      if (!responseText || typeof responseText !== "string") {
+        throw new Error("Invalid response format from AI service");
+      }
 
-    //   if (responseText.trim() === "") {
-    //     throw new Error("Empty response from AI service");
-    //   }
+      if (responseText.trim() === "") {
+        throw new Error("Empty response from AI service");
+      }
 
-    //   //Clean and parse
-    //   const cleanedResponse = cleanAIResponse(responseText);
-    //   aiData = JSON.parse(cleanedResponse);
-    // } catch (parseError) {
-    //   console.error(`[${requestId}] JSON parse error:`, parseError);
-    //   return NextResponse.json(
-    //     {
-    //       error: "Invalid AI response format",
-    //       requestId,
-    //       raw: response.text.substring(0, 200) + "...",
-    //     },
-    //     { status: 502 }
-    //   );
-    // }
+      //Clean and parse
+      const cleanedResponse = cleanAIResponse(responseText);
+      aiData = JSON.parse(cleanedResponse);
+    } catch (parseError) {
+      console.error(`[${requestId}] JSON parse error:`, parseError);
+      return NextResponse.json(
+        {
+          error: "Invalid AI response format",
+          requestId,
+          raw: response.text.substring(0, 200) + "...",
+        },
+        { status: 502 }
+      );
+    }
 
-    // const aiValidation = aiResponseSchema.safeParse(aiData);
-    // if (!aiValidation.success) {
-    //   console.error(`[${requestId}] AI validation error:`, aiValidation.error);
-    //   return NextResponse.json(
-    //     {
-    //       error: "AI response validation failed",
-    //       details: aiValidation.error.issues,
-    //       requestId,
-    //     },
-    //     { status: 502 }
-    //   );
-    // }
+    const aiValidation = aiResponseSchema.safeParse(aiData);
+    if (!aiValidation.success) {
+      console.error(`[${requestId}] AI validation error:`, aiValidation.error);
+      return NextResponse.json(
+        {
+          error: "AI response validation failed",
+          details: aiValidation.error.issues,
+          requestId,
+        },
+        { status: 502 }
+      );
+    }
 
-    // const { baseName, description, heroTitle, text } = aiValidation.data;
+    const { baseName, description, heroTitle, text } = aiValidation.data;
 
-    // const aiResponseData: Partial<PackageFormDataType> = {
-    //   name: baseName?.trim(),
-    //   overview: description?.trim() ?? "",
-    //   isRichText: false,
-    //   text: text?.trim() ?? "",
-    //   heroTitle: heroTitle?.trim() ?? "",
-    //   ...(isImageChange
-    //     ? { imageUrl: imageData?.url, thumbnailUrl: imageData?.thumbnailUrl }
-    //     : {}),
-    // };
-
-    // const data: PackageFormDataType = {
-    //   name: baseName.trim(),
-    //   overview: description?.trim() ?? "",
-    //   slug: slugify(baseName),
-    //   isRichText: false,
-    //   imageUrl: imageData?.url ?? "",
-    //   thumbnailUrl: imageData?.thumbnailUrl ?? "",
-    //   threePrice: Math.floor(Math.random() * 1000) + 1000, // Random price between 100-999
-    //   fourPrice: Math.floor(Math.random() * 1000) + 1000,
-    //   fivePrice: Math.floor(Math.random() * 1000) + 1000,
-    //   heroTitle: heroTitle.trim(),
-    //   rating: Math.floor(Math.random() * 5) + 1, // Random rating between 1-5
-    //   text: text.trim(),
-    //   day,
-    //   night,
-    //   destinationId,
-    //   inclusions: [],
-    //   exclusions: [],
-    //   highlights: [],
-    //   tours: [toursId ?? 0],
-    //   featured: false,
-    //   status: true,
-    //   category: tourType,
-    // };
-
-    // const savedPackage = await PackageService.create(data);
-
-    // console.log(
-    //   `[${requestId}] Successfully created destination:`,
-    //   savedPackage.pid
-    // );
+    const aiResponseData: Partial<PackageFormDataType> = {
+      name: baseName?.trim(),
+      overview: description?.trim() ?? "",
+      isRichText: false,
+      text: text?.trim() ?? "",
+      heroTitle: heroTitle?.trim() ?? "",
+      ...(isImageChange
+        ? { imageUrl: imageData?.url, thumbnailUrl: imageData?.thumbnailUrl }
+        : {}),
+      day,
+      night,
+      destinationId,
+      tours: toursId !== undefined ? [toursId] : undefined,
+    };
 
     return NextResponse.json({
-      data: {
-        heroTitle: "Kerala Bliss: Backwaters, Beaches & Ayurveda Serenity",
-        isRichText: false,
-        name: "Kerala Backwaters Beaches Relaxation 3D4N",
-        overview:
-          "Unwind in Kerala's tranquil backwaters on a traditional houseboat. Experience rejuvenating Ayurvedic therapies, stroll golden beaches, and explore lush spice plantations. A perfect escape for peace and relaxation amidst nature's beauty. Discover God's Own Country's serene charm.",
-        text: "Escape to Kerala for 3 days of serene backwater cruises, golden beaches, and revitalizing Ayurveda. Pure relaxation awaits.",
-        day,
-        night,
-        destinationId,
-        tours: [toursId],
-        imageUrl: imageData?.url,
-        thumbnailUrl: imageData?.thumbnailUrl,
-      },
+      data: aiResponseData,
       requestId,
       message: "Destination created successfully",
       success: true,

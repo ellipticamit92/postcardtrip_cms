@@ -168,26 +168,6 @@ export async function POST(req: NextRequest) {
         : {}),
     };
 
-    // const data: DestinationFormDataType = {
-    //   name: aiValidation.data.name.trim(),
-    //   overview: aiValidation?.data?.description?.trim() ?? "",
-    //   isRichText: false,
-    //   imageUrl: imageData?.url ?? "",
-    //   thumbnailUrl: imageData?.thumbnailUrl ?? "",
-    //   basePrice: Math.floor(Math.random() * 900) + 100, // Random price between 100-999
-    //   originalPrice: Math.floor(Math.random() * 900) + 100,
-    //   heroTitle: aiValidation.data.heroTitle.trim(),
-    //   rating: Math.floor(Math.random() * 5) + 1, // Random rating between 1-5
-    //   country: aiValidation.data.country.trim(),
-    //   heading: aiValidation.data.heading.trim(),
-    //   trending: false,
-    //   featured: false,
-    //   status: true,
-    // };
-
-    // Save to database with transaction
-    // const savedDestination = await DestinationService.create(data);
-
     return NextResponse.json({
       data: aiResponseData,
       requestId,
