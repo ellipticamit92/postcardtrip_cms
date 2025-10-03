@@ -41,25 +41,25 @@ const DestinationGrid: FC<DestinationsProps> = ({ data, pagination }) => {
                 </div>
               )}
 
-              <div className="absolute top-2 left-2 z-10">
+              <div className="absolute top-1 left-1 z-10">
                 <Badge className="bg-pink-500 text-white">
                   {destination?.packages?.length} Pacakges
                 </Badge>
               </div>
 
               {destination?.trending && (
-                <div className="absolute bottom-4 right-2 z-10">
-                  <Badge className="bg-cyan-500 text-white">Trending</Badge>
+                <div className="absolute bottom-1 right-1 z-10">
+                  <Badge className="bg-orange-500 text-white">Trending</Badge>
                 </div>
               )}
               {destination?.featured && (
-                <div className="absolute bottom-8 right-2 z-10">
+                <div className="absolute bottom-10 right-1 z-10">
                   <Badge className="bg-cyan-500 text-white">Featured</Badge>
                 </div>
               )}
 
               {destination?.status && (
-                <div className="absolute top-2 right-2 z-10">
+                <div className="absolute top-1 right-1 z-10">
                   <Badge className="bg-green-500 text-white">Active</Badge>
                 </div>
               )}

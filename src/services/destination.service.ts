@@ -50,7 +50,7 @@ export class DestinationService {
     try {
       const {
         page = 1,
-        limit = 10,
+        limit = 12,
         country,
         name,
         sortBy = "createdAt",
@@ -168,6 +168,9 @@ export class DestinationService {
               night: true,
               imageUrl: true,
               text: true,
+              slug: true,
+              threePrice: true,
+              fourPrice: true,
               cities: {
                 select: {
                   name: true,
@@ -317,6 +320,8 @@ export class DestinationService {
           isRichText: true,
           featured: true,
           rating: true,
+          bestTimeToVisit: true,
+          highlights: true,
         },
       });
 

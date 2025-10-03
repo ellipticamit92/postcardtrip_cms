@@ -14,7 +14,7 @@ const requestSchema = z.object({
 
 const aiResponseSchema = z.object({
   name: z.string().min(1).max(200),
-  description: z.string().min(150).max(500),
+  description: z.string().min(150).max(600),
   heroTitle: z.string().min(20).max(70),
   heading: z.string().min(15).max(25),
   country: z.string().min(2).max(100),
@@ -83,8 +83,6 @@ export async function POST(req: NextRequest) {
       }
     }
 
-    const imageData = await fetchUnsplashImage(destination);
-
     // Generate content with improved prompt
     const gemini = getGeminiClient();
     const response = await gemini.models.generateContent({
@@ -152,6 +150,8 @@ export async function POST(req: NextRequest) {
         { status: 502 }
       );
     }
+
+    const imageData = await fetchUnsplashImage(destination);
 
     const aiResponseData: Partial<DestinationFormDataType> = {
       name: aiValidation?.data?.name?.trim(),
