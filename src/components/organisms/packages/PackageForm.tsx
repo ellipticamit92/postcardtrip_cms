@@ -98,7 +98,6 @@ export function PackageForm({
   const { control, reset } = form;
 
   useEffect(() => {
-    console.log("DEBUG initial data  = ", initialData);
     reset(initialData);
   }, [initialData, reset]);
 

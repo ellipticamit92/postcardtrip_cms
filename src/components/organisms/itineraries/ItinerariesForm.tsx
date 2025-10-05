@@ -85,7 +85,6 @@ export default function ItinerariesForm({
         days: data.days,
       };
 
-      console.log("DEBUG submitData = ", submitData);
       if (isEditMode && itineraryId) {
         await updateItinerary(itineraryId, submitData);
       } else {

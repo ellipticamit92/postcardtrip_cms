@@ -27,7 +27,6 @@ interface ItineraryGridProps {
 }
 
 const ItineraryGrid: FC<ItineraryGridProps> = ({ data }) => {
-  console.log("DEBUG data  = ", data);
   return (
     <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-2 gap-6">
       {data.map((iti: ItineraryWithPackage, index: number) => (
