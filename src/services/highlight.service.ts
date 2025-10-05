@@ -1,11 +1,23 @@
+import { HighlightsAIResponseType } from "@/app/api/auth/ai-generate/highlights/route";
 import { getFieldOptionsNum, getNameValueOptions } from "@/lib/helper";
 import { prisma } from "@/lib/prisma";
 
 export class HighlightService {
   // Create new highlight
-  static async create(data: { text: string }) {
+  // static async create(data: { tit: string }) {
+  //   try {
+  //     return await prisma.highlight.create({ data });
+  //   } catch (error) {
+  //     throw new Error(`Failed to create highlight: ${error}`);
+  //   }
+  // }
+
+  static async saveAIData(data: HighlightsAIResponseType[]) {
     try {
-      return await prisma.highlight.create({ data });
+      return await prisma.highlight.createMany({
+        data: data,
+        skipDuplicates: true, // optional: skips cities that already exist
+      });
     } catch (error) {
       throw new Error(`Failed to create highlight: ${error}`);
     }
@@ -16,8 +28,8 @@ export class HighlightService {
     options: {
       page?: number;
       limit?: number;
-      text?: string;
-      sortBy?: "hlid" | "createdAt" | "updatedAt" | "text";
+      title?: string;
+      sortBy?: "hlid" | "createdAt" | "updatedAt";
       sortOrder?: "asc" | "desc";
     } = {}
   ) {
@@ -25,7 +37,7 @@ export class HighlightService {
       const {
         page = 1,
         limit = 20,
-        text,
+        title,
         sortBy = "createdAt",
         sortOrder = "desc",
       } = options;
@@ -33,7 +45,7 @@ export class HighlightService {
       const skip = (page - 1) * limit;
       const where: any = {};
 
-      if (text) where.text = { contains: text, mode: "insensitive" };
+      if (title) where.title = { contains: title, mode: "insensitive" };
 
       const [data, total] = await Promise.all([
         prisma.highlight.findMany({
@@ -41,9 +53,32 @@ export class HighlightService {
           skip,
           take: limit,
           orderBy: { [sortBy]: sortOrder },
+          include: {
+            destination: {
+              select: {
+                did: true,
+                name: true,
+              },
+            },
+          },
         }),
         prisma.highlight.count({ where }),
       ]);
+
+      if (!data || data.length === 0) {
+        return {
+          data: [],
+          message: "No highlights found.",
+          pagination: {
+            page,
+            limit,
+            total: 0,
+            totalPages: 0,
+            hasNext: false,
+            hasPrev: page > 1,
+          },
+        };
+      }
 
       return {
         data,
@@ -71,25 +106,25 @@ export class HighlightService {
   }
 
   // Get single highlight by text
-  static async getByText(text: string) {
-    try {
-      return await prisma.highlight.findUnique({ where: { text } });
-    } catch (error) {
-      throw new Error(`Failed to fetch highlight by text: ${error}`);
-    }
-  }
+  // static async getByText(text: string) {
+  //   try {
+  //     return await prisma.highlight.findUnique({ where: { text } });
+  //   } catch (error) {
+  //     throw new Error(`Failed to fetch highlight by text: ${error}`);
+  //   }
+  // }
 
   // Update highlight
-  static async update(hlid: number, data: { text?: string }) {
-    try {
-      return await prisma.highlight.update({
-        where: { hlid },
-        data,
-      });
-    } catch (error) {
-      throw new Error(`Failed to update highlight: ${error}`);
-    }
-  }
+  // static async update(hlid: number, data: { text?: string }) {
+  //   try {
+  //     return await prisma.highlight.update({
+  //       where: { hlid },
+  //       data,
+  //     });
+  //   } catch (error) {
+  //     throw new Error(`Failed to update highlight: ${error}`);
+  //   }
+  // }
 
   // Delete highlight
   static async delete(hlid: number) {
@@ -103,11 +138,11 @@ export class HighlightService {
   static async getNameId() {
     try {
       const highlight = await prisma.highlight.findMany({
-        select: { hlid: true, text: true },
-        orderBy: { text: "asc" },
+        select: { hlid: true, title: true },
+        orderBy: { title: "asc" },
       });
 
-      const highlightData = getFieldOptionsNum(highlight, "hlid", "text");
+      const highlightData = getFieldOptionsNum(highlight, "hlid", "title");
       return {
         data: highlightData,
       };
@@ -119,11 +154,11 @@ export class HighlightService {
   static async getNameValue() {
     try {
       const highlight = await prisma.highlight.findMany({
-        select: { hlid: true, text: true },
-        orderBy: { text: "asc" },
+        select: { hlid: true, title: true },
+        orderBy: { title: "asc" },
       });
 
-      const highlightData = getNameValueOptions(highlight, "text");
+      const highlightData = getNameValueOptions(highlight, "title");
       return {
         data: highlightData,
       };

@@ -1,5 +1,9 @@
 import { DestinationFormDataType } from "@/components/organisms/destinations/DestinationForm";
-import { getFieldOptionsNum, getNameValueOptions } from "@/lib/helper";
+import {
+  getFieldOptionsNum,
+  getNameValueOptions,
+  getValueIdOptions,
+} from "@/lib/helper";
 import { prisma } from "@/lib/prisma";
 
 export class DestinationService {
@@ -16,7 +20,7 @@ export class DestinationService {
     }
   }
 
-  static async getNameId() {
+  static async getNameId(isValueId?: boolean) {
     try {
       const destinations = await prisma.destination.findMany({
         select: {
@@ -27,7 +31,12 @@ export class DestinationService {
           name: "asc",
         },
       });
-      const destinationsData = getFieldOptionsNum(destinations, "did");
+      let destinationsData = [];
+      if (isValueId) {
+        destinationsData = getValueIdOptions(destinations, "did");
+      } else {
+        destinationsData = getFieldOptionsNum(destinations, "did");
+      }
       return {
         data: destinationsData,
       };
@@ -196,7 +205,7 @@ export class DestinationService {
               },
               highlights: {
                 select: {
-                  text: true,
+                  title: true,
                 },
               },
             },

@@ -2,50 +2,13 @@ import { useState, useEffect } from "react";
 import { citiesApi } from "@/lib/api/cities";
 import { showToast } from "@/lib/toast";
 import { toast } from "sonner";
-import { CityAIFormValues } from "@/components/organisms/city/CityAIForm";
 import { CityAIResponseType } from "@/app/api/auth/ai-generate/cities/route";
+import { HooksProps } from "@/types/type";
+import { PaginationInfo } from "@/types/form/type";
+import { City } from "@prisma/client";
+import { DestinationAIDataTYpe } from "@/schemas/destinationName";
 
-interface City {
-  cid: number;
-  name: string;
-  description: string;
-  destinationId: number;
-  destination?: {
-    did: number;
-    name: string;
-    country: string;
-  };
-  hotels: Array<{
-    hid: number;
-    name: string;
-    starRating: number;
-  }>;
-  packages: Array<{
-    pid: number;
-    name: string;
-    basePrice: number;
-    durationDays: number;
-  }>;
-  createdAt: string;
-  updatedAt: string;
-}
-
-interface UseCitiesOptions {
-  autoFetch?: boolean;
-  initialPage?: number;
-  initialLimit?: number;
-}
-
-interface PaginationInfo {
-  page: number;
-  limit: number;
-  total: number;
-  totalPages: number;
-  hasNext: boolean;
-  hasPrev: boolean;
-}
-
-export const useCities = (options: UseCitiesOptions = {}) => {
+export const useCities = (options: HooksProps = {}) => {
   const { autoFetch = false, initialPage = 1, initialLimit = 150 } = options;
 
   const [cities, setCities] = useState<City[]>([]);
@@ -108,7 +71,7 @@ export const useCities = (options: UseCitiesOptions = {}) => {
   };
 
   const createAICity = async (
-    data: CityAIFormValues
+    data: DestinationAIDataTYpe
   ): Promise<{
     success: boolean;
     data?: CityAIResponseType[];

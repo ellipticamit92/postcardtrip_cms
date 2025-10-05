@@ -1,4 +1,4 @@
-import { City, Itinerary, Package } from "@prisma/client";
+import { City, Hotel, HotelImage, Itinerary, Package } from "@prisma/client";
 
 export interface PaginationOptions {
   page?: number;
@@ -95,29 +95,6 @@ export interface VerificationToken {
   expires: Date;
 }
 
-export interface Hotel {
-  hid: number;
-  name: string;
-  description: string;
-  starRating: number;
-  cityId: number;
-  // Optional relations
-  city?: Partial<City>;
-  prices?: PackageHotelPrice[];
-  images?: HotelImage[];
-}
-
-export interface PackageHotelPrice {
-  phid: number;
-  basePrice: number | null;
-  originalPrice: number | null;
-  hotelId: number;
-  packageId: number;
-  // Optional relations
-  hotel?: Partial<Hotel>;
-  package?: Partial<Package>;
-}
-
 export interface ItineraryPackageItem {
   package: {
     name: string;
@@ -160,66 +137,6 @@ export interface ItineraryPlaceImage {
   // Optional relations
   place?: ItineraryPlace;
 }
-
-export interface Highlight {
-  hlid: number;
-  text: string;
-  packages: Package[];
-  updatedAt: Date;
-  createdAt: Date;
-}
-
-export interface Inclusion {
-  lid: number;
-  text: string;
-  packages: Package[];
-  updatedAt: Date;
-  createdAt: Date;
-}
-
-export interface Exclusion {
-  eid: number;
-  text: string;
-  packages: Package[];
-  updatedAt: Date;
-  createdAt: Date;
-}
-
-export interface HotelImage {
-  hiid: number;
-  url: string;
-  caption: string | null;
-  hotelId: number;
-  // Optional relations
-  hotel?: Hotel;
-}
-
-export interface Tours {
-  tid: number;
-  text: string;
-  description?: string | null;
-  icons?: string | null;
-}
-
-// export interface Review {
-//   id: number;
-//   username: string;
-//   places: string;
-//   review: string;
-//   rating: number;
-//   packageId?: number | null;
-//   destinationId?: number | null;
-//   package?: {
-//     pid: number;
-//     name: string;
-//   } | null;
-//   destination?: {
-//     did: number;
-//     name: string;
-//   } | null;
-//   createdAt: Date;
-//   updatedAt: Date;
-// }
 
 export type IEHType = "inclusion" | "exclusion" | "highlight";
 

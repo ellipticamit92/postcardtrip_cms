@@ -1,4 +1,4 @@
-import { CityAIResponseType } from "@/app/api/auth/ai-generate/cities/route";
+import { HighlightsAIResponseType } from "@/app/api/auth/ai-generate/highlights/route";
 import { CityFormValues } from "@/components/organisms/city/CityForm";
 import { DestinationAIDataTYpe } from "@/schemas/destinationName";
 import { PageInfo } from "next/dist/build/utils";
@@ -11,10 +11,10 @@ export interface ApiResponse<T = unknown> {
   error?: string;
 }
 
-const BASE = "/api/auth/cities";
-const AI_API_URL = "/api/auth/ai-generate/cities";
+const BASE = "/api/auth/highlights";
+const AI_API_URL = "/api/auth/ai-generate/highlights";
 
-export const citiesApi = {
+export const highlightsApi = {
   /* List with pagination & filters */
   getAll: async (params?: {
     page?: number;
@@ -69,7 +69,7 @@ export const citiesApi = {
     return response.json();
   },
 
-  saveCityData: async (data: CityAIResponseType[]) => {
+  saveHighlightData: async (data: HighlightsAIResponseType[]) => {
     const response = await fetch(`${BASE}/save`, {
       method: "POST",
       headers: {

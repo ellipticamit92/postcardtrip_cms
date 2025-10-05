@@ -6,7 +6,7 @@ export class IEHService {
     options: {
       page?: number;
       limit?: number;
-      text?: string;
+      title?: string;
       sortBy?: "hlid" | "createdAt" | "updatedAt" | "text";
       sortOrder?: "asc" | "desc";
       type: IEHType;
@@ -18,7 +18,7 @@ export class IEHService {
       const {
         page = 1,
         limit = 20,
-        text,
+        title,
         sortBy = "createdAt",
         sortOrder = "desc",
         type,
@@ -27,7 +27,7 @@ export class IEHService {
       const skip = (page - 1) * limit;
       const where: any = {};
 
-      if (text) where.text = { contains: text, mode: "insensitive" };
+      if (title) where.text = { contains: title, mode: "insensitive" };
 
       let updateData;
       let updateTotal = 0;

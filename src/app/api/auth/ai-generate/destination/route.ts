@@ -14,12 +14,12 @@ const requestSchema = z.object({
 
 const aiResponseSchema = z.object({
   name: z.string().min(1).max(200),
-  description: z.string().min(150).max(600),
+  description: z.string().min(150).max(900),
   heroTitle: z.string().min(20).max(70),
   heading: z.string().min(15).max(25),
   country: z.string().min(2).max(100),
   cardText: z.string().min(20).max(200),
-  bestTimeToVisit: z.string().min(10).max(50).optional(),
+  bestTimeToVisit: z.string().min(10).max(100).optional(),
   highlights: z.string().min(50).max(300).optional(),
 });
 
@@ -163,7 +163,7 @@ export async function POST(req: NextRequest) {
       heroTitle: aiValidation?.data?.heroTitle?.trim() ?? "",
       bestTimeToVisit: aiValidation?.data?.bestTimeToVisit?.trim() ?? "",
       highlights: aiValidation?.data?.highlights ?? "",
-      ...(isImageChange
+      ...(isImageChange || !isEdit
         ? { imageUrl: imageData?.url, thumbnailUrl: imageData?.thumbnailUrl }
         : {}),
     };

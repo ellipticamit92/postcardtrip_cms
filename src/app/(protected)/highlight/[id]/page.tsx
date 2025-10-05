@@ -1,5 +1,7 @@
 import { Heading } from "@/components/atoms/Heading";
+import { HighlightForm } from "@/components/organisms/highlights/HighlightForm";
 import { IEHForm } from "@/components/organisms/IEH/IEHForm";
+import HighlightService from "@/services/highlight.service";
 import IEHService from "@/services/ieh.service";
 
 export const dynamic = "force-dynamic";
@@ -12,19 +14,25 @@ export default async function HighlightEditPage({
   const { id: idString } = await params;
   const id = Number(idString);
 
-  const highlightData = await IEHService.getByid(id, "highlight");
+  const highlightData = await HighlightService.getById(id);
   let highlightId: number | undefined;
   if (highlightData && "hlid" in highlightData) {
     highlightId = highlightData.hlid;
   }
 
   const updateData = {
-    text: highlightData?.text ?? "",
+    title: highlightData?.title ?? "",
+    category: highlightData?.category ?? "",
+    destinationId: highlightData?.destinationId ?? 1,
   };
   return (
     <>
       <Heading text="Edit highlight" href="/" />
-      <IEHForm type="highlight" initialData={updateData} id={highlightId} />
+      <HighlightForm
+        initialData={updateData}
+        hlId={highlightId}
+        destinations={[]}
+      />
     </>
   );
 }

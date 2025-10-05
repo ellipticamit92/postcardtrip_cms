@@ -27,6 +27,10 @@ export interface ItineraryWithPackage extends Itinerary {
   highlights: Highlight[];
 }
 
+export interface HighlightWithDestination extends Highlight {
+  destination?: Partial<Destination>;
+}
+
 export interface PackageWithDestiantion extends Package {
   destination?: Partial<Destination>;
   // itineraries?: Partial<Itinerary>[];
@@ -99,4 +103,13 @@ export interface PackageFormDataType {
   highlights: Highlight[];
   inclusions: Inclusion[];
   exclusions: Exclusion[];
+}
+
+export interface PaginationInfo {
+  page: number;
+  limit: number;
+  total: number;
+  totalPages: number;
+  hasNext: boolean;
+  hasPrev: boolean;
 }

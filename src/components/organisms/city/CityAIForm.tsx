@@ -21,12 +21,10 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-
-const cityAISchema = z.object({
-  destinationName: z.string().min(1, "Please select destination"),
-});
-
-export type CityAIFormValues = z.infer<typeof cityAISchema>;
+import {
+  DestinationAIDataTYpe,
+  destinationAISchema,
+} from "@/schemas/destinationName";
 
 interface CityFormProps {
   destinations: Options;
@@ -37,14 +35,14 @@ export function CityAIForm({ destinations }: CityFormProps) {
   const { loading, createAICity, saveCityAIData } = useCities({
     autoFetch: false,
   });
-  const form = useForm<CityAIFormValues>({
-    resolver: zodResolver(cityAISchema),
+  const form = useForm<DestinationAIDataTYpe>({
+    resolver: zodResolver(destinationAISchema),
   });
 
   const { control, handleSubmit, watch } = form;
   const destinationName = watch("destinationName");
 
-  const onSubmit = async (data: CityAIFormValues) => {
+  const onSubmit = async (data: DestinationAIDataTYpe) => {
     try {
       const submitData = {
         destinationName: data.destinationName,

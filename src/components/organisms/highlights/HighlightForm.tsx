@@ -9,57 +9,56 @@ import { Loader2 } from "lucide-react";
 import { useCities } from "@/hooks/use-cities";
 import { Form } from "@/components/ui/form";
 import { FormInput } from "@/components/atoms/FormInput";
-import { FormRichText } from "@/components/atoms/FormRichText";
-import ImageUploader from "@/components/atoms/ImageUploader";
 import MyForm from "../MyForm";
 
-const citySchema = z.object({
-  name: z.string().min(2, "City name is required"),
-  description: z.string().min(5, "City Description is too short"),
-  imageUrl: z.string().optional(),
+const highlightSchema = z.object({
+  title: z.string().min(2, "Highlight name is required"),
+  category: z.string().optional(),
+  destinationId: z.number().optional(),
 });
 
-export type CityFormValues = z.infer<typeof citySchema>;
+export type HighlightFormValues = z.infer<typeof highlightSchema>;
 
-interface CityFormProps {
+interface HighlightFormProps {
   destinations: { label: string; value: string }[];
-  initialData?: CityFormValues;
-  cityId?: number;
+  initialData?: HighlightFormValues;
+  hlId?: number;
 }
 
-export function CityForm({ initialData, cityId }: CityFormProps) {
+export function HighlightForm({ initialData, hlId }: HighlightFormProps) {
   const { loading, createCity, updateCity } = useCities({
     autoFetch: false,
   });
-  const form = useForm<CityFormValues>({
-    resolver: zodResolver(citySchema),
+  const form = useForm<HighlightFormValues>({
+    resolver: zodResolver(highlightSchema),
     defaultValues: initialData || {
-      name: "",
-      description: "",
-      imageUrl: "",
+      title: "",
+      category: "",
     },
   });
 
   const { control, handleSubmit, reset } = form;
 
-  const onSubmit = async (data: CityFormValues) => {
+  const onSubmit = async (data: HighlightFormValues) => {
     try {
-      const isEditMode = Boolean(cityId);
+      const isEditMode = Boolean(hlId);
 
       const submitData = {
-        name: data.name.trim(),
-        description: data.description.trim(),
+        title: data.title.trim(),
+        category: data?.category?.trim(),
       };
 
-      if (isEditMode && cityId) {
-        await updateCity(cityId, submitData);
-      } else {
-        await createCity(submitData);
-      }
+      console.log("DEBUG submit data  = ", submitData);
 
-      if (!isEditMode) {
-        reset();
-      }
+      //   if (isEditMode && cityId) {
+      //     await updateCity(cityId, submitData);
+      //   } else {
+      //     await createCity(submitData);
+      //   }
+
+      //   if (!isEditMode) {
+      //     reset();
+      //   }
     } catch (err: any) {
       console.error("Error submitting city", err);
       toast.error(err.message || "Error submitting city");
@@ -73,9 +72,9 @@ export function CityForm({ initialData, cityId }: CityFormProps) {
           <div className="grid grid-cols-3 gap-4 mb-6">
             <div className="col-span-3">
               <FormInput
-                label="City Name"
-                name="name"
-                placeholder="Enter city name"
+                label="Highlight Name"
+                name="title"
+                placeholder="Enter highlight name"
                 control={control}
               />
             </div>
@@ -88,7 +87,7 @@ export function CityForm({ initialData, cityId }: CityFormProps) {
             placeholder="Select city"
           /> */}
 
-            <div className="col-span-2">
+            {/* <div className="col-span-2">
               <FormRichText
                 label="City Description"
                 name="description"
@@ -107,7 +106,7 @@ export function CityForm({ initialData, cityId }: CityFormProps) {
                   label="Upload City Image"
                 />
               )}
-            />
+            /> */}
           </div>
 
           <Button type="submit" disabled={loading}>

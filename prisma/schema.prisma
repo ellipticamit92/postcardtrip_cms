@@ -80,9 +80,10 @@ model Destination {
   originalPrice      Int?
   rating             Float?
   bestTimeToVisit    String?
-  highlights         String?
+  highlight          String?
   packages           Package[]
   reviews            Reviews[]
+  highlights         Highlight[]
   updatedAt          DateTime  @updatedAt
   createdAt          DateTime  @default(now())
 }
@@ -187,13 +188,16 @@ model Itinerary {
 }
 
 model Highlight {
-  hlid        Int       @id @default(autoincrement())
-  text        String    @unique
-  status    Boolean?   @default(false)
-  packages    Package[] 
-  itineraries Itinerary[]
-  updatedAt   DateTime  @updatedAt
-  createdAt   DateTime  @default(now())
+  hlid            Int          @id @default(autoincrement())
+  title           String       @unique
+  category        String? 
+  status          Boolean?     @default(false)
+  packages        Package[] 
+  itineraries     Itinerary[]
+  destination     Destination?  @relation(fields: [destinationId], references: [did])
+  destinationId   Int?
+  updatedAt       DateTime     @updatedAt
+  createdAt       DateTime     @default(now())
 }
 
 model Inclusion {

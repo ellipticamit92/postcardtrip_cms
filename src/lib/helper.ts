@@ -29,6 +29,16 @@ export const getFieldOptionsNum = (data: any, id: string, label?: string) => {
   });
 };
 
+export const getValueIdOptions = (data: any, id: string, label?: string) => {
+  return data?.map((item: any) => {
+    const name = item[label ?? "name"];
+    return {
+      label: name,
+      value: `${name}_${item[id]}`,
+    };
+  });
+};
+
 export const getTourOptions = (tours: any) => {
   return tours?.map((item: any) => {
     return {
