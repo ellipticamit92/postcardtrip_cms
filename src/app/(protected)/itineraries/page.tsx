@@ -8,8 +8,7 @@ import { Map } from "lucide-react";
 export const dynamic = "force-dynamic";
 
 export default async function ItinerariesPage() {
-  const { data, pagination } =
-    await ItineraryService.getGroupedItineraryPackage();
+  const { data, pagination } = await ItineraryService.getAll();
 
   return (
     <>
@@ -21,12 +20,12 @@ export default async function ItinerariesPage() {
       />
 
       <ViewLayout
-        data={Object.values(data ?? {})}
+        data={data}
         pagination={pagination}
         GridComponent={ItineraryGrid}
         ListComponent={ItineraryTable}
         TableComponent={ItineraryTable}
-        filterKey={"itineraries"}
+        filterKey={"day"}
       />
     </>
   );

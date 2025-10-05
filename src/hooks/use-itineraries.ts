@@ -1,10 +1,7 @@
-import {
-  ApiResponse,
-  itinerariesApi,
-  ItineraryPayload,
-} from "@/lib/api/itineraries";
+import { ItinerariesFormData } from "@/components/organisms/itineraries/ItinerariesForm";
+import { ApiResponse, itinerariesApi } from "@/lib/api/itineraries";
 import { showToast } from "@/lib/toast";
-import { Itinerary } from "@/types/type";
+import { Itinerary } from "@prisma/client";
 import { useEffect, useState } from "react";
 import { toast } from "sonner";
 
@@ -81,11 +78,20 @@ export function useItineraries(
   };
 
   // Create
-  const createItinerary = async (data: ItineraryPayload) => {
+  const createItinerary = async (data: ItinerariesFormData) => {
     setLoading(true);
     setError(null);
     const loadingToast = showToast.createLoading("itinerary");
     try {
+      const nameResult = await itinerariesApi.getByPackageId(data.packageId);
+
+      if (nameResult.success) {
+        const errorMsg = "Package Itinerary already exists";
+        toast.dismiss(loadingToast);
+        showToast.error(errorMsg);
+        return { success: false, error: errorMsg };
+      }
+
       const res = await itinerariesApi.create(data);
       if (res.success) {
         fetchItineraries();
@@ -110,23 +116,32 @@ export function useItineraries(
 
   // Update
   const updateItinerary = async (
-    itid: number,
-    data: Partial<ItineraryPayload>
+    pkgId: number,
+    data: Partial<ItinerariesFormData>
   ) => {
     setLoading(true);
     setError(null);
+
+    const loadingToast = showToast.updateLoading("itinerary");
     try {
-      const res = await itinerariesApi.update(itid, data);
+      const res = await itinerariesApi.update(pkgId, data);
       if (res.success) {
         fetchItineraries();
+        toast.dismiss(loadingToast);
+        showToast.updateSuccess("itinerary");
         return res.data;
       } else {
         setError(res.error || "Failed to update itinerary");
-        throw new Error(res.error || "Failed to update itinerary");
+        toast.dismiss(loadingToast);
+        showToast.updateError("Itinerary", "Failed to update itinerary");
+        return { success: false, error: res.error };
       }
-    } catch (e: any) {
-      setError(e?.message || "Failed to update itinerary");
-      throw e;
+    } catch (err: any) {
+      const errorMsg = err instanceof Error ? err.message : "An error occurred";
+      setError(errorMsg);
+      toast.dismiss(loadingToast);
+      showToast.updateError("Itinerary", errorMsg);
+      return { success: false, error: errorMsg };
     } finally {
       setLoading(false);
     }

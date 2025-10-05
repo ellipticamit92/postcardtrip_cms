@@ -21,6 +21,7 @@ export default async function CityPage({ searchParams }: SearchPageProps) {
         description="Manage cities"
         Icon={Building2}
         href="/city/add"
+        aiHref="/city/ai"
       />
       <ViewLayout
         data={data ?? []}

@@ -1,5 +1,5 @@
 import { DestinationFormDataType } from "@/components/organisms/destinations/DestinationForm";
-import { getFieldOptionsNum } from "@/lib/helper";
+import { getFieldOptionsNum, getNameValueOptions } from "@/lib/helper";
 import { prisma } from "@/lib/prisma";
 
 export class DestinationService {
@@ -28,6 +28,24 @@ export class DestinationService {
         },
       });
       const destinationsData = getFieldOptionsNum(destinations, "did");
+      return {
+        data: destinationsData,
+      };
+    } catch (error) {
+      throw new Error(`Failed to fetch destinations name and id: ${error}`);
+    }
+  }
+
+  static async getNameValue() {
+    try {
+      const destinations = await prisma.destination.findMany({
+        select: {
+          did: true,
+          name: true,
+          createdAt: true,
+        },
+      });
+      const destinationsData = getNameValueOptions(destinations, "name");
       return {
         data: destinationsData,
       };

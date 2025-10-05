@@ -88,15 +88,16 @@ model Destination {
 }
 
 model City {
-  cid           Int          @id @default(autoincrement())
-  name          String       @unique
-  description   String       @db.Text
-  imageUrl      String?
-  status        Boolean?     @default(false)
-  hotels        Hotel[]
-  packages      Package[] 
-  itineraries   Itinerary[]
-  createdAt     DateTime     @default(now())
+  cid                       Int           @id @default(autoincrement())
+  name                      String        @unique
+  description               String?       @db.Text
+  imageUrl                  String?
+  mustSeeAttractions        Json?         
+  activities                Json?       
+  status                    Boolean?      @default(false)
+  hotels                    Hotel[]
+  packages                  Package[] 
+  createdAt                 DateTime      @default(now())
 }
 
 model Hotel {
@@ -172,16 +173,14 @@ model PackageHotelPrice {
 }
 
 model Itinerary {
-  itid        Int       @id @default(autoincrement())
-  day         Int
+  itid        Int        @id @default(autoincrement())
+  day         Json?
   title       String
   subTitle    String?
-  details     String     @db.Text
   isRichText  Boolean    @default(false)
   status      Boolean?   @default(false)
   package     Package    @relation(fields: [packageId], references: [pid])
-  packageId   Int
-  cities      City[]
+  packageId   Int        @unique
   highlights  Highlight[]
   updatedAt   DateTime  @updatedAt
   createdAt   DateTime  @default(now())

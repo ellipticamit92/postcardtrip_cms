@@ -42,11 +42,7 @@ export async function PUT(req: NextRequest, { params }: RouteParams) {
     }
 
     const body = await req.json();
-    const updated = await ItineraryService.update(id, {
-      day: body.day,
-      title: body.title,
-      details: body.details,
-    });
+    const updated = await ItineraryService.update(id, body);
 
     return NextResponse.json({
       success: true,

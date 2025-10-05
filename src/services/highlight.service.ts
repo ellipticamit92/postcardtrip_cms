@@ -1,4 +1,4 @@
-import { getFieldOptionsNum } from "@/lib/helper";
+import { getFieldOptionsNum, getNameValueOptions } from "@/lib/helper";
 import { prisma } from "@/lib/prisma";
 
 export class HighlightService {
@@ -113,6 +113,22 @@ export class HighlightService {
       };
     } catch (error) {
       throw new Error(`Failed to fetch tours name and id: ${error}`);
+    }
+  }
+
+  static async getNameValue() {
+    try {
+      const highlight = await prisma.highlight.findMany({
+        select: { hlid: true, text: true },
+        orderBy: { text: "asc" },
+      });
+
+      const highlightData = getNameValueOptions(highlight, "text");
+      return {
+        data: highlightData,
+      };
+    } catch (error) {
+      throw new Error(`Failed to fetch destinations name and id: ${error}`);
     }
   }
 }

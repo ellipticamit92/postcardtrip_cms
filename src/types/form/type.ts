@@ -8,12 +8,23 @@ import {
   Tours,
   Highlight,
   Inquiry,
+  Itinerary,
 } from "@prisma/client";
 import { PaginationProps } from "../type";
 
 // Extend Destination to include packages
 export interface DestinationWithPackages extends Destination {
   packages?: Package[]; // optional, since it may be undefined
+}
+
+export interface ItineraryWithPackage extends Itinerary {
+  package?: {
+    name: string;
+    destination: {
+      name: string;
+    };
+  };
+  highlights: Highlight[];
 }
 
 export interface PackageWithDestiantion extends Package {

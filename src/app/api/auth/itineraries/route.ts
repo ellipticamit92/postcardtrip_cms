@@ -74,10 +74,7 @@ export async function POST(req: NextRequest) {
       );
     }
 
-    const itinerary = await ItineraryService.create({
-      packageId: Number(body.packageId),
-      days: body.days,
-    });
+    const itinerary = await ItineraryService.create(body);
 
     return NextResponse.json(
       { success: true, data: itinerary, message: "Itinerary created" },

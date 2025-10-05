@@ -16,7 +16,7 @@ export async function GET(_: NextRequest, { params }: RouteParams) {
       );
     }
 
-    const itineraries = await ItineraryService.getByPackage(packageId);
+    const itineraries = await ItineraryService.getByPackageId(packageId);
     return NextResponse.json({ success: true, data: itineraries });
   } catch (err) {
     console.error("GET itineraries by package error:", err);

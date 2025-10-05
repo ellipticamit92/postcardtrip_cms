@@ -11,6 +11,15 @@ export const getFieldOptions = (data: any, id: string) => {
   });
 };
 
+export const getNameValueOptions = (data: any, label?: string) => {
+  return data?.map((item: any) => {
+    return {
+      label: item[label ?? "name"],
+      value: item[label ?? "name"],
+    };
+  });
+};
+
 export const getFieldOptionsNum = (data: any, id: string, label?: string) => {
   return data?.map((item: any) => {
     return {

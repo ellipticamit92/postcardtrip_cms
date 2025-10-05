@@ -1,16 +1,6 @@
 // src/lib/api/itineraries.ts
-export interface ItineraryDays {
-  day: number;
-  title: string;
-  details: string;
-  highlights: number[];
-  cities: number[];
-}
 
-export interface ItineraryPayload {
-  packageId: number;
-  days: ItineraryDays[];
-}
+import { ItinerariesFormData } from "@/components/organisms/itineraries/ItinerariesForm";
 
 export interface ApiResponse<T = unknown> {
   success: boolean;
@@ -60,7 +50,7 @@ export const itinerariesApi = {
   },
 
   /* Itineraries by package */
-  getByPackage: async (packageId: number) => {
+  getByPackageId: async (packageId: number) => {
     const response = await fetch(`${BASE}/package/${packageId}`);
     return response.json();
   },
@@ -74,7 +64,7 @@ export const itinerariesApi = {
   },
 
   /* Create */
-  create: async (data: ItineraryPayload) => {
+  create: async (data: ItinerariesFormData) => {
     const response = await fetch(BASE, {
       method: "POST",
       headers: {
@@ -86,7 +76,7 @@ export const itinerariesApi = {
   },
 
   /* Update */
-  update: async (id: number, data: Partial<ItineraryPayload>) => {
+  update: async (id: number, data: Partial<ItinerariesFormData>) => {
     const response = await fetch(`${BASE}/${id}`, {
       method: "PUT",
       headers: {

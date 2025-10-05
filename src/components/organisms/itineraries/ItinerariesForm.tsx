@@ -5,7 +5,7 @@ import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Button } from "@/components/ui/button";
 import { useFieldArray, useForm } from "react-hook-form";
-import { Itinerary, Options } from "@/types/type";
+import { Options } from "@/types/type";
 import { useItineraries } from "@/hooks/use-itineraries";
 import { toast } from "sonner";
 import { Form } from "@/components/ui/form";
@@ -18,43 +18,48 @@ import { Loader2 } from "lucide-react";
 const daySchema = z.object({
   day: z.number().min(1, "Day number required"),
   title: z.string().min(1, "Title required"),
+  subTitle: z.string().optional(),
   details: z.string().min(1, "Details required"),
-  highlights: z.array(z.number()).optional(),
-  places: z.array(z.number()).optional(),
+  highlights: z.array(z.string()).optional(),
+  cities: z.array(z.string()).optional(),
 });
+
+export type DaySchemaData = z.infer<typeof daySchema>;
 
 const itinerariesSchema = z.object({
-  packageId: z.string().min(1, "Please the package"),
+  packageId: z.number().min(1, "Day number required"),
   days: z.array(daySchema).min(1, "At least one day required"),
+  title: z.string().min(1, "Title required"),
+  highlights: z.array(z.number()).optional(),
 });
 
-type ItinerariesFormData = z.infer<typeof itinerariesSchema>;
+export type ItinerariesFormData = z.infer<typeof itinerariesSchema>;
 
 interface ItinerariesFormProps {
-  packages: { label: string; value: string }[];
-  initialDays?: Array<{
-    day: number;
-    title: string;
-    details: string;
-    highlights: number[];
-    places: number[];
-  }>;
-  initialData?: Itinerary[];
+  packages: Options;
   cityOptions?: Options;
   highlightOptions: Options;
+  hiValueOptions: Options;
+  packageId?: number;
+  initialData?: ItinerariesFormData;
   itineraryId?: number;
 }
 
 export default function ItinerariesForm({
-  itineraryId,
-  initialData,
   packages,
   cityOptions,
   highlightOptions,
+  packageId,
+  hiValueOptions,
+  initialData,
+  itineraryId,
 }: ItinerariesFormProps) {
-  const { loading, createItinerary } = useItineraries();
+  const { loading, createItinerary, updateItinerary } = useItineraries();
   const form = useForm<ItinerariesFormData>({
     resolver: zodResolver(itinerariesSchema),
+    defaultValues: initialData ?? {
+      title: "",
+    },
   });
 
   const {
@@ -75,10 +80,14 @@ export default function ItinerariesForm({
 
       const submitData = {
         packageId: data.packageId,
+        title: data.title,
+        highlights: data.highlights,
         days: data.days,
       };
+
+      console.log("DEBUG submitData = ", submitData);
       if (isEditMode && itineraryId) {
-        //await updatePackage(PackageId, submitData);
+        await updateItinerary(itineraryId, submitData);
       } else {
         await createItinerary(submitData);
       }
@@ -97,64 +106,77 @@ export default function ItinerariesForm({
     <Form {...form}>
       <form onSubmit={handleSubmit(onSubmit)} className="space-y-4 mt-4">
         <div className="grid grid-cols-3 gap-4">
+          <FormInput control={control} name="title" label="Itinerary Name" />
           <FormSelect
             label="Package"
             name="packageId"
             control={control}
             options={packages}
             placeholder="Select destination"
+            isNumber
+          />
+          <FormMultiSelect
+            name="highlights"
+            control={control}
+            label="Select Itinerary Highlihts"
+            options={highlightOptions || []}
           />
         </div>
 
         <div className="space-y-3 bg-white">
           {fields.map((field, i) => (
-            <div
-              key={field.id}
-              className="grid grid-cols-3 gap-4 mb-4 p-3 py-4 border-dashed border-3 relative"
-            >
-              <FormInput
-                control={control}
-                name={`days.${i}.title`}
-                label={`Day ${i + 1} Title`}
-              />
-              <FormMultiSelect
-                name={`days.${i}.places`}
-                control={control}
-                label="Select Ciities"
-                options={cityOptions || []}
-              />
-              <FormMultiSelect
-                name={`days.${i}.highlights`}
-                control={control}
-                label="Select Highlihts"
-                options={highlightOptions || []}
-              />
-              {fields.length > 1 && (
-                <div className="absolute right-5 top-4">
-                  <Button
-                    type="button"
-                    variant="destructive"
-                    size="icon"
-                    disabled={isSubmitting || loading}
-                    onClick={() => remove(i)}
-                    className="ml-2"
-                  >
-                    <span aria-hidden>✕</span>
-                  </Button>
-                </div>
-              )}
-              <div className="col-span-3">
-                <FormRichText
-                  label={`Day ${i + 1} Details`}
-                  name={`days.${i}.details`}
+            <div key={field.id}>
+              <h1 className="font-bold mb-1">Day {i + 1}: Data</h1>
+              <div className="grid grid-cols-4 gap-4 mb-4 p-3 py-4 border-dashed border-3 relative">
+                <FormInput
                   control={control}
+                  name={`days.${i}.title`}
+                  label={`Day ${i + 1} Title`}
                 />
+                <FormInput
+                  control={control}
+                  name={`days.${i}.subTitle`}
+                  label={`Day ${i + 1} Sub Title`}
+                />
+                <FormMultiSelect
+                  name={`days.${i}.cities`}
+                  control={control}
+                  label="Select Day Ciities"
+                  options={cityOptions || []}
+                />
+                <FormMultiSelect
+                  name={`days.${i}.highlights`}
+                  control={control}
+                  label="Select Day Highlihts"
+                  options={hiValueOptions || []}
+                />
+                {fields.length > 1 && (
+                  <div className="absolute right-5 top-4">
+                    <Button
+                      type="button"
+                      variant="destructive"
+                      size="icon"
+                      disabled={isSubmitting || loading}
+                      onClick={() => remove(i)}
+                      className="ml-2"
+                    >
+                      <span aria-hidden>✕</span>
+                    </Button>
+                  </div>
+                )}
+                <div className="col-span-4">
+                  <FormRichText
+                    label={`Day ${i + 1} Details`}
+                    name={`days.${i}.details`}
+                    control={control}
+                  />
+                </div>
               </div>
             </div>
           ))}
         </div>
 
-        <div className="flex justify-end my-6">
+        <div className="flex gap-4 justify-end bg-white p-4 shadow-md sticky bottom-0">
           <Button
             type="button"
             variant="secondary"
@@ -169,8 +191,7 @@ export default function ItinerariesForm({
           >
             + Add Another Day
           </Button>
-        </div>
-        <div className="flex gap-2">
+
           <Button type="submit" disabled={loading}>
             {loading && <Loader2 className="animate-spin mr-2" />}
             {initialData ? "Update" : "Add"} Itineraries

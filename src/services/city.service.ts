@@ -1,4 +1,5 @@
-import { getFieldOptionsNum } from "@/lib/helper";
+import { CityAIResponseType } from "@/app/api/auth/ai-generate/cities/route";
+import { getFieldOptionsNum, getNameValueOptions } from "@/lib/helper";
 import { prisma } from "@/lib/prisma";
 
 export class CityService {
@@ -16,6 +17,17 @@ export class CityService {
     }
   }
 
+  static async saveAIData(data: CityAIResponseType[]) {
+    try {
+      return await prisma.city.createMany({
+        data: data,
+        skipDuplicates: true, // optional: skips cities that already exist
+      });
+    } catch (error) {
+      throw new Error(`Failed to create city: ${error}`);
+    }
+  }
+
   static async getNameId() {
     try {
       const cities = await prisma.city.findMany({
@@ -26,6 +38,24 @@ export class CityService {
         },
       });
       const cityData = getFieldOptionsNum(cities, "cid");
+      return {
+        data: cityData,
+      };
+    } catch (error) {
+      throw new Error(`Failed to fetch destinations name and id: ${error}`);
+    }
+  }
+
+  static async getNameValue() {
+    try {
+      const cities = await prisma.city.findMany({
+        select: {
+          cid: true,
+          name: true,
+          createdAt: true,
+        },
+      });
+      const cityData = getNameValueOptions(cities, "name");
       return {
         data: cityData,
       };

@@ -171,7 +171,7 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({
       data: aiResponseData,
       requestId,
-      message: "Destination created successfully",
+      message: "Destination data generated successfully",
       success: true,
     });
   } catch (error: any) {

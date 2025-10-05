@@ -2,6 +2,8 @@ import { useState, useEffect } from "react";
 import { citiesApi } from "@/lib/api/cities";
 import { showToast } from "@/lib/toast";
 import { toast } from "sonner";
+import { CityAIFormValues } from "@/components/organisms/city/CityAIForm";
+import { CityAIResponseType } from "@/app/api/auth/ai-generate/cities/route";
 
 interface City {
   cid: number;
@@ -102,6 +104,69 @@ export const useCities = (options: UseCitiesOptions = {}) => {
     } catch (err) {
       setError(err instanceof Error ? err.message : "An error occurred");
       return null;
+    }
+  };
+
+  const createAICity = async (
+    data: CityAIFormValues
+  ): Promise<{
+    success: boolean;
+    data?: CityAIResponseType[];
+    error?: string;
+  }> => {
+    setLoading(true);
+    setError(null);
+    const loadingToast = showToast.createLoading("city ai");
+    try {
+      const result = await citiesApi.createAI(data);
+
+      if (result.success) {
+        toast.dismiss(loadingToast);
+        showToast.createSuccess("City");
+        return { success: true, data: result.data };
+      } else {
+        setError(result.error || "Failed to create ai city");
+        toast.dismiss(loadingToast);
+        showToast.createError("city");
+        return { success: false, error: result.error };
+      }
+    } catch (err) {
+      const errorMsg = err instanceof Error ? err.message : "An error occurred";
+      toast.dismiss(loadingToast);
+      showToast.createError("city", errorMsg);
+      setError(errorMsg);
+      return { success: false, error: errorMsg };
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const saveCityAIData = async (data: CityAIResponseType[]) => {
+    setLoading(true);
+    setError(null);
+
+    const loadingToast = showToast.createLoading("save city ai");
+    try {
+      const result = await citiesApi.saveCityData(data);
+
+      if (result.success) {
+        toast.dismiss(loadingToast);
+        showToast.createSuccess("City");
+        return { success: true, data: result.data };
+      } else {
+        setError(result.error || "Failed to save ai city data");
+        toast.dismiss(loadingToast);
+        showToast.createError("city");
+        return { success: false, error: result.error };
+      }
+    } catch (err) {
+      const errorMsg = err instanceof Error ? err.message : "An error occurred";
+      toast.dismiss(loadingToast);
+      showToast.createError("city", errorMsg);
+      setError(errorMsg);
+      return { success: false, error: errorMsg };
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -279,11 +344,13 @@ export const useCities = (options: UseCitiesOptions = {}) => {
     fetchCities,
     getCity,
     createCity,
+    createAICity,
     updateCity,
     deleteCity,
     getCitiesByDestination,
     searchCities,
     changePage,
+    saveCityAIData,
 
     // Utilities
     clearError: () => setError(null),

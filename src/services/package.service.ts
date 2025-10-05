@@ -278,7 +278,6 @@ export class PackageService {
             select: {
               day: true,
               title: true,
-              details: true,
             },
           },
           hotelPrices: true,

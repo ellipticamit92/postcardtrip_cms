@@ -1,6 +1,6 @@
 "use client";
 
-import { City, PaginationProps } from "@/types/type";
+import { PaginationProps } from "@/types/type";
 import { ColumnDef } from "@tanstack/react-table";
 import { ArrowUpDown, MoreHorizontal } from "lucide-react";
 import { FC } from "react";
@@ -25,6 +25,10 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import { City } from "@prisma/client";
+import { getActivitiesArray, getAttractionArray } from "./helper";
+import AttractionsDialog from "@/components/AttractionsDialog";
+import ActivitiesDialog from "@/components/ActivitiesDialog";
 
 export const columns: ColumnDef<City>[] = [
   {
@@ -57,13 +61,13 @@ export const columns: ColumnDef<City>[] = [
         className="!p-0"
         onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
       >
-        City Name <ArrowUpDown className="ml-2 h-4 w-4" />
+        Name <ArrowUpDown className="ml-2 h-4 w-4" />
       </Button>
     ),
   },
   {
     accessorKey: "description",
-    header: "City Description",
+    header: "Description",
     cell: ({ row }) => {
       const overview = row.getValue("description") as string;
       const name = row.getValue("name") as string;
@@ -89,6 +93,37 @@ export const columns: ColumnDef<City>[] = [
         </div>
       );
     },
+  },
+  {
+    accessorKey: "activities",
+    header: "Activities",
+    cell: ({ row }) => {
+      const activitiesData = row.getValue("activities");
+      return <ActivitiesDialog data={activitiesData} />;
+    },
+  },
+  {
+    accessorKey: "mustSeeAttractions",
+    header: "Attractions",
+    cell: ({ row }) => {
+      const attractionData = row.getValue("mustSeeAttractions");
+      return <AttractionsDialog data={attractionData} />;
+    },
+  },
+  {
+    accessorKey: "imageUrl",
+    header: "imageUrl",
+    cell: ({ row }) => (
+      <div>
+        <a
+          className="text-blue-700 hover:underline font-bold"
+          href={row.getValue("imageUrl")}
+          target="_blank"
+        >
+          View
+        </a>
+      </div>
+    ),
   },
   {
     id: "actions",

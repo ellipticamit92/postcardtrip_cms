@@ -10,9 +10,13 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
-import { City, PaginationProps } from "@/types/type";
+import { PaginationProps } from "@/types/type";
+import { City } from "@prisma/client";
 import { Edit, Trash2 } from "lucide-react";
 import { FC } from "react";
+import { getActivitiesArray } from "./helper";
+import ActivitiesDialog from "@/components/ActivitiesDialog";
+import AttractionsDialog from "@/components/AttractionsDialog";
 
 interface CityGridProps {
   data: City[];
@@ -77,6 +81,11 @@ const CityGrid: FC<CityGridProps> = ({ data, pagination }) => {
 
             {/* Content */}
             <CardContent className="p-0 space-y-4">
+              <div className="flex gap-4">
+                <ActivitiesDialog data={city.activities} />
+                <AttractionsDialog data={city.mustSeeAttractions} />
+              </div>
+
               {/* Metadata */}
               <div className="flex items-center justify-between text-xs text-muted-foreground border-t pt-2">
                 <span>
@@ -108,7 +117,9 @@ const CityGrid: FC<CityGridProps> = ({ data, pagination }) => {
                     </DialogHeader>
                     <div
                       className="prose prose-sm max-w-none mt-3"
-                      dangerouslySetInnerHTML={{ __html: city.description }}
+                      dangerouslySetInnerHTML={{
+                        __html: city.description ?? "",
+                      }}
                     />
                   </DialogContent>
                 </Dialog>

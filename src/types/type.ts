@@ -1,4 +1,4 @@
-import { Package } from "@prisma/client";
+import { City, Itinerary, Package } from "@prisma/client";
 
 export interface PaginationOptions {
   page?: number;
@@ -95,16 +95,6 @@ export interface VerificationToken {
   expires: Date;
 }
 
-export interface City {
-  cid: number;
-  name: string;
-  description: string; // Rich text HTML content
-  createdAt: Date;
-  // Optional relations
-  packages?: Package[];
-  hotels?: Hotel[];
-}
-
 export interface Hotel {
   hid: number;
   name: string;
@@ -150,18 +140,6 @@ export interface ItineraryPackage {
     };
     itineraries: Itinerary[];
   };
-}
-
-export interface Itinerary {
-  itid: number;
-  day: number;
-  title: string;
-  details: string; // Rich text HTML content
-  packageId: number;
-  // Optional relations
-  package: Partial<Package>;
-  highlights?: Partial<Highlight>[];
-  cities?: Partial<City>[];
 }
 
 export interface ItineraryPlace {
