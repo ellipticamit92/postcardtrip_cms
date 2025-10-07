@@ -74,7 +74,6 @@ export const DestinationAIForm: FC<DestinationAIFormProps> = ({
           heroTitle: aiResponseData?.data?.heroTitle ?? "",
           text: aiResponseData?.data?.text ?? "",
           isRichText: false,
-          highlights: aiResponseData?.data?.highlights ?? "",
           bestTimeToVisit: aiResponseData?.data?.bestTimeToVisit ?? "",
           ...(isImageChanged || !destinationId
             ? { imageUrl: aiResponseData?.data?.imageUrl }

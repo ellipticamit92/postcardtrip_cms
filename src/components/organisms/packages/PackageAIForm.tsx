@@ -14,6 +14,7 @@ import { Options, OptionsNum } from "@/types/type";
 import FormSection from "@/components/molecules/FormSection";
 import { PackageForm, PackageFormDataType } from "./PackageForm";
 import { useState } from "react";
+import { FormCheckbox } from "@/components/atoms/FormCheckbox";
 
 const schema = z.object({
   day: z.number().min(1, "Please select day"),
@@ -82,13 +83,11 @@ export function PackageAIForm({
         toursId: data.toursId ? Number(data.toursId) : undefined,
         destination: destinationName?.[0]?.label ?? "",
         tourType: toursName?.[0]?.label ?? "",
+        isEdit: !!packageId,
+        isImageChange: data.imageChange || false,
       };
 
-      const aiResponseData = await createUpdateAIPackage(
-        submitData,
-        !!packageId,
-        data.imageChange || false
-      );
+      const aiResponseData = await createUpdateAIPackage(submitData);
 
       if (aiResponseData.success) {
         const ai = aiResponseData?.data ?? {};
@@ -163,6 +162,11 @@ export function PackageAIForm({
                   isNumber
                 />
               </div>
+              <FormCheckbox
+                name="imageChange"
+                control={control}
+                label="Change Image"
+              />
             </div>
 
             <FormSelect

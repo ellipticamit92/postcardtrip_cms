@@ -84,9 +84,7 @@ export const usePackages = (options: UsePackagesOptions = {}) => {
   };
 
   const createUpdateAIPackage = async (
-    data: PackageAIFormDataType,
-    isEdit: boolean = false,
-    isImageChange: boolean = false
+    data: PackageAIFormDataType
   ): Promise<{
     success: boolean;
     data?: Partial<Package>;

@@ -27,7 +27,6 @@ export default async function EditAIDestinationPage({
   const status = destination?.status ?? false;
   const isRichText = destination?.isRichText ?? false;
   const bestTimeToVisit = destination?.bestTimeToVisit ?? "";
-  const highlights = destination?.highlights ?? "";
 
   const updatedDestination = {
     name,
@@ -45,7 +44,6 @@ export default async function EditAIDestinationPage({
     status,
     isRichText,
     bestTimeToVisit,
-    highlights,
   };
 
   return (

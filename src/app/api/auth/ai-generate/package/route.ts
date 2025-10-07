@@ -13,6 +13,7 @@ const requestSchema = z.object({
   destination: z.string().min(1).max(100).trim(),
   tourType: z.string().optional(),
   isImageChange: z.boolean().optional(),
+  isEdit: z.boolean().optional(),
 });
 
 const aiResponseSchema = z.object({
@@ -61,6 +62,7 @@ export async function POST(req: NextRequest) {
       toursId,
       night,
       isImageChange,
+      isEdit,
     } = validationResult.data;
     const imageData = await fetchUnsplashImage(destination);
 
@@ -145,7 +147,7 @@ export async function POST(req: NextRequest) {
       isRichText: false,
       text: text?.trim() ?? "",
       heroTitle: heroTitle?.trim() ?? "",
-      ...(isImageChange || !destinationId
+      ...(isImageChange || !isEdit
         ? { imageUrl: imageData?.url, thumbnailUrl: imageData?.thumbnailUrl }
         : {}),
       day,
