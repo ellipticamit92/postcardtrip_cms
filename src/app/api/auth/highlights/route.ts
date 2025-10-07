@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { CityService } from "@/services/city.service";
+import HighlightService from "@/services/highlight.service";
 
 // GET /api/cities - Get all cities with pagination and filters
 export async function GET(request: NextRequest) {
@@ -44,21 +45,17 @@ export async function POST(request: NextRequest) {
     const body = await request.json();
 
     // Validate required fields
-    if (!body.name || !body.description) {
+    if (!body.title) {
       return NextResponse.json(
         {
           success: false,
-          error: "Missing required fields: name, description",
+          error: "Missing required fields: title",
         },
         { status: 400 }
       );
     }
 
-    const city = await CityService.create({
-      name: body.name,
-      description: body.description,
-      imageUrl: body.imageUrl,
-    });
+    const city = await HighlightService.create(body);
 
     return NextResponse.json(
       {

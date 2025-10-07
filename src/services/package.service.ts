@@ -133,7 +133,7 @@ export class PackageService {
             highlights: {
               select: {
                 hlid: true,
-                text: true,
+                title: true,
               },
             },
             cities: {
@@ -193,7 +193,7 @@ export class PackageService {
           highlights: {
             select: {
               hlid: true,
-              text: true,
+              title: true,
             },
           },
           inclusions: {
@@ -582,7 +582,7 @@ export class PackageService {
           },
           highlights: {
             select: {
-              text: true,
+              title: true,
             },
           },
         },

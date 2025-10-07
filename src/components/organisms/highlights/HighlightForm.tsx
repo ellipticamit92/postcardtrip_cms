@@ -1,15 +1,18 @@
 "use client";
 
 import { z } from "zod";
-import { Controller, useForm } from "react-hook-form";
+import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Button } from "@/components/ui/button";
 import { toast } from "sonner";
 import { Loader2 } from "lucide-react";
-import { useCities } from "@/hooks/use-cities";
 import { Form } from "@/components/ui/form";
 import { FormInput } from "@/components/atoms/FormInput";
 import MyForm from "../MyForm";
+import { Options } from "@/types/type";
+import FormSection from "@/components/molecules/FormSection";
+import { FormSelect } from "@/components/atoms/FormSelect";
+import { useHighlights } from "@/hooks/use-highlights";
 
 const highlightSchema = z.object({
   title: z.string().min(2, "Highlight name is required"),
@@ -20,13 +23,17 @@ const highlightSchema = z.object({
 export type HighlightFormValues = z.infer<typeof highlightSchema>;
 
 interface HighlightFormProps {
-  destinations: { label: string; value: string }[];
+  destinations: Options;
   initialData?: HighlightFormValues;
   hlId?: number;
 }
 
-export function HighlightForm({ initialData, hlId }: HighlightFormProps) {
-  const { loading, createCity, updateCity } = useCities({
+export function HighlightForm({
+  initialData,
+  hlId,
+  destinations,
+}: HighlightFormProps) {
+  const { loading, createHighlight, updateHighlight } = useHighlights({
     autoFetch: false,
   });
   const form = useForm<HighlightFormValues>({
@@ -46,19 +53,20 @@ export function HighlightForm({ initialData, hlId }: HighlightFormProps) {
       const submitData = {
         title: data.title.trim(),
         category: data?.category?.trim(),
+        destinationId: data?.destinationId,
       };
 
       console.log("DEBUG submit data  = ", submitData);
 
-      //   if (isEditMode && cityId) {
-      //     await updateCity(cityId, submitData);
-      //   } else {
-      //     await createCity(submitData);
-      //   }
+      if (isEditMode && hlId) {
+        await updateHighlight(hlId, submitData);
+      } else {
+        await createHighlight(submitData);
+      }
 
-      //   if (!isEditMode) {
-      //     reset();
-      //   }
+      if (!isEditMode) {
+        reset();
+      }
     } catch (err: any) {
       console.error("Error submitting city", err);
       toast.error(err.message || "Error submitting city");
@@ -69,50 +77,39 @@ export function HighlightForm({ initialData, hlId }: HighlightFormProps) {
     <MyForm>
       <Form {...form}>
         <form onSubmit={handleSubmit(onSubmit)} className="space-y-4 mt-4">
-          <div className="grid grid-cols-3 gap-4 mb-6">
-            <div className="col-span-3">
-              <FormInput
-                label="Highlight Name"
-                name="title"
-                placeholder="Enter highlight name"
-                control={control}
-              />
-            </div>
-
-            {/* <FormSelect
-            label="Destination"
-            name="destinationId"
-            control={control}
-            options={destinations}
-            placeholder="Select city"
-          /> */}
-
-            {/* <div className="col-span-2">
-              <FormRichText
-                label="City Description"
-                name="description"
-                placeholder="Describe the city"
-                control={control}
-                height={260}
-              />
-            </div>
-            <Controller
+          <FormSection title="Basic Information" icon="📍">
+            <FormInput
+              label="Highlight Name"
+              name="title"
+              placeholder="Enter highlight name"
               control={control}
-              name="imageUrl"
-              render={({ field }) => (
-                <ImageUploader
-                  value={field.value}
-                  onChange={field.onChange}
-                  label="Upload City Image"
-                />
-              )}
-            /> */}
-          </div>
+            />
+            <FormInput
+              label="Highlight Category"
+              name="category"
+              placeholder="Enter highlight category"
+              control={control}
+            />
+            <FormSelect
+              label="Destination"
+              name="destinationId"
+              control={control}
+              options={destinations}
+              placeholder="Select destination"
+              isNumber
+            />
+          </FormSection>
 
-          <Button type="submit" disabled={loading}>
-            {loading && <Loader2 className="animate-spin mr-2" />}
-            {initialData ? "Update" : "Add"} City
-          </Button>
+          <div className="flex justify-end bg-white p-4 shadow-md sticky bottom-0">
+            <Button
+              type="submit"
+              disabled={loading}
+              className="px-6 py-2 text-base font-medium"
+            >
+              {loading && <Loader2 className="animate-spin mr-2" />}
+              {initialData ? "Update" : "Add"} Highlight
+            </Button>
+          </div>
         </form>
       </Form>
     </MyForm>

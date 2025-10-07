@@ -119,7 +119,7 @@ export function PackageForm({
         day: data.day,
         night: data.night,
         destinationId: Number(data.destinationId) ?? 1,
-        imageUrl: data.imageUrl ?? "not-url",
+        imageUrl: data.imageUrl ?? "",
         threePrice: data.threePrice ?? 0,
         fourPrice: data.fourPrice ?? 0,
         fivePrice: data.fivePrice ?? 0,

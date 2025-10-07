@@ -1,16 +1,17 @@
 import { HighlightsAIResponseType } from "@/app/api/auth/ai-generate/highlights/route";
+import { HighlightFormValues } from "@/components/organisms/highlights/HighlightForm";
 import { getFieldOptionsNum, getNameValueOptions } from "@/lib/helper";
 import { prisma } from "@/lib/prisma";
 
 export class HighlightService {
   // Create new highlight
-  // static async create(data: { tit: string }) {
-  //   try {
-  //     return await prisma.highlight.create({ data });
-  //   } catch (error) {
-  //     throw new Error(`Failed to create highlight: ${error}`);
-  //   }
-  // }
+  static async create(data: HighlightFormValues) {
+    try {
+      return await prisma.highlight.create({ data });
+    } catch (error) {
+      throw new Error(`Failed to create highlight: ${error}`);
+    }
+  }
 
   static async saveAIData(data: HighlightsAIResponseType[]) {
     try {
@@ -105,26 +106,26 @@ export class HighlightService {
     }
   }
 
-  // Get single highlight by text
-  // static async getByText(text: string) {
-  //   try {
-  //     return await prisma.highlight.findUnique({ where: { text } });
-  //   } catch (error) {
-  //     throw new Error(`Failed to fetch highlight by text: ${error}`);
-  //   }
-  // }
+  // Get single highlight by title
+  static async getByTitle(title: string) {
+    try {
+      return await prisma.highlight.findUnique({ where: { title } });
+    } catch (error) {
+      throw new Error(`Failed to fetch highlight by text: ${error}`);
+    }
+  }
 
   // Update highlight
-  // static async update(hlid: number, data: { text?: string }) {
-  //   try {
-  //     return await prisma.highlight.update({
-  //       where: { hlid },
-  //       data,
-  //     });
-  //   } catch (error) {
-  //     throw new Error(`Failed to update highlight: ${error}`);
-  //   }
-  // }
+  static async update(hlid: number, data: HighlightFormValues) {
+    try {
+      return await prisma.highlight.update({
+        where: { hlid },
+        data,
+      });
+    } catch (error) {
+      throw new Error(`Failed to update highlight: ${error}`);
+    }
+  }
 
   // Delete highlight
   static async delete(hlid: number) {

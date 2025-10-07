@@ -1,5 +1,6 @@
 import { HighlightsAIResponseType } from "@/app/api/auth/ai-generate/highlights/route";
 import { CityFormValues } from "@/components/organisms/city/CityForm";
+import { HighlightFormValues } from "@/components/organisms/highlights/HighlightForm";
 import { DestinationAIDataTYpe } from "@/schemas/destinationName";
 import { PageInfo } from "next/dist/build/utils";
 
@@ -47,7 +48,7 @@ export const highlightsApi = {
   },
 
   /* Create */
-  create: async (data: CityFormValues) => {
+  create: async (data: HighlightFormValues) => {
     const response = await fetch(BASE, {
       method: "POST",
       headers: {
@@ -81,7 +82,7 @@ export const highlightsApi = {
   },
 
   /* Update */
-  update: async (id: number, data: Partial<CityFormValues>) => {
+  update: async (id: number, data: Partial<HighlightFormValues>) => {
     const response = await fetch(`${BASE}/${id}`, {
       method: "PUT",
       headers: {
@@ -109,8 +110,8 @@ export const highlightsApi = {
   },
 
   /* Get city by name */
-  getByName: async (name: string) => {
-    const response = await fetch(`${BASE}/name/${encodeURIComponent(name)}`);
+  getByTitle: async (title: string) => {
+    const response = await fetch(`${BASE}/title/${encodeURIComponent(title)}`);
     return response.json();
   },
 };

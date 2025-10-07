@@ -1,6 +1,7 @@
 import { Heading } from "@/components/atoms/Heading";
 import { HighlightForm } from "@/components/organisms/highlights/HighlightForm";
 import { IEHForm } from "@/components/organisms/IEH/IEHForm";
+import DestinationService from "@/services/destination.service";
 import HighlightService from "@/services/highlight.service";
 import IEHService from "@/services/ieh.service";
 
@@ -13,6 +14,7 @@ export default async function HighlightEditPage({
 }) {
   const { id: idString } = await params;
   const id = Number(idString);
+  const destinations = await DestinationService.getNameId();
 
   const highlightData = await HighlightService.getById(id);
   let highlightId: number | undefined;
@@ -31,7 +33,7 @@ export default async function HighlightEditPage({
       <HighlightForm
         initialData={updateData}
         hlId={highlightId}
-        destinations={[]}
+        destinations={destinations.data}
       />
     </>
   );

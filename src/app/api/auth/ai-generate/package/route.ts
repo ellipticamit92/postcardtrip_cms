@@ -145,7 +145,7 @@ export async function POST(req: NextRequest) {
       isRichText: false,
       text: text?.trim() ?? "",
       heroTitle: heroTitle?.trim() ?? "",
-      ...(isImageChange
+      ...(isImageChange || !destinationId
         ? { imageUrl: imageData?.url, thumbnailUrl: imageData?.thumbnailUrl }
         : {}),
       day,
