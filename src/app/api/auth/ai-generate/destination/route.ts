@@ -20,7 +20,6 @@ const aiResponseSchema = z.object({
   country: z.string().min(2).max(100),
   cardText: z.string().min(20).max(200),
   bestTimeToVisit: z.string().min(10).max(100).optional(),
-  highlights: z.string().min(50).max(300).optional(),
 });
 
 export async function POST(req: NextRequest) {
@@ -97,7 +96,6 @@ export async function POST(req: NextRequest) {
         - cardText: A short teaser/summary for use in a destination card or listing (string, 30-100 characters). Keep it punchy and appealing.
         - heading: A concise, memorable heading for the destination (string, 15-25 characters). Should work well as a section title.
         - country: The country where the destination is located (string, 2-100 characters). Ensure accuracy.
-        - highlights: A single string containing 3-5 must-see attractions, activities, or experiences, separated by commas (string, 50-300 characters).
         - bestTimeToVisit: A short phrase describing the ideal travel season (string, 10-50 characters).
 
         Return a single valid JSON object matching this schema.`,
@@ -162,7 +160,6 @@ export async function POST(req: NextRequest) {
       text: aiValidation?.data?.cardText?.trim() ?? "",
       heroTitle: aiValidation?.data?.heroTitle?.trim() ?? "",
       bestTimeToVisit: aiValidation?.data?.bestTimeToVisit?.trim() ?? "",
-      highlights: aiValidation?.data?.highlights ?? "",
       ...(isImageChange || !isEdit
         ? { imageUrl: imageData?.url, thumbnailUrl: imageData?.thumbnailUrl }
         : {}),

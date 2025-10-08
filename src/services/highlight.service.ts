@@ -167,6 +167,23 @@ export class HighlightService {
       throw new Error(`Failed to fetch destinations name and id: ${error}`);
     }
   }
+
+  static async getOptionsByDestinationId(did: number) {
+    try {
+      const highlight = await prisma.highlight.findMany({
+        select: { hlid: true, title: true },
+        orderBy: { title: "asc" },
+        where: { destinationId: did },
+      });
+
+      const highlightData = getNameValueOptions(highlight, "title");
+      return {
+        data: highlightData,
+      };
+    } catch (error) {
+      throw new Error(`Failed to fetch tours name and id: ${error}`);
+    }
+  }
 }
 
 export default HighlightService;

@@ -1,5 +1,4 @@
 import { NextRequest, NextResponse } from "next/server";
-import { unslugify } from "@/lib/helper";
 import PackageService from "@/services/package.service";
 
 interface RouteParams {

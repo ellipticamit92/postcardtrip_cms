@@ -1,8 +1,8 @@
 "use client";
 
-import { ItineraryPackage, PaginationProps } from "@/types/type";
+import { PaginationProps } from "@/types/type";
 import { ColumnDef } from "@tanstack/react-table";
-import { ArrowUpDown, MoreHorizontal } from "lucide-react";
+import { MoreHorizontal } from "lucide-react";
 import { FC } from "react";
 import Link from "next/link";
 import { Checkbox } from "@/components/ui/checkbox";
@@ -15,7 +15,6 @@ import {
   DialogTrigger,
 } from "@/components/ui/dialog";
 import CommonTable from "@/components/molecules/CommonTable";
-import ShowData from "@/components/molecules/ShowData";
 import {
   DropdownMenu,
   DropdownMenuTrigger,
@@ -113,34 +112,6 @@ export const columns: ColumnDef<ItineraryWithPackage>[] = [
       );
     },
   },
-  // {
-  //   accessorKey: "details",
-  //   header: "Details",
-  //   cell: ({ row }) => {
-  //     const details = row.getValue("details") as string;
-  //     const name = row.getValue("day") as string;
-  //     return (
-  //       <div className="space-y-2 w-6">
-  //         <Dialog>
-  //           <DialogTrigger asChild>
-  //             <Button variant="outline" size="xs">
-  //               View
-  //             </Button>
-  //           </DialogTrigger>
-  //           <DialogContent className="max-w-4xl max-h-[80vh] overflow-y-auto">
-  //             <DialogHeader>
-  //               <DialogTitle>Day {name} - Overview</DialogTitle>
-  //             </DialogHeader>
-  //             <div
-  //               className="prose prose-sm max-w-none"
-  //               dangerouslySetInnerHTML={{ __html: details }}
-  //             />
-  //           </DialogContent>
-  //         </Dialog>
-  //       </div>
-  //     );
-  //   },
-  // },
   {
     accessorKey: "createdAt",
     header: "Created",

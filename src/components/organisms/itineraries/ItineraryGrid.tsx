@@ -29,7 +29,7 @@ interface ItineraryGridProps {
 const ItineraryGrid: FC<ItineraryGridProps> = ({ data }) => {
   return (
     <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-2 gap-6">
-      {data.map((iti: ItineraryWithPackage, index: number) => (
+      {data.map((iti: ItineraryWithPackage) => (
         <Card
           key={iti.itid}
           className="py-0 group hover:shadow-lg hover:border-primary/20 transition-all duration-300 rounded-xl overflow-hidden gap-3"
@@ -38,9 +38,8 @@ const ItineraryGrid: FC<ItineraryGridProps> = ({ data }) => {
             <div className="flex items-start justify-between">
               <div className="flex-1">
                 <CardTitle className="text-lg font-semibold text-foreground mb-1">
-                  {iti.title} <br />
                   <span className="text-xs font-bold">
-                    Package Name: {iti?.package?.name}
+                    {iti?.package?.name}
                   </span>
                 </CardTitle>
                 <p className="text-sm text-muted-foreground">

@@ -59,20 +59,6 @@ export class IEHService {
         updateTotal = total;
       }
 
-      if (type === "highlight") {
-        const [data, total] = await Promise.all([
-          prisma.highlight.findMany({
-            where,
-            skip,
-            take: limit,
-            orderBy: { [sortBy]: sortOrder },
-          }),
-          prisma.highlight.count({ where }),
-        ]);
-        updateData = data;
-        updateTotal = total;
-      }
-
       return {
         data: updateData,
         pagination: {
@@ -95,8 +81,6 @@ export class IEHService {
         return await prisma.inclusion.create({ data });
       } else if (type.toLowerCase() === "exclusion") {
         return await prisma.exclusion.create({ data });
-      } else if (type.toLowerCase() === "highlight") {
-        return await prisma.highlight.create({ data });
       }
     } catch (error) {
       throw new Error(`Failed to create highlight: ${error}`);
@@ -117,10 +101,6 @@ export class IEHService {
         return await prisma.exclusion.findUnique({
           where: { text },
         });
-      } else if (type.toLowerCase() === "highlight") {
-        return await prisma.highlight.findUnique({
-          where: { text },
-        });
       }
       return null;
     } catch (error) {
@@ -134,8 +114,6 @@ export class IEHService {
         return await prisma.inclusion.findUnique({ where: { lid: id } });
       } else if (type === "exclusion") {
         return await prisma.exclusion.findUnique({ where: { eid: id } });
-      } else if (type === "highlight") {
-        return await prisma.highlight.findUnique({ where: { hlid: id } });
       }
     } catch (error) {
       throw new Error(`Failed to fetch highlight: ${error}`);
@@ -154,11 +132,6 @@ export class IEHService {
           where: { eid: id },
           data,
         });
-      } else if (type === "highlight") {
-        return await prisma.highlight.update({
-          where: { hlid: id },
-          data,
-        });
       }
     } catch (error) {
       throw new Error(`Failed to update highlight: ${error}`);
@@ -175,8 +148,6 @@ export class IEHService {
         return await prisma.inclusion.delete({ where: { lid: newId } });
       } else if (type === "exclusion") {
         return await prisma.exclusion.delete({ where: { eid: newId } });
-      } else if (type === "highlight") {
-        return await prisma.highlight.delete({ where: { hlid: newId } });
       }
     } catch (error) {
       throw new Error(`Failed to delete: ${error}`);

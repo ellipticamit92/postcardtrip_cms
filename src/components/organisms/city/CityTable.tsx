@@ -26,7 +26,6 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { City } from "@prisma/client";
-import { getActivitiesArray, getAttractionArray } from "./helper";
 import AttractionsDialog from "@/components/AttractionsDialog";
 import ActivitiesDialog from "@/components/ActivitiesDialog";
 

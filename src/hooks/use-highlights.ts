@@ -287,7 +287,7 @@ export const useHighlights = (options: HooksProps = {}) => {
     if (autoFetch) {
       fetchHighlights();
     }
-  }, [autoFetch]);
+  }, [autoFetch, fetchHighlights]);
 
   return {
     // State

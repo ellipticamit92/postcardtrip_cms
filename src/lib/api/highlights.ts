@@ -1,5 +1,4 @@
 import { HighlightsAIResponseType } from "@/app/api/auth/ai-generate/highlights/route";
-import { CityFormValues } from "@/components/organisms/city/CityForm";
 import { HighlightFormValues } from "@/components/organisms/highlights/HighlightForm";
 import { DestinationAIDataTYpe } from "@/schemas/destinationName";
 import { PageInfo } from "next/dist/build/utils";

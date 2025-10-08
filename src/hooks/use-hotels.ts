@@ -324,7 +324,7 @@ export const useHotels = (options: UseHotelsOptions = {}) => {
     if (autoFetch) {
       fetchHotels();
     }
-  }, [autoFetch]);
+  }, [autoFetch, fetchHotels]);
 
   return {
     // State

@@ -6,15 +6,7 @@ import { ArrowUpDown, MoreHorizontal } from "lucide-react";
 import { FC } from "react";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
-import {
-  Dialog,
-  DialogContent,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
-} from "@/components/ui/dialog";
 import CommonTable from "@/components/molecules/CommonTable";
-
 import DeleteData from "../DeleteData";
 import { Checkbox } from "@/components/ui/checkbox";
 import {

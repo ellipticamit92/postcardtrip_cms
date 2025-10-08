@@ -10,7 +10,7 @@ import { toast } from "sonner";
 import { usePackages } from "@/hooks/use-packages";
 import { numberOptions } from "@/lib/helper";
 import { FormSelect } from "@/components/atoms/FormSelect";
-import { Options, OptionsNum } from "@/types/type";
+import { Options } from "@/types/type";
 import FormSection from "@/components/molecules/FormSection";
 import { PackageForm, PackageFormDataType } from "./PackageForm";
 import { useState } from "react";

@@ -19,6 +19,8 @@ interface FormInputProps<T extends FieldValues> {
   min?: number;
   max?: number;
   className?: string;
+  /** 🆕 Allows pre-filled value */
+  defaultValue?: string | number | undefined;
 }
 
 export const FormInput = <T extends FieldValues>({
@@ -32,11 +34,13 @@ export const FormInput = <T extends FieldValues>({
   min,
   max,
   className = "",
+  defaultValue,
 }: FormInputProps<T>) => {
   return (
     <FormField
       control={control}
       name={name}
+      defaultValue={defaultValue as any} // ✅ prefill support
       render={({ field }) => (
         <FormItem>
           <FormLabel>{label}</FormLabel>
@@ -46,7 +50,11 @@ export const FormInput = <T extends FieldValues>({
               placeholder={placeholder}
               type={type}
               disabled={disabled}
-              value={field.value ?? ""}
+              value={
+                field.value ??
+                defaultValue ??
+                "" /* ensure consistent controlled behavior */
+              }
               step={step}
               min={min}
               max={max}

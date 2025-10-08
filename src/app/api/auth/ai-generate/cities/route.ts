@@ -2,7 +2,6 @@ import { NextRequest, NextResponse } from "next/server";
 import { z } from "zod";
 import { checkRateLimit, cleanAIResponse } from "@/lib/helper";
 import { getGeminiClient } from "@/lib/gemini";
-import { fetchUnsplashImage } from "@/lib/api/fetchImage";
 
 const requestSchema = z.object({
   destinationName: z.string().min(1).max(100).trim(),

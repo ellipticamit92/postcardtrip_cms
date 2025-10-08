@@ -1,9 +1,7 @@
 import { Heading } from "@/components/atoms/Heading";
 import { HighlightForm } from "@/components/organisms/highlights/HighlightForm";
-import { IEHForm } from "@/components/organisms/IEH/IEHForm";
 import DestinationService from "@/services/destination.service";
 import HighlightService from "@/services/highlight.service";
-import IEHService from "@/services/ieh.service";
 
 export const dynamic = "force-dynamic";
 

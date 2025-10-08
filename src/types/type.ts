@@ -1,4 +1,4 @@
-import { City, Hotel, HotelImage, Itinerary, Package } from "@prisma/client";
+import { Itinerary } from "@prisma/client";
 
 export interface PaginationOptions {
   page?: number;
@@ -138,7 +138,7 @@ export interface ItineraryPlaceImage {
   place?: ItineraryPlace;
 }
 
-export type IEHType = "inclusion" | "exclusion" | "highlight";
+export type IEHType = "inclusion" | "exclusion";
 
 export interface HooksProps {
   autoFetch?: boolean;

@@ -9,6 +9,7 @@ interface RouteParams {
 export async function GET(_: NextRequest, { params }: RouteParams) {
   try {
     const packageId = Number((await params).packageId);
+    console.log("DEBIUD id  = ", packageId);
     if (isNaN(packageId)) {
       return NextResponse.json(
         { success: false, error: "Invalid package ID" },
@@ -17,6 +18,9 @@ export async function GET(_: NextRequest, { params }: RouteParams) {
     }
 
     const itineraries = await ItineraryService.getByPackageId(packageId);
+    if (itineraries && itineraries?.length === 0) {
+      return NextResponse.json({ success: false, data: itineraries });
+    }
     return NextResponse.json({ success: true, data: itineraries });
   } catch (err) {
     console.error("GET itineraries by package error:", err);

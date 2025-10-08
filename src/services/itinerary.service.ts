@@ -13,20 +13,8 @@ export class ItineraryService {
           package: {
             connect: { pid: Number(data.packageId) }, // Link package
           },
-          title: data.title, // ✅ Correct value, not the String type
-          subTitle: null,
           day: data.days, // Save the days array as JSON
           isRichText: true,
-          highlights: {
-            connect:
-              data?.highlights?.map((hlid: number) => ({
-                hlid,
-              })) ?? [],
-          },
-        },
-        include: {
-          highlights: true,
-          package: true,
         },
       });
 
@@ -173,27 +161,13 @@ export class ItineraryService {
       const prismaData: any = {};
 
       if (data.packageId) prismaData.packageId = Number(data.packageId);
-      if (data.title) prismaData.title = data.title;
       if (data.days) {
         prismaData.details = JSON.stringify(data.days); // optional if you’re storing JSON
-      }
-      if (data.highlights) {
-        prismaData.highlights = {
-          set: data.highlights.map((id) => ({ hlid: id })),
-        };
       }
 
       return await prisma.itinerary.update({
         where: { itid },
-        data: {
-          ...data,
-          highlights: {
-            set: [],
-            connect: data.highlights?.map((hlid: number) => ({
-              hlid,
-            })),
-          },
-        },
+        data,
       });
     } catch (error) {
       throw new Error(`Failed to update itinerary: ${error}`);
@@ -207,31 +181,6 @@ export class ItineraryService {
       });
     } catch (error) {
       throw new Error(`Failed to delete itinerary: ${error}`);
-    }
-  }
-
-  static async searchByTitle(title: string) {
-    try {
-      const whereClause = title
-        ? {
-            OR: [{ title: { contains: title, mode: "insensitive" } }],
-          }
-        : {};
-      return await prisma.itinerary.findMany({
-        where: whereClause,
-        include: {
-          package: {
-            include: {
-              destination: true,
-            },
-          },
-        },
-        orderBy: {
-          day: "asc",
-        },
-      });
-    } catch (error) {
-      throw new Error(`Failed to search itineraries by title: ${error}`);
     }
   }
 

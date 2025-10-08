@@ -24,6 +24,8 @@ interface FormRichTextProps<T extends FieldValues> {
   label: string;
   placeholder?: string;
   height?: number;
+  /** 🆕 Default value for prefilling (e.g., editing existing data) */
+  defaultValue?: string;
 }
 
 export const FormRichText = <T extends FieldValues>({
@@ -32,17 +34,19 @@ export const FormRichText = <T extends FieldValues>({
   label,
   placeholder = "Start writing...",
   height = 400,
+  defaultValue = "",
 }: FormRichTextProps<T>) => {
   return (
     <FormField
       control={control}
       name={name}
+      defaultValue={defaultValue as any} // ✅ ensures default value integration
       render={({ field }) => (
         <FormItem>
           <FormLabel>{label}</FormLabel>
           <FormControl>
             <TinyMCEEditor
-              content={field.value || ""}
+              content={field.value || defaultValue || ""} // ✅ prefilled content
               onChange={field.onChange}
               height={height}
               placeholder={placeholder}

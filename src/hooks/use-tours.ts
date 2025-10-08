@@ -197,7 +197,7 @@ export const useTours = (
 
   useEffect(() => {
     if (autoFetch) fetchTours();
-  }, [autoFetch]);
+  }, [autoFetch, fetchTours]);
 
   return {
     // State

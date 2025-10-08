@@ -14,9 +14,9 @@ import { PaginationProps } from "@/types/type";
 import { City } from "@prisma/client";
 import { Edit, Trash2 } from "lucide-react";
 import { FC } from "react";
-import { getActivitiesArray } from "./helper";
 import ActivitiesDialog from "@/components/ActivitiesDialog";
 import AttractionsDialog from "@/components/AttractionsDialog";
+import Link from "next/link";
 
 interface CityGridProps {
   data: City[];
@@ -61,13 +61,16 @@ const CityGrid: FC<CityGridProps> = ({ data, pagination }) => {
                   </Badge>
                 </div>
                 <div className="flex gap-1">
-                  <Button
-                    variant="ghost"
-                    size="icon"
-                    className="h-8 w-8 hover:bg-primary/10"
-                  >
-                    <Edit className="h-4 w-4" />
-                  </Button>
+                  <Link href={`/city/${city.cid}`}>
+                    <Button
+                      variant="ghost"
+                      size="icon"
+                      className="h-8 w-8 hover:bg-primary/10"
+                    >
+                      <Edit className="h-4 w-4" />
+                    </Button>
+                  </Link>
+
                   <Button
                     variant="ghost"
                     size="icon"

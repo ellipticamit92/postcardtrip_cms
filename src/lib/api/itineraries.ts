@@ -1,5 +1,6 @@
 // src/lib/api/itineraries.ts
 
+import { ItinerariesAIFormData } from "@/components/organisms/itineraries/ItinerariesAIForm";
 import { ItinerariesFormData } from "@/components/organisms/itineraries/ItinerariesForm";
 
 export interface ApiResponse<T = unknown> {
@@ -18,6 +19,7 @@ export interface ApiResponse<T = unknown> {
 }
 
 const BASE = "/api/auth/itineraries";
+const AI_BASE = "/api/auth/ai-generate/itineraries";
 
 export const itinerariesApi = {
   /* List with pagination & filters */
@@ -66,6 +68,18 @@ export const itinerariesApi = {
   /* Create */
   create: async (data: ItinerariesFormData) => {
     const response = await fetch(BASE, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(data),
+    });
+    return response.json();
+  },
+
+  /* Create Using AI */
+  createAI: async (data: ItinerariesAIFormData) => {
+    const response = await fetch(AI_BASE, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",

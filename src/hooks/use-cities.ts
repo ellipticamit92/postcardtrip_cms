@@ -7,6 +7,7 @@ import { HooksProps } from "@/types/type";
 import { PaginationInfo } from "@/types/form/type";
 import { City } from "@prisma/client";
 import { DestinationAIDataTYpe } from "@/schemas/destinationName";
+import { CityFormValues } from "@/components/organisms/city/CityForm";
 
 export const useCities = (options: HooksProps = {}) => {
   const { autoFetch = false, initialPage = 1, initialLimit = 150 } = options;
@@ -182,16 +183,12 @@ export const useCities = (options: HooksProps = {}) => {
   // Update city
   const updateCity = async (
     id: number,
-    data: {
-      name?: string;
-      description?: string;
-      imageUrlk?: string;
-      destinationId?: number;
-    }
+    data: CityFormValues
   ): Promise<{ success: boolean; data?: City; error?: string }> => {
     setLoading(true);
     setError(null);
 
+    const loadingToast = showToast.createLoading("city");
     try {
       const result = await citiesApi.update(id, data);
 
@@ -202,15 +199,20 @@ export const useCities = (options: HooksProps = {}) => {
             city.cid === id ? { ...city, ...result.data } : city
           )
         );
-
+        toast.dismiss(loadingToast);
+        showToast.updateSuccess("City");
         return { success: true, data: result.data };
       } else {
         setError(result.error || "Failed to update city");
+        toast.dismiss(loadingToast);
+        showToast.updateError("city", "Failed to update city");
         return { success: false, error: result.error };
       }
     } catch (err) {
       const errorMsg = err instanceof Error ? err.message : "An error occurred";
       setError(errorMsg);
+      toast.dismiss(loadingToast);
+      showToast.updateError("city", errorMsg);
       return { success: false, error: errorMsg };
     } finally {
       setLoading(false);
@@ -293,7 +295,7 @@ export const useCities = (options: HooksProps = {}) => {
     if (autoFetch) {
       fetchCities();
     }
-  }, [autoFetch]);
+  }, [autoFetch, fetchCities]);
 
   return {
     // State

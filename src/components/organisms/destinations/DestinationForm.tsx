@@ -35,7 +35,6 @@ const schema = z.object({
   basePrice: z.number().min(1, "Please enter base price"),
   originalPrice: z.number().min(1, "Please enter original price"),
   bestTimeToVisit: z.string().optional(),
-  highlights: z.string().optional(),
 });
 
 export type DestinationFormDataType = z.infer<typeof schema>;
@@ -66,7 +65,6 @@ export function DestinationForm({
       heroTitle: "",
       text: "",
       bestTimeToVisit: "",
-      highlights: "",
     },
   });
 
@@ -103,7 +101,6 @@ export function DestinationForm({
         heroTitle: data.heroTitle?.trim() || undefined,
         rating: data.rating,
         bestTimeToVisit: data.bestTimeToVisit?.trim() || undefined,
-        highlights: data.highlights || "",
       };
 
       if (isEditMode && destinationId) {
@@ -210,18 +207,7 @@ export function DestinationForm({
             }`}
           />
 
-          <FormTextarea
-            name="highlights"
-            control={control}
-            label="Highlights"
-            className={`border ${
-              isFieldChanged("highlights")
-                ? "border-orange-300"
-                : "border-gray-300"
-            }`}
-          />
-
-          <div className="flex flex-col gap-3">
+          <div className="cols-span-2 flex gap-3 flex-1">
             <FormCheckbox
               name="trending"
               control={control}

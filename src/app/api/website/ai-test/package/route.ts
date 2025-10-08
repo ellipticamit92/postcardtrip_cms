@@ -49,7 +49,7 @@ export async function POST(req: NextRequest) {
       );
     }
     const { destination, day, tourType } = validationResult.data;
-    const imageData = await fetchUnsplashImage(destination);
+    // const imageData = await fetchUnsplashImage(destination);
 
     // Generate content with improved prompt
     const gemini = getGeminiClient();

@@ -1,4 +1,3 @@
-import { City } from "@prisma/client";
 import { JsonValue } from "@prisma/client/runtime/library";
 
 export const getActivitiesArray = (
@@ -30,7 +29,7 @@ export const getAttractionArray = (
   if (typeof mustSeeAttractions === "string") {
     try {
       attractions = JSON.parse(mustSeeAttractions);
-    } catch (e) {
+    } catch {
       attractions = [];
     }
   } else if (Array.isArray(mustSeeAttractions)) {

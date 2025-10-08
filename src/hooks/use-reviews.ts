@@ -208,7 +208,7 @@ export const useReviews = (options: UseReviewsOptions = {}) => {
     if (autoFetch) {
       fetchReviews();
     }
-  }, [autoFetch]);
+  }, [autoFetch, fetchReviews]);
 
   return {
     reviews,

@@ -244,7 +244,7 @@ export const useDestinations = (options: HooksProps = {}) => {
     if (autoFetch) {
       fetchDestinations();
     }
-  }, [autoFetch]);
+  }, [autoFetch, fetchDestinations]);
 
   return {
     // State

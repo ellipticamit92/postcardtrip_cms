@@ -56,10 +56,7 @@ export async function PUT(request: NextRequest, { params }: RouteParams) {
       );
     }
 
-    const updatedCity = await CityService.update(cityId, {
-      name: body.name,
-      description: body.description,
-    });
+    const updatedCity = await CityService.update(cityId, body);
 
     return NextResponse.json({
       success: true,

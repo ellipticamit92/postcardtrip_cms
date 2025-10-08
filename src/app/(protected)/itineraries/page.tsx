@@ -17,6 +17,7 @@ export default async function ItinerariesPage() {
         description="Manage travel package itinearies"
         Icon={Map}
         href="/itineraries/add"
+        aiHref="/itineraries/ai"
       />
 
       <ViewLayout

@@ -1,13 +1,10 @@
 import { CityAIResponseType } from "@/app/api/auth/ai-generate/cities/route";
+import { CityFormValues } from "@/components/organisms/city/CityForm";
 import { getFieldOptionsNum, getNameValueOptions } from "@/lib/helper";
 import { prisma } from "@/lib/prisma";
 
 export class CityService {
-  static async create(data: {
-    name: string;
-    description: string;
-    imageUrl?: string;
-  }) {
+  static async create(data: CityFormValues) {
     try {
       return await prisma.city.create({
         data,
@@ -170,15 +167,9 @@ export class CityService {
     }
   }
 
-  static async update(
-    cid: number,
-    data: {
-      name?: string;
-      description?: string;
-      imageUrl?: string;
-    }
-  ) {
+  static async update(cid: number, data: CityFormValues) {
     try {
+      console.log("DEBUG update city = ", data);
       return await prisma.city.update({
         where: { cid },
         data,
@@ -214,6 +205,23 @@ export class CityService {
       });
     } catch (error) {
       throw new Error(`Failed to search cities by name: ${error}`);
+    }
+  }
+
+  static async getOptionsByDestinationId(did: number) {
+    try {
+      const cities = await prisma.city.findMany({
+        select: { cid: true, name: true },
+        orderBy: { cid: "asc" },
+        where: { destinationId: did },
+      });
+
+      const citiesData = getNameValueOptions(cities, "name");
+      return {
+        data: citiesData,
+      };
+    } catch (error) {
+      throw new Error(`Failed to fetch tours name and id: ${error}`);
     }
   }
 }

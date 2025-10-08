@@ -21,7 +21,6 @@ export default async function EditAIPakcagePage({
   const destinationOptions = await DestinationService.getNameId();
   const packages = await PackageService.getById(id);
 
-  const name = packages?.name ?? "";
   const updatePackage = {
     name: packages?.name ?? "",
     day: packages?.day ?? 1,

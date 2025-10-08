@@ -166,6 +166,34 @@ export class PackageService {
     }
   }
 
+  static async getByPID(pid: number) {
+    try {
+      const packageData = await prisma.package.findUnique({
+        where: { pid },
+        select: {
+          name: true,
+          day: true,
+          night: true,
+          destination: {
+            select: {
+              did: true,
+              name: true,
+              country: true,
+            },
+          },
+        },
+      });
+
+      if (!packageData) {
+        throw new Error("Package not found");
+      }
+
+      return packageData;
+    } catch (error) {
+      throw new Error(`Failed to fetch package: ${error}`);
+    }
+  }
+
   static async getById(pid: number) {
     try {
       const packageData = await prisma.package.findUnique({

@@ -1,3 +1,4 @@
+import { ItinerariesAIFormData } from "@/components/organisms/itineraries/ItinerariesAIForm";
 import { ItinerariesFormData } from "@/components/organisms/itineraries/ItinerariesForm";
 import { ApiResponse, itinerariesApi } from "@/lib/api/itineraries";
 import { showToast } from "@/lib/toast";
@@ -114,6 +115,43 @@ export function useItineraries(
     }
   };
 
+  // Create Using AI
+  const createAIItinerary = async (data: ItinerariesAIFormData) => {
+    setLoading(true);
+    setError(null);
+    const loadingToast = showToast.createLoading("itinerary");
+    try {
+      const nameResult = await itinerariesApi.getByPackageId(data.packageId);
+
+      if (nameResult.success) {
+        const errorMsg = "Package Itinerary already exists";
+        toast.dismiss(loadingToast);
+        showToast.error(errorMsg);
+        return { success: false, error: errorMsg };
+      }
+
+      const res = await itinerariesApi.createAI(data);
+      if (res.success) {
+        fetchItineraries();
+        toast.dismiss(loadingToast);
+        showToast.createSuccess("Itinerary");
+        return res.data;
+      } else {
+        toast.dismiss(loadingToast);
+        showToast.createError("itinerary");
+        setError(res.error || "Failed to create AI itinerary");
+        throw new Error(res.error || "Failed to create AI itinerary");
+      }
+    } catch (err: any) {
+      const errorMsg = err?.message || "Failed to create AI itinerary";
+      toast.dismiss(loadingToast);
+      showToast.createError("itinerary", errorMsg);
+      setError(errorMsg);
+    } finally {
+      setLoading(false);
+    }
+  };
+
   // Update
   const updateItinerary = async (
     pkgId: number,
@@ -209,6 +247,7 @@ export function useItineraries(
     fetchItineraries,
     fetchItinerary,
     createItinerary,
+    createAIItinerary,
     updateItinerary,
     deleteItinerary,
     searchItineraries,

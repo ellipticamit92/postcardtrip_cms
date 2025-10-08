@@ -84,6 +84,7 @@ model Destination {
   packages           Package[]
   reviews            Reviews[]
   highlights         Highlight[]
+  city               City[]
   updatedAt          DateTime  @updatedAt
   createdAt          DateTime  @default(now())
 }
@@ -98,6 +99,8 @@ model City {
   status                    Boolean?      @default(false)
   hotels                    Hotel[]
   packages                  Package[] 
+  destination     Destination?  @relation(fields: [destinationId], references: [did])
+  destinationId   Int?
   createdAt                 DateTime      @default(now())
 }
 
@@ -176,8 +179,6 @@ model PackageHotelPrice {
 model Itinerary {
   itid        Int        @id @default(autoincrement())
   day         Json?
-  title       String
-  subTitle    String?
   isRichText  Boolean    @default(false)
   status      Boolean?   @default(false)
   package     Package    @relation(fields: [packageId], references: [pid])

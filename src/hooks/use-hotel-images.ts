@@ -192,7 +192,7 @@ export function useHotelImages(initialFilters: HotelImageFilters = {}) {
     if (autoFetch) {
       fetchImages();
     }
-  }, [autoFetch]);
+  }, [autoFetch, fetchImage]);
 
   return {
     images,
