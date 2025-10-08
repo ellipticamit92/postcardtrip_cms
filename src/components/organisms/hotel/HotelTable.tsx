@@ -1,6 +1,5 @@
 "use client";
 
-import { Hotel } from "@/types/type";
 import { ColumnDef } from "@tanstack/react-table";
 import { ArrowUpDown, MoreHorizontal } from "lucide-react";
 import { FC } from "react";
@@ -24,6 +23,7 @@ import {
 } from "@/components/ui/dropdown-menu";
 import CommonTable from "@/components/molecules/CommonTable";
 import DeleteData from "../DeleteData";
+import { Hotel } from "@prisma/client";
 
 export const columns: ColumnDef<Hotel>[] = [
   {
@@ -60,14 +60,14 @@ export const columns: ColumnDef<Hotel>[] = [
       </Button>
     ),
   },
-  {
-    accessorKey: "city",
-    header: "City Name",
-    cell: ({ row }) => {
-      const hotel = row.original;
-      return <span>{hotel?.city?.name}</span>;
-    },
-  },
+  // {
+  //   accessorKey: "city",
+  //   header: "City Name",
+  //   cell: ({ row }) => {
+  //     const hotel = row.original;
+  //     return <span>{hotel?.city?.name}</span>;
+  //   },
+  // },
   {
     accessorKey: "starRating",
     header: "Star Rating",

@@ -305,7 +305,6 @@ export class PackageService {
           itineraries: {
             select: {
               day: true,
-              title: true,
             },
           },
           hotelPrices: true,

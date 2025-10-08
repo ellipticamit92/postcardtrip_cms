@@ -1,7 +1,7 @@
 "use client";
 
 import { format } from "date-fns";
-import { PaginationProps, Tours } from "@/types/type";
+import { PaginationProps } from "@/types/type";
 import { ColumnDef } from "@tanstack/react-table";
 import { ArrowUpDown, MoreHorizontal } from "lucide-react";
 import { FC } from "react";
@@ -25,6 +25,7 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import { Tours } from "@prisma/client";
 
 export const columns: ColumnDef<Tours>[] = [
   {

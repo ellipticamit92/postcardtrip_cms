@@ -1,7 +1,7 @@
 "use client";
 
 import { format } from "date-fns";
-import { PackageHotelPrice, PaginationProps } from "@/types/type";
+import { PaginationProps } from "@/types/type";
 import { ColumnDef } from "@tanstack/react-table";
 import { Checkbox } from "../ui/checkbox";
 import { ArrowUpDown, MoreHorizontal } from "lucide-react";
@@ -18,6 +18,7 @@ import { FC } from "react";
 import CommonTable from "../molecules/CommonTable";
 import Link from "next/link";
 import DeleteData from "./DeleteData";
+import { PackageHotelPrice } from "@prisma/client";
 
 export const columns: ColumnDef<PackageHotelPrice>[] = [
   {
@@ -78,18 +79,18 @@ export const columns: ColumnDef<PackageHotelPrice>[] = [
       return <div>{row.original?.originalPrice}</div>;
     },
   },
-  {
-    accessorKey: "hotel",
-    header: "hotels",
-    cell: ({ row }) => {
-      return <div>{row?.original?.hotel?.name}</div>;
-    },
-  },
-  {
-    accessorKey: "package",
-    header: "Package name",
-    cell: ({ row }) => <div>{row?.original?.package?.name}</div>,
-  },
+  // {
+  //   accessorKey: "hotel",
+  //   header: "hotels",
+  //   cell: ({ row }) => {
+  //     return <div>{row?.original?.hotel?.name}</div>;
+  //   },
+  // },
+  // {
+  //   accessorKey: "package",
+  //   header: "Package name",
+  //   cell: ({ row }) => <div>{row?.original?.package?.name}</div>,
+  // },
   {
     accessorKey: "imageUrl",
     header: "imageUrl",

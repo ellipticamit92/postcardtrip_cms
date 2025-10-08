@@ -1,6 +1,5 @@
 "use client";
 
-import { HotelImage } from "@/types/type";
 import { ColumnDef } from "@tanstack/react-table";
 import { Checkbox } from "../ui/checkbox";
 import { ArrowUpDown, MoreHorizontal } from "lucide-react";
@@ -18,6 +17,7 @@ import CommonTable from "../molecules/CommonTable";
 import Link from "next/link";
 import DeleteData from "./DeleteData";
 import { getFIleName } from "@/lib/utils";
+import { HotelImage } from "@prisma/client";
 
 export const columns: ColumnDef<HotelImage>[] = [
   {
@@ -54,22 +54,22 @@ export const columns: ColumnDef<HotelImage>[] = [
       </Button>
     ),
   },
-  {
-    accessorKey: "hotel",
-    header: "Hotel Name",
-    cell: ({ row }) => {
-      const hotelImage = row.original;
-      return <span>{hotelImage.hotel?.name}</span>;
-    },
-  },
-  {
-    accessorKey: "city",
-    header: "City Name",
-    cell: ({ row }) => {
-      const hotelImage = row.original;
-      return <span>{hotelImage.hotel?.city?.name}</span>;
-    },
-  },
+  // {
+  //   accessorKey: "hotel",
+  //   header: "Hotel Name",
+  //   cell: ({ row }) => {
+  //     const hotelImage = row.original;
+  //     return <span>{hotelImage.hotel?.name}</span>;
+  //   },
+  // },
+  // {
+  //   accessorKey: "city",
+  //   header: "City Name",
+  //   cell: ({ row }) => {
+  //     const hotelImage = row.original;
+  //     return <span>{hotelImage.hotel?.city?.name}</span>;
+  //   },
+  // },
   {
     accessorKey: "url",
     header: "Hotel Image",
