@@ -9,7 +9,7 @@ interface RouteParams {
 export async function GET(_: NextRequest, { params }: RouteParams) {
   try {
     const packageId = Number((await params).packageId);
-    console.log("DEBIUD id  = ", packageId);
+
     if (isNaN(packageId)) {
       return NextResponse.json(
         { success: false, error: "Invalid package ID" },

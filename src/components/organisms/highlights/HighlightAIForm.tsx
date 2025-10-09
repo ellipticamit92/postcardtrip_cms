@@ -52,13 +52,12 @@ export function HighlightAIForm({ destinations }: HighlightFormProps) {
       const submitData = {
         destinationName: destName,
       };
-      console.log("DEBUG s  ", submitData);
+
       const resData = await createAIHighlights(submitData);
       const updateData = resData?.data?.map((item: any) => ({
         ...item,
         destinationId: Number(destId),
       }));
-      console.log("UDPAted = ", updateData);
       sethighlightData(updateData ?? []);
     } catch (err: any) {
       console.error("Error submitting highlight", err);

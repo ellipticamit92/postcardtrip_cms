@@ -194,6 +194,43 @@ export class PackageService {
     }
   }
 
+  static async getDestinationPackage(did: number, pid: number) {
+    try {
+      const packageData = await prisma.package.findMany({
+        where: {
+          destinationId: did,
+          status: true,
+          NOT: { pid }, // ✅ Exclude this specific pid
+        },
+        take: 3,
+        select: {
+          name: true,
+          day: true,
+          night: true,
+          imageUrl: true,
+          threePrice: true,
+          rating: true,
+          slug: true,
+          destination: {
+            select: {
+              did: true,
+              name: true,
+              country: true,
+            },
+          },
+        },
+      });
+
+      if (!packageData) {
+        throw new Error("Package not found");
+      }
+
+      return packageData;
+    } catch (error) {
+      throw new Error(`Failed to fetch package: ${error}`);
+    }
+  }
+
   static async getById(pid: number) {
     try {
       const packageData = await prisma.package.findUnique({
@@ -297,8 +334,12 @@ export class PackageService {
           status: true,
           rating: true,
           heroTitle: true,
+          threePrice: true,
+          fourPrice: true,
+          fivePrice: true,
           destination: {
             select: {
+              did: true,
               country: true,
             },
           },
@@ -318,7 +359,12 @@ export class PackageService {
               text: true,
             },
           },
-          highlights: true,
+          highlights: {
+            select: {
+              title: true,
+              category: true,
+            },
+          },
         },
       });
     } catch (error) {
@@ -601,6 +647,7 @@ export class PackageService {
           day: true,
           night: true,
           text: true,
+          slug: true,
           destination: {
             select: {
               name: true,

@@ -129,9 +129,24 @@ export class ReviewService {
     try {
       return await prisma.reviews.findMany({
         where: { packageId },
-        include: {
-          package: true,
-          destination: true,
+        select: {
+          username: true,
+          places: true,
+          rating: true,
+          year: true,
+          month: true,
+          review: true,
+          package: {
+            select: {
+              name: true,
+            },
+          },
+          destination: {
+            select: {
+              name: true,
+              country: true,
+            },
+          },
         },
       });
     } catch (error) {

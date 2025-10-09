@@ -9,8 +9,11 @@ interface RouteParams {
 export async function GET(request: NextRequest, { params }: RouteParams) {
   try {
     const { id } = await params;
+    const ids = id.split("_");
 
-    const packagesData = await PackageService.getByName(id);
+    const did = Number(ids[0]);
+    const pid = Number(ids[1]);
+    const packagesData = await PackageService.getDestinationPackage(did, pid);
 
     return NextResponse.json({
       success: true,

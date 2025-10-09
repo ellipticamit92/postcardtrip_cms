@@ -56,8 +56,6 @@ export function HighlightForm({
         destinationId: data?.destinationId,
       };
 
-      console.log("DEBUG submit data  = ", submitData);
-
       if (isEditMode && hlId) {
         await updateHighlight(hlId, submitData);
       } else {

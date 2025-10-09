@@ -169,7 +169,6 @@ export class CityService {
 
   static async update(cid: number, data: CityFormValues) {
     try {
-      console.log("DEBUG update city = ", data);
       return await prisma.city.update({
         where: { cid },
         data,
